@@ -10,7 +10,7 @@ import { Manifest } from './manifest'
 import { RescopedStream } from './stream'
 import { Synchronizer } from './synchronizer'
 import { Context, Options, Package } from './types'
-import { InlinePlugin } from './plugin'
+import { Plugin } from './plugin'
 
 export namespace Release {
   export async function start(
@@ -51,12 +51,7 @@ export namespace Release {
     const { getLucky, waitFor } = synchronizer
 
     // Release all packages.
-    const createInlinePlugin = InlinePlugin.get(
-      packages,
-      context,
-      synchronizer,
-      flags,
-    )
+    const createPlugin = Plugin.get(packages, context, synchronizer, flags)
 
     await Promise.all(
       packages.map(async (pkg) => {
@@ -67,7 +62,7 @@ export namespace Release {
           await waitFor('readyForRelease', pkg)
         }
 
-        return releasePackage(pkg, createInlinePlugin, context)
+        return releasePackage(pkg, createPlugin, context)
       }),
     )
 
@@ -123,7 +118,7 @@ export namespace Release {
 
   async function releasePackage(
     pkg: Package,
-    createInlinePlugin: (pkg: Package) => { [key: string]: any },
+    createPlugin: (pkg: Package) => { [key: string]: any },
     context: Context,
   ) {
     const { options: pkgOptions, name, dir } = pkg
@@ -133,7 +128,7 @@ export namespace Release {
     // The inline plugin is the only plugin we call semanticRelease() with.
     // The inline plugin functions then call e.g. plugins.analyzeCommits()
     // manually and sometimes manipulate the responses.
-    const inlinePlugin = createInlinePlugin(pkg)
+    const inlinePlugin = createPlugin(pkg)
 
     // Set the options that we call semanticRelease() with.
     const options = { ...pkgOptions, ...inlinePlugin }

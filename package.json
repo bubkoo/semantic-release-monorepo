@@ -38,36 +38,41 @@
   "release": {
     "repositoryUrl": "https://github.com/bubkoo/monorepo-semantic-release",
     "plugins": [
-      ["@semantic-release/commit-analyzer",{"releaseRules":[
+      [
+        "@semantic-release/commit-analyzer",
         {
-          "type": "build",
-          "release": "patch"
-        },
-        {
-          "type": "ci",
-          "release": "patch"
-        },
-        {
-          "type": "chore",
-          "release": "patch"
-        },
-        {
-          "type": "docs",
-          "release": "patch"
-        },
-        {
-          "type": "refactor",
-          "release": "patch"
-        },
-        {
-          "type": "style",
-          "release": "patch"
-        },
-        {
-          "type": "test",
-          "release": "patch"
+          "releaseRules": [
+            {
+              "type": "build",
+              "release": "patch"
+            },
+            {
+              "type": "ci",
+              "release": "patch"
+            },
+            {
+              "type": "chore",
+              "release": "patch"
+            },
+            {
+              "type": "docs",
+              "release": "patch"
+            },
+            {
+              "type": "refactor",
+              "release": "patch"
+            },
+            {
+              "type": "style",
+              "release": "patch"
+            },
+            {
+              "type": "test",
+              "release": "patch"
+            }
+          ]
         }
-      ]}],
+      ],
       "@semantic-release/release-notes-generator",
       "@semantic-release/changelog",
       "@semantic-release/npm",
@@ -123,6 +128,7 @@
     "eslint": "^7.9.0",
     "husky": "^4.3.0",
     "lint-staged": "^10.3.0",
+    "multi-semantic-release": "^2.4.7",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.1.2",
     "pretty-quick": "^3.0.2",

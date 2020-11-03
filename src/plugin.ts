@@ -8,7 +8,7 @@ import { Manifest } from './manifest'
 import { Synchronizer } from './synchronizer'
 import { Package, Context, PluginOptions, Options } from './types'
 
-export namespace InlinePlugin {
+export namespace Plugin {
   const debug = getDebugger('msr:inline-plugin')
 
   function updateManifestDeps(pkg: Package, path: string) {
@@ -138,14 +138,14 @@ export namespace InlinePlugin {
         await waitForAll('analyzed')
 
         // Make sure type is "patch" if the package has any deps that have changed.
-        if (!pkg.nextType && hasChangedDeep(pkg.localDeps)) {
+        if (pkg.nextType == null && hasChangedDeep(pkg.localDeps)) {
           pkg.nextType = 'patch'
         }
 
-        debug('commits analyzed: %s', pkg.name)
-        debug('release type: %s', pkg.nextType)
+        debug(
+          `"${pkg.name}" commits analyzed, and the release type is "${pkg.nextType}"`,
+        )
 
-        // Return type.
         return pkg.nextType
       }
 
@@ -227,7 +227,7 @@ export namespace InlinePlugin {
         console.log(pkg.name, context, pluginOptions)
       }
 
-      const inlinePlugin: { [key: string]: any } = {
+      const plugin: { [key: string]: any } = {
         verifyConditions,
         analyzeCommits,
         generateNotes,
@@ -235,17 +235,17 @@ export namespace InlinePlugin {
         success,
       }
 
-      Object.keys(inlinePlugin).forEach((type) =>
-        Reflect.defineProperty(inlinePlugin[type], 'pluginName', {
+      Object.keys(plugin).forEach((type) =>
+        Reflect.defineProperty(plugin[type], 'pluginName', {
           value: 'monorepo-semantic-release',
           writable: false,
           enumerable: true,
         }),
       )
 
-      debug('inlinePlugin created: %s', pkg.name)
+      debug('plugin created: %s', pkg.name)
 
-      return inlinePlugin
+      return plugin
     }
   }
 }
