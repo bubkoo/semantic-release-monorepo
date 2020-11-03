@@ -33,7 +33,7 @@ function getSuccessComment() {
   // note: spaces will break the generated markdown
   return (
     ''
-    + ":tada: This <%= issue.pull_request ? 'PR is included' : 'issue has been resolved' %> in version <%= nextRelease.version %> :tada:"
+    + ":tada: This <%= issue.pull_request ? 'PR is included' : 'issue has been resolved' %> :tada:"
     + '<% if(typeof releases !== "undefined" && Array.isArray(releases) && releases.length > 0) { %>'
     + '<% var releaseInfos = releases.filter(function(release) { return !!release.name }) %>'
     + '<% if(releaseInfos.length) { %>'
