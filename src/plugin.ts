@@ -265,6 +265,14 @@ export namespace Plugin {
         await waitForAll('published', (p) => p.nextType != null)
         const packages = todo().filter((p) => p.nextType != null)
         successCount += 1
+
+        console.log(
+          '=====================================',
+          successCount,
+          '###',
+          packages.length,
+        )
+
         if (successCount < packages.length) {
           pluginOptions.successComment = false
           releases.push(...(context as any).releases)
@@ -272,7 +280,6 @@ export namespace Plugin {
           const ctx = context as any
           ctx.releases = releases
           pluginOptions.successComment = getSuccessComment()
-          console.log('=====================================')
           await plugins.success(context)
         }
 
