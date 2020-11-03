@@ -68,6 +68,37 @@ export namespace Plugin {
       })
   }
 
+  function getSuccessComment() {
+    return (
+      '' +
+      ":tada: This <%= issue.pull_request ? 'PR is included' : 'issue has been resolved' %> :tada:" +
+      '<% if(typeof releases !== "undefined" && Array.isArray(releases) && releases.length > 0) { %>' +
+      '<% var releaseInfos = releases.filter(function(release) { return !!release.name }) %>' +
+      '<% if(releaseInfos.length) { %>' +
+      '\n\nThe release is available on' +
+      '<% if (releaseInfos.length === 1) { %>' +
+      ' ' +
+      '<% if(releaseInfos[0].url) { %>' +
+      '[<%= releaseInfos[0].name %>](<%= releaseInfos[0].url %>)' +
+      '<% } else { %>' +
+      '<%= releaseInfos[0].name %>' +
+      '<% } %>' +
+      '<% } else { %>' +
+      ':' +
+      '<% releaseInfos.forEach(function(release) { %>' +
+      '\n- ' +
+      '<% if(release.url) { %>' +
+      '[<%= release.name %>](<%= release.url %>)' +
+      '<% } else { %>' +
+      '<%= release.name %>' +
+      '<% } %>' +
+      '<% }) %>' +
+      '<% } %>' +
+      '<% } %>' +
+      '<% } %>'
+    )
+  }
+
   export function get(
     packages: Package[],
     multiContext: Context,
@@ -79,7 +110,8 @@ export namespace Plugin {
 
     return function create(pkg: Package) {
       const { deps, plugins, dir, path, name } = pkg
-      let commits: Commits.Commit[]
+      let filteredCommits: Commits.Commit[]
+      let oldCommits: Commits.Commit[]
 
       const verifyConditions = async (
         pluginOptions: PluginOptions,
@@ -111,16 +143,21 @@ export namespace Plugin {
           : undefined
 
         // Filter commits by directory.
-        commits = await Commits.filter(
+        filteredCommits = await Commits.filter(
           cwd,
           dir,
           context.lastRelease ? context.lastRelease.gitHead : undefined,
           firstParentBranch,
         )
 
-        // Set context.commits so analyzeCommits does correct analysis.
         const ctx = context as any
-        ctx.commits = commits
+
+        if (oldCommits == null) {
+          oldCommits = ctx.commits
+        }
+
+        // Set context.commits so analyzeCommits does correct analysis.
+        ctx.commits = filteredCommits
 
         // Set lastRelease for package from context.
         pkg.lastRelease = context.lastRelease
@@ -169,10 +206,10 @@ export namespace Plugin {
 
         const notes: string[] = []
 
-        // Set context.commits so analyzeCommits does correct analysis.
-        // We need to redo this because context is a different instance each time.
+        // Set context.commits so analyzeCommits does correct analysis. We
+        // need to redo this because context is a different instance each time.
         const ctx = context as any
-        ctx.commits = commits
+        ctx.commits = filteredCommits
 
         // Get subnotes and add to list.
         // Inject pkg name into title if it matches e.g. `# 1.0.0` or `## [1.0.1]` (as generate-release-notes does).
@@ -210,20 +247,33 @@ export namespace Plugin {
           todo().find((p) => p.nextType != null && !p.prepared),
         )
 
-        // Wait for all packages to be `prepare`d and tagged by `semantic-release`
         await waitForAll('prepared', (p) => p.nextType != null)
+
         const res = await plugins.publish(context)
         debug('published: %s', pkg.name)
         return res.length ? res[0] : {}
       }
 
+      let successCount = 0
+      const releases: SemanticRelease.Release[] = []
+
       const success = async (
-        pluginOptions: PluginOptions,
+        pluginOptions: any,
         context: SemanticRelease.Context,
       ) => {
         pkg.published = true
         await waitForAll('published', (p) => p.nextType != null)
-        // console.log(pkg.name, context, pluginOptions)
+        const packages = todo().filter((p) => p.nextType != null)
+        successCount += 1
+        if (successCount < packages.length) {
+          pluginOptions.successComment = false
+          releases.push(...(context as any).releases)
+        } else {
+          const ctx = context as any
+          ctx.releases = releases
+          pluginOptions.successComment = getSuccessComment()
+        }
+
         const res = await plugins.success(context)
         debug('succeed: %s', pkg.name)
         return res
