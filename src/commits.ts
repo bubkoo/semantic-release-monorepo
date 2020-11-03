@@ -30,8 +30,10 @@ export namespace Commits {
     }
     subject: string
     body: string
+    hash: string
     message: string
     gitTags: string
+    committerDate: Date
   }
 
   export async function filter(

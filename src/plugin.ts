@@ -9,7 +9,7 @@ import { Synchronizer } from './synchronizer'
 import { Package, Context, PluginOptions, Options } from './types'
 
 export namespace InlinePlugin {
-  const debug = getDebugger('msr:inlinePlugin')
+  const debug = getDebugger('msr:inline-plugin')
 
   function updateManifestDeps(pkg: Package, path: string) {
     // Get and parse manifest file contents.
