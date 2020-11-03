@@ -235,7 +235,7 @@ export namespace Plugin {
         const packages = todo().filter((p) => p.nextType != null)
         const ctx = context as any
 
-        console.log('=====================================', successExeCount)
+        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>', successExeCount)
 
         if (successExeCount < packages.length) {
           successExeCount += 1
