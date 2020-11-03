@@ -243,11 +243,26 @@ export namespace Plugin {
           releases.push(...ctx.releases)
         }
 
-        if (successExeCount === packages.length) {
-          console.log(ctx)
-          ctx.releases = releases
-          await plugins.success(context)
+        if (successExeCount < packages.length) {
+          const options = context.options
+          if (options) {
+            const plugins = options.plugins
+            plugins.forEach((plugin) => {
+              if (Array.isArray(plugin)) {
+                const [name, args] = plugin
+                if (name === '@semantic-release/github') {
+                  args.successComment = false
+                }
+              }
+            })
+          }
         }
+
+        if (successExeCount === packages.length) {
+          ctx.releases = releases
+        }
+
+        await plugins.success(context)
 
         debug('succeed: %s', pkg.name)
       }
