@@ -3,6 +3,7 @@ import { Signale } from 'signale'
 import { WritableStreamBuffer } from 'stream-buffers'
 import SemanticRelease from 'semantic-release'
 import semanticGetConfig from 'semantic-release/lib/get-config'
+import cloneDeep from 'lodash.clonedeep'
 import { Util } from './util'
 import { check } from './blork'
 import { Logger } from './logger'
@@ -92,16 +93,29 @@ export namespace Release {
     const pkgOptions = await Util.getConfig(dir)
     const finalOptions = Object.assign({}, globalOptions, pkgOptions)
     const logger = { error() {}, log() {} }
+    const forkOptions = cloneDeep(finalOptions)
+    if (forkOptions.plugins) {
+      forkOptions.plugins.forEach((plugin) => {
+        if (Array.isArray(plugin)) {
+          const [name, config] = plugin
+          if (name === '@semantic-release/github') {
+            if (config) {
+              config.successComment = false
+            }
+          }
+        }
+      })
+    }
+
+    const context = { env, stdout, stderr, logger: logger as any, cwd: dir }
 
     // Use semantic-release's internal config with the final options (now we
     // have the right `options.plugins` setting) to get the plugins object and
     // the options including defaults.
     // We need this so we can call e.g. plugins.analyzeCommit() to be able to
     // affect the input and output of the whole set of plugins.
-    const { options, plugins } = await loadSemanticRelease(
-      { env, stdout, stderr, logger: logger as any, cwd: dir },
-      finalOptions,
-    )
+    const instance1 = await loadSemanticRelease(context, finalOptions)
+    const instance2 = await loadSemanticRelease(context, forkOptions)
 
     return {
       path,
@@ -109,9 +123,10 @@ export namespace Release {
       name,
       manifest,
       deps,
-      options,
-      plugins,
       logger,
+      options: instance1.options,
+      plugins: instance1.plugins,
+      plugins2: instance2.plugins,
       localDeps: [],
     }
   }

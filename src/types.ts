@@ -21,6 +21,7 @@ export interface Package {
   manifest: { [name: string]: any }
   deps: string[]
   plugins: any
+  plugins2: any
   logger: Logger
   options: SemanticRelease.Options
   localDeps: Package[]

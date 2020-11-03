@@ -459,6 +459,13 @@
   resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.6.tgz#f4c7ec43e81b319a9815115031709f26987891f0"
   integrity sha512-3c+yGKvVP5Y9TYBEibGNR+kLtijnj7mYrXRg+WpFb2X9xm04g/DXYkfg4hmzJQosc9snFNUPkbYIhu+KAm6jJw==
 
+"@types/lodash.clonedeep@^4.5.6":
+  version "4.5.6"
+  resolved "https://registry.npmjs.org/@types/lodash.clonedeep/-/lodash.clonedeep-4.5.6.tgz#3b6c40a0affe0799a2ce823b440a6cf33571d32b"
+  integrity sha512-cE1jYr2dEg1wBImvXlNtp0xDoS79rfEdGozQVgliDZj1uERH4k+rmEMTudP9b4VQ8O6nRb5gPqft0QzEQGMQgA==
+  dependencies:
+    "@types/lodash" "*"
+
 "@types/lodash.identity@^3.0.6":
   version "3.0.6"
   resolved "https://registry.npmjs.org/@types/lodash.identity/-/lodash.identity-3.0.6.tgz#55e1858a9e51c9963c63190ac88eb427c8b5015b"
