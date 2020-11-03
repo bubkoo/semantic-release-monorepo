@@ -1,11 +1,11 @@
 {
 	"name": "@bubkoo/msr-test-b",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"dependencies": {
-		"@bubkoo/msr-test-a": "1.0.1"
+		"@bubkoo/msr-test-a": "^1.0.2"
 	},
 	"devDependencies": {
-		"@bubkoo/msr-test-c": "1.0.0",
+		"@bubkoo/msr-test-c": "^1.0.2",
 		"left-pad": "latest"
 	},
 	"publishConfig": {
