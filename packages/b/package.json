@@ -1,8 +1,8 @@
 {
 	"name": "@bubkoo/msr-test-b",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"dependencies": {
-		"@bubkoo/msr-test-a": "^1.0.2"
+		"@bubkoo/msr-test-a": "^1.0.3"
 	},
 	"devDependencies": {
 		"@bubkoo/msr-test-c": "^1.0.0",

@@ -1,6 +1,6 @@
 {
 	"name": "@bubkoo/msr-test-a",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"peerDependencies": {
 		"@bubkoo/msr-test-c": "^1.0.0",
 		"left-pad": "latest"
