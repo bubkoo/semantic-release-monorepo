@@ -223,8 +223,10 @@ export namespace Plugin {
       ) => {
         pkg.published = true
         await waitForAll('published', (p) => p.nextType != null)
+        // console.log(pkg.name, context, pluginOptions)
+        const res = await plugins.success(context)
         debug('succeed: %s', pkg.name)
-        console.log(pkg.name, context, pluginOptions)
+        return res
       }
 
       const plugin: { [key: string]: any } = {
