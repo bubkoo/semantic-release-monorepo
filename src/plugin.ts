@@ -68,37 +68,6 @@ export namespace Plugin {
       })
   }
 
-  function getSuccessComment() {
-    return (
-      '' +
-      ":tada: This <%= issue.pull_request ? 'PR is included' : 'issue has been resolved' %> :tada:" +
-      '<% if(typeof releases !== "undefined" && Array.isArray(releases) && releases.length > 0) { %>' +
-      '<% var releaseInfos = releases.filter(function(release) { return !!release.name }) %>' +
-      '<% if(releaseInfos.length) { %>' +
-      '\n\nThe release is available on' +
-      '<% if (releaseInfos.length === 1) { %>' +
-      ' ' +
-      '<% if(releaseInfos[0].url) { %>' +
-      '[<%= releaseInfos[0].name %>](<%= releaseInfos[0].url %>)' +
-      '<% } else { %>' +
-      '<%= releaseInfos[0].name %>' +
-      '<% } %>' +
-      '<% } else { %>' +
-      ':' +
-      '<% releaseInfos.forEach(function(release) { %>' +
-      '\n- ' +
-      '<% if(release.url) { %>' +
-      '[<%= release.name %>](<%= release.url %>)' +
-      '<% } else { %>' +
-      '<%= release.name %>' +
-      '<% } %>' +
-      '<% }) %>' +
-      '<% } %>' +
-      '<% } %>' +
-      '<% } %>'
-    )
-  }
-
   export function get(
     packages: Package[],
     multiContext: Context,
@@ -256,7 +225,7 @@ export namespace Plugin {
       }
 
       const success = async (
-        pluginOptions: any,
+        pluginOptions: PluginOptions,
         context: SemanticRelease.Context,
       ) => {
         pkg.published = true
@@ -269,13 +238,13 @@ export namespace Plugin {
           const packages = todo().filter((p) => p.nextType != null)
           const releases: SemanticRelease.Release[] = []
           packages.forEach((p) => {
+            console.log(p.name, p.result)
             if (p.result) {
               releases.push(...p.result.releases)
             }
           })
           const ctx = context as any
           ctx.releases = releases
-          pluginOptions.successComment = getSuccessComment()
           await plugins.success(context)
         }
 
