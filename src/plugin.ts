@@ -272,7 +272,8 @@ export namespace Plugin {
           const ctx = context as any
           ctx.releases = releases
           pluginOptions.successComment = getSuccessComment()
-          await plugins.success(pluginOptions, context)
+          console.log('=====================================')
+          await plugins.success(context)
         }
 
         // console.log(plugins.success)
