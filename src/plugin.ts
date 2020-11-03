@@ -207,7 +207,7 @@ export namespace Plugin {
         pkg.prepared = true
         emit(
           'readyToGenerateNotes',
-          todo().find((p) => p.nextType && !p.prepared),
+          todo().find((p) => p.nextType != null && !p.prepared),
         )
 
         // Wait for all packages to be `prepare`d and tagged by `semantic-release`
