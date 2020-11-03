@@ -1,12 +1,12 @@
 {
  "name": "@bubkoo/msr-test-c",
- "version": "1.2.5",
+ "version": "1.2.6",
  "private": true,
  "dependencies": {
-  "@bubkoo/msr-test-a": "^1.2.5"
+  "@bubkoo/msr-test-a": "^1.2.6"
  },
  "devDependencies": {
-  "@bubkoo/msr-test-b": "^1.2.5",
-  "@bubkoo/msr-test-d": "^1.2.5"
+  "@bubkoo/msr-test-b": "^1.2.6",
+  "@bubkoo/msr-test-d": "^1.2.6"
  }
 }
