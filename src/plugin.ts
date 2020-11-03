@@ -20,7 +20,7 @@ export namespace InlinePlugin {
 
     const updateDependency = (scope: string, name: string, version: string) => {
       if (manifest[scope] && manifest[scope][name]) {
-        manifest[scope][name] = version
+        manifest[scope][name] = `^${version}`
       }
     }
 

@@ -2,7 +2,7 @@
 	"name": "@bubkoo/msr-test-a",
 	"version": "1.0.4",
 	"peerDependencies": {
-		"@bubkoo/msr-test-c": "1.0.0",
+		"@bubkoo/msr-test-c": "^1.0.4",
 		"left-pad": "latest"
 	},
 	"publishConfig": {
