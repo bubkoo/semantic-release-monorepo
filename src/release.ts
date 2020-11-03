@@ -108,8 +108,6 @@ export namespace Release {
       finalOptions,
     )
 
-    console.log(path, finalOptions, options, plugins)
-
     return {
       path,
       dir,

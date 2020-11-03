@@ -43,6 +43,4 @@ export namespace Workspace {
 
     return workspaces
   }
-
-  export function loadPackage() {}
 }

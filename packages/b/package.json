@@ -5,7 +5,7 @@
 		"@bubkoo/msr-test-a": "^1.0.1"
 	},
 	"devDependencies": {
-		"@bubkoo/msr-test-c": "1.0.0",
+		"@bubkoo/msr-test-c": "^1.0.0",
 		"left-pad": "latest"
 	},
 	"publishConfig": {
