@@ -239,7 +239,8 @@ export namespace Plugin {
 
         if (successExeCount < packages.length) {
           successExeCount += 1
-          releases.push(ctx.releases)
+          console.log(ctx.releases)
+          releases.push(...ctx.releases)
         }
 
         if (successExeCount === packages.length) {
