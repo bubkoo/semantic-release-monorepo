@@ -1,0 +1,11 @@
+{
+  "version": "independent",
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "command": {
+    "version": {
+      "ignoreChanges": ["*.md", "**/*.test.ts", "**/*.spec.ts"],
+      "message": "chore(release): publish"
+    }
+  }
+}

@@ -3,4 +3,4 @@
 
 ### Features
 
-* ✨ init ([736f607](https://github.com/bubkoo/semantic-release-monorepo/commit/736f6075fd15e09b0f76a41f86b7301b9a442d1c))
+* ✨ init ([736f607](https://github.com/bubkoo/monorepo-semantic-release/commit/736f6075fd15e09b0f76a41f86b7301b9a442d1c))

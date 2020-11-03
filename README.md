@@ -1,1 +1,1 @@
-# semantic-release-monorepo
+# monorepo-semantic-release

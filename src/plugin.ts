@@ -223,7 +223,8 @@ export namespace InlinePlugin {
       ) => {
         pkg.published = true
         await waitForAll('published', (p) => p.nextType != null)
-        debug('success: %s', pkg.name)
+        debug('succeed: %s', pkg.name)
+        console.log(pkg.name, context, pluginOptions)
       }
 
       const inlinePlugin: { [key: string]: any } = {
@@ -236,7 +237,7 @@ export namespace InlinePlugin {
 
       Object.keys(inlinePlugin).forEach((type) =>
         Reflect.defineProperty(inlinePlugin[type], 'pluginName', {
-          value: 'Inline plugin',
+          value: 'monorepo-semantic-release',
           writable: false,
           enumerable: true,
         }),

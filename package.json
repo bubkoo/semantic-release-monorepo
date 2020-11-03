@@ -36,11 +36,12 @@
     ]
   },
   "release": {
-    "repositoryUrl": "https://github.com/bubkoo/semantic-release-monorepo",
+    "repositoryUrl": "https://github.com/bubkoo/monorepo-semantic-release",
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
       "@semantic-release/changelog",
+      "@semantic-release/npm",
       [
         "@semantic-release/github",
         {
@@ -58,7 +59,7 @@
       ]
     ]
   },
-  "repository": "https://github.com/bubkoo/welcome-action",
+  "repository": "https://github.com/bubkoo/monorepo-semantic-release",
   "author": "bubkoo <bubkoo.wy@gmail.com>",
   "license": "MIT",
   "dependencies": {

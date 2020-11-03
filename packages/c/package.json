@@ -1,8 +1,13 @@
 {
-	"name": "msr-test-c",
-	"version": "0.0.0",
+	"name": "@bubkoo/msr-test-c",
+  "version": "0.0.0",
+  "private": "true",
 	"devDependencies": {
-		"msr-test-b": "1.0.0",
-		"msr-test-d": "1.0.0"
-	}
+		"@bubkoo/msr-test-b": "1.0.0",
+		"@bubkoo/msr-test-d": "1.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
 }

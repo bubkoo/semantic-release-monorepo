@@ -12,7 +12,7 @@ export namespace Workspace {
     return bashGlob.sync(patterns, options)
   }
 
-  export function get(cwd: string) {
+  export function getPaths(cwd: string) {
     const manifest = Manifest.get(`${cwd}/package.json`)
     let packages = manifest.workspaces
     if (packages && packages.packages) {
@@ -43,4 +43,6 @@ export namespace Workspace {
 
     return workspaces
   }
+
+  export function loadPackage() {}
 }

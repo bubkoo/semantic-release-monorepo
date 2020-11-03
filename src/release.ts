@@ -5,9 +5,10 @@ import SemanticRelease from 'semantic-release'
 import semanticGetConfig from 'semantic-release/lib/get-config'
 import { Util } from './util'
 import { check } from './blork'
+import { Logger } from './logger'
 import { Manifest } from './manifest'
-import { Synchronizer } from './synchronizer'
 import { RescopedStream } from './stream'
+import { Synchronizer } from './synchronizer'
 import { Context, Options, Package } from './types'
 import { InlinePlugin } from './plugin'
 
@@ -31,7 +32,7 @@ export namespace Release {
 
     cwd = Util.cleanPath(cwd) // tslint:disable-line
 
-    const logger = getLogger({ stdout, stderr })
+    const logger = Logger.get({ stdout, stderr })
     logger.complete(`Started release! Loading ${paths.length} packages...`)
 
     const globalOptions = await Util.getConfig(cwd)
@@ -107,7 +108,8 @@ export namespace Release {
       finalOptions,
     )
 
-    // Return package object.
+    console.log(path, finalOptions, options, plugins)
+
     return {
       path,
       dir,
@@ -126,27 +128,23 @@ export namespace Release {
     createInlinePlugin: (pkg: Package) => { [key: string]: any },
     context: Context,
   ) {
-    // Vars.
     const { options: pkgOptions, name, dir } = pkg
     const { env, stdout, stderr } = context
 
     // Make an 'inline plugin' for this package.
     // The inline plugin is the only plugin we call semanticRelease() with.
-    // The inline plugin functions then call e.g. plugins.analyzeCommits() manually and sometimes manipulate the responses.
+    // The inline plugin functions then call e.g. plugins.analyzeCommits()
+    // manually and sometimes manipulate the responses.
     const inlinePlugin = createInlinePlugin(pkg)
 
     // Set the options that we call semanticRelease() with.
-    // This consists of:
-    // - The global options (e.g. from the top level package.json)
-    // - The package options (e.g. from the specific package's package.json)
     const options = { ...pkgOptions, ...inlinePlugin }
 
     // Add the package name into tagFormat.
-    // Thought about doing a single release for the tag (merging several packages), but it's impossible to prevent Github releasing while allowing NPM to continue.
-    // It'd also be difficult to merge all the assets into one release without full editing/overriding the plugins.
-    options.tagFormat = `${name}` + '@${version}'
+    if (options.tagFormat == null) {
+      options.tagFormat = `${name}` + '@${version}'
+    }
 
-    // This options are needed for plugins that does not rely on `pluginOptions` and extracts them independently.
     options._pkgOptions = pkgOptions
 
     // Call semanticRelease() on the directory and save result to pkg.
@@ -154,8 +152,8 @@ export namespace Release {
     pkg.result = await SemanticRelease(options, {
       env,
       cwd: dir,
-      stdout: new RescopedStream(stdout, name) as any,
-      stderr: new RescopedStream(stderr, name) as any,
+      stdout: RescopedStream.get(stdout, name),
+      stderr: RescopedStream.get(stderr, name),
     })
   }
 
@@ -190,25 +188,5 @@ export namespace Release {
       logger.error(`Error in semantic-release getConfig(): %0`, error)
       throw error
     }
-  }
-
-  function getLogger({
-    stdout,
-    stderr,
-  }: {
-    stdout: NodeJS.WriteStream
-    stderr: NodeJS.WriteStream
-  }) {
-    return new Signale({
-      config: { displayTimestamp: true, displayLabel: false },
-      // scope: "multirelease",
-      stream: stdout,
-      types: {
-        error: { color: 'red', label: '', badge: '', stream: [stderr] },
-        log: { color: 'magenta', label: '', badge: '•', stream: [stdout] },
-        success: { color: 'green', label: '', badge: '', stream: [stdout] },
-        complete: { color: 'green', label: '', badge: '🎉', stream: [stdout] },
-      },
-    })
   }
 }
