@@ -272,12 +272,13 @@ export namespace Plugin {
           const ctx = context as any
           ctx.releases = releases
           pluginOptions.successComment = getSuccessComment()
+          await plugins.success(pluginOptions, context)
         }
 
-        console.log(plugins.success)
-        const res = await plugins.success(pluginOptions, context)
+        // console.log(plugins.success)
+        // const res = await plugins.success(pluginOptions, context)
         debug('succeed: %s', pkg.name)
-        return res
+        // return res
       }
 
       const plugin: { [key: string]: any } = {
