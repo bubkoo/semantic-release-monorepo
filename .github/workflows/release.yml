@@ -9,9 +9,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: yarn
-      # - run: yarn build
-      # - run: node ./lib/src/index.js
-      - run: yarn multi-semantic-release --debug
+      - run: yarn build
+      - run: node ./lib/src/index.js
+        # - run: yarn multi-semantic-release --debug
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
