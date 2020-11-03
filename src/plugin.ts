@@ -76,7 +76,8 @@ export namespace Plugin {
   ) {
     const { cwd } = multiContext
     const { emit, todo, waitFor, waitForAll, getLucky } = synchronizer
-    let successExectued = false
+    let successExeCount = 0
+    const releases: SemanticRelease.Release[] = []
 
     return function create(pkg: Package) {
       const { deps, plugins, dir, path, name } = pkg
@@ -231,19 +232,17 @@ export namespace Plugin {
         pkg.published = true
         await waitForAll('published', (p) => p.nextType != null)
 
-        console.log('=====================================', successExectued)
+        const packages = todo().filter((p) => p.nextType != null)
+        const ctx = context as any
 
-        if (!successExectued) {
-          successExectued = true
-          const packages = todo().filter((p) => p.nextType != null)
-          const releases: SemanticRelease.Release[] = []
-          packages.forEach((p) => {
-            console.log(p.name, p.result)
-            if (p.result) {
-              releases.push(...p.result.releases)
-            }
-          })
-          const ctx = context as any
+        console.log('=====================================', successExeCount)
+
+        if (successExeCount < packages.length) {
+          successExeCount += 1
+          releases.push(ctx.releases)
+        }
+
+        if (successExeCount === packages.length) {
           ctx.releases = releases
           await plugins.success(context)
         }
