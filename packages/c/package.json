@@ -1,13 +1,13 @@
 {
-	"name": "@bubkoo/msr-test-c",
-  "version": "0.0.0",
-  "private": "true",
-	"devDependencies": {
-		"@bubkoo/msr-test-b": "*",
-		"@bubkoo/msr-test-d": "*"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
-  }
+ "name": "@bubkoo/msr-test-c",
+ "version": "0.0.1",
+ "private": "true",
+ "devDependencies": {
+  "@bubkoo/msr-test-b": "^1.0.1",
+  "@bubkoo/msr-test-d": "^0.0.1"
+ },
+ "publishConfig": {
+  "access": "public",
+  "registry": "https://registry.npmjs.org"
+ }
 }
