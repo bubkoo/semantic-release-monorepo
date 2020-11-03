@@ -139,7 +139,7 @@ export namespace Release {
     const options = { ...pkgOptions, ...inlinePlugin }
 
     // Add the package name into tagFormat.
-    if (options.tagFormat == null) {
+    if (options.tagFormat == null || options.tagFormat === 'v${version}') {
       options.tagFormat = `${name}` + '@${version}'
     }
 
