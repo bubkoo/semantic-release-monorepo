@@ -1,6 +1,6 @@
 {
   "name": "@bubkoo/msr-test-d",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": "true",
   "publishConfig": {
     "access": "public",
