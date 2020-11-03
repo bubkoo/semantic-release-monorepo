@@ -2,7 +2,7 @@
 	"name": "msr-test-a",
 	"version": "0.0.0",
 	"peerDependencies": {
-		"msr-test-c": "*",
+		"msr-test-c": "1.0.0",
 		"left-pad": "latest"
 	}
 }
