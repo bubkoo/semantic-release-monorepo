@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": "true",
 	"devDependencies": {
-		"@bubkoo/msr-test-b": "1.0.0",
-		"@bubkoo/msr-test-d": "1.0.0"
+		"@bubkoo/msr-test-b": "*",
+		"@bubkoo/msr-test-d": "*"
   },
   "publishConfig": {
     "access": "public",
