@@ -3,10 +3,10 @@
  "version": "1.0.5",
  "private": true,
  "dependencies": {
-  "@bubkoo/msr-test-a": "^1.0.9"
+  "@bubkoo/msr-test-a": "^1.0.10"
  },
  "devDependencies": {
-  "@bubkoo/msr-test-b": "^1.0.9",
+  "@bubkoo/msr-test-b": "^1.0.10",
   "@bubkoo/msr-test-d": "^1.0.6"
  }
 }
