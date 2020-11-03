@@ -274,7 +274,8 @@ export namespace Plugin {
           pluginOptions.successComment = getSuccessComment()
         }
 
-        const res = await plugins.success(context)
+        console.log(plugins.success)
+        const res = await plugins.success(pluginOptions, context)
         debug('succeed: %s', pkg.name)
         return res
       }
