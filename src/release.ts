@@ -148,10 +148,6 @@ export namespace Release {
       stdout: RescopedStream.get(stdout, name),
       stderr: RescopedStream.get(stderr, name),
     })
-
-    if (pkg.result) {
-      console.log('============================', pkg.result.releases)
-    }
   }
 
   async function loadSemanticRelease(

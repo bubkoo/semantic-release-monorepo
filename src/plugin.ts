@@ -244,6 +244,7 @@ export namespace Plugin {
         }
 
         if (successExeCount === packages.length) {
+          console.log(ctx)
           ctx.releases = releases
           await plugins.success(context)
         }
