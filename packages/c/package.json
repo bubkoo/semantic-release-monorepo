@@ -1,9 +1,9 @@
 {
  "name": "@bubkoo/msr-test-c",
- "version": "1.0.2",
+ "version": "1.0.3",
  "private": "true",
  "devDependencies": {
-  "@bubkoo/msr-test-b": "^1.0.2",
+  "@bubkoo/msr-test-b": "^1.0.3",
   "@bubkoo/msr-test-d": "1.0.1"
  },
  "publishConfig": {
