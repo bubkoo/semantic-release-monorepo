@@ -1,3 +1,13 @@
+## @bubkoo/msr-test-b [1.0.10](https://github.com/bubkoo/monorepo-semantic-release/compare/@bubkoo/msr-test-b@1.0.9...@bubkoo/msr-test-b@1.0.10) (2020-11-03)
+
+
+
+
+
+### Dependencies
+
+* **@bubkoo/msr-test-a:** upgraded to 1.0.10
+
 ## @bubkoo/msr-test-b [1.0.9](https://github.com/bubkoo/monorepo-semantic-release/compare/@bubkoo/msr-test-b@1.0.8...@bubkoo/msr-test-b@1.0.9) (2020-11-03)
 
 
