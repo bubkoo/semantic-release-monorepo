@@ -1,7 +1,7 @@
 {
  "name": "@bubkoo/msr-test-c",
- "version": "1.0.4",
- "private": "true",
+ "version": "1.0.5",
+ "private": true,
  "dependencies": {
   "@bubkoo/msr-test-a": "^1.0.9"
  },
