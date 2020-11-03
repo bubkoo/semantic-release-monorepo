@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: yarn
       - run: yarn build
-      - run: node ./lib/src/index.js
+      - run: node lib/src/index.js
         # - run: yarn multi-semantic-release --debug
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
