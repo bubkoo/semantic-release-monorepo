@@ -8,9 +8,5 @@
  "devDependencies": {
   "@bubkoo/msr-test-b": "^1.0.5",
   "@bubkoo/msr-test-d": "^1.0.4"
- },
- "publishConfig": {
-  "access": "public",
-  "registry": "https://registry.npmjs.org"
  }
 }

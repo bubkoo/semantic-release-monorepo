@@ -1,9 +1,5 @@
 {
   "name": "@bubkoo/msr-test-d",
   "version": "1.0.4",
-  "private": "true",
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
-  }
+  "private": "true"
 }

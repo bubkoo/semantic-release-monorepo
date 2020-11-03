@@ -4,9 +4,6 @@
 	"dependencies": {
 		"@bubkoo/msr-test-a": "^1.0.5"
 	},
-	"devDependencies": {
-		"left-pad": "latest"
-	},
 	"publishConfig": {
 		"access": "public",
 		"registry": "https://registry.npmjs.org"
