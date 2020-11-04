@@ -1,8 +1,8 @@
 {
 	"name": "@bubkoo/msr-test-a",
-	"version": "1.2.27",
+	"version": "1.2.28",
 	"peerDependencies": {
-		"@bubkoo/msr-test-c": "^1.2.27",
+		"@bubkoo/msr-test-c": "^1.2.28",
 		"left-pad": "latest"
 	},
 	"publishConfig": {
