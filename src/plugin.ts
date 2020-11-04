@@ -88,6 +88,7 @@ export namespace Plugin {
     const { cwd } = multiContext
     const { emit, todo, waitFor, waitForAll, getLucky } = synchronizer
     const releaseMap: { [key: string]: SemanticRelease.Release[] } = {}
+    let successExeCount = 0
 
     return function create(pkg: Package) {
       const { deps, plugins, plugins2, dir, path, name } = pkg
@@ -287,8 +288,6 @@ export namespace Plugin {
 
         return releases[0]
       }
-
-      let successExeCount = 0
 
       const success = async (
         pluginOptions: PluginOptions,
