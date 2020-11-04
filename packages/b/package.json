@@ -5,7 +5,6 @@
 		"@bubkoo/msr-test-a": "^1.2.18"
 	},
 	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org"
+		"access": "public"
 	}
 }
