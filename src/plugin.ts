@@ -72,6 +72,14 @@ export namespace Plugin {
       })
   }
 
+  function getOrgName(name: string) {
+    if (name[0] !== '@') {
+      return null
+    }
+    const index = name.indexOf('/')
+    return index > 1 ? name.substr(1, index - 1) : null
+  }
+
   export function get(
     packages: Package[],
     multiContext: Context,
@@ -225,18 +233,24 @@ export namespace Plugin {
         await waitForAll('prepared', (p) => p.nextType != null)
 
         const res = await plugins.publish(context)
+        const org = getOrgName(pkg.name)
 
-        if (!pkg.private) {
-          const npmrc = resolve(homedir(), '.npmrc')
+        if (!pkg.private && org) {
+          const globalNpmrc = resolve(homedir(), '.npmrc')
+          const localNpmrc = resolve(pkg.dir, '.npmrc')
           const token = context.env.GITHUB_TOKEN
-          await fse.ensureFile(npmrc)
+          await fse.ensureFile(globalNpmrc)
           writeFileSync(
-            npmrc,
-            `registry=https://npm.pkg.github.com/\n//npm.pkg.github.com/:_authToken=${token}`,
-            {
-              encoding: 'utf-8',
-            },
+            globalNpmrc,
+            `//npm.pkg.github.com/:_authToken=${token}`,
           )
+
+          writeFileSync(
+            localNpmrc,
+            `registry=https://npm.pkg.github.com/${org}`,
+          )
+
+          await fse.ensureFile(localNpmrc)
 
           const result = execa('npm', ['publish'], {
             cwd: pkg.dir,

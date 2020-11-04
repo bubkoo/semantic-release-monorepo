@@ -8,5 +8,6 @@
  "devDependencies": {
   "@bubkoo/msr-test-b": "^1.2.24",
   "@bubkoo/msr-test-d": "^1.2.24"
- }
+ },
+ "repository": "https://github.com/bubkoo/monorepo-semantic-release"
 }
