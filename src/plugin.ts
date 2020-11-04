@@ -1,3 +1,4 @@
+import { resolve } from 'path'
 import { writeFileSync } from 'fs'
 import execa from 'execa'
 import getDebugger from 'debug'
@@ -224,14 +225,18 @@ export namespace Plugin {
         const res = await plugins.publish(context)
 
         if (!pkg.private) {
-          const result = execa(
-            'npm',
-            ['publish', '--registry', 'https://npm.pkg.github.com'],
-            {
-              cwd: pkg.dir,
-              env: context.env,
-            },
-          ) as any
+          const path = resolve(pkg.dir, '.npmrc')
+          const token = context.env.GITHUB_TOKEN
+
+          console.log(path)
+          await execa(
+            `echo "https://npm.pkg.github.com/:_authToken=${token}" >> ${path}`,
+          )
+
+          const result = execa('npm', ['publish'], {
+            cwd: pkg.dir,
+            env: context.env,
+          }) as any
 
           const ctx = context as any
           result.stdout.pipe(ctx.stdout, { end: false })
