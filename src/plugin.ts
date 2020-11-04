@@ -1,9 +1,9 @@
 import * as fse from 'fs-extra'
-import { resolve } from 'path'
 import { homedir } from 'os'
-import { writeFileSync } from 'fs'
+import { resolve } from 'path'
 import execa from 'execa'
 import getDebugger from 'debug'
+import cloneDeep from 'lodash.clonedeep'
 import detectIndent from 'detect-indent'
 import detectNewline from 'detect-newline'
 import SemanticRelease from 'semantic-release'
@@ -47,7 +47,7 @@ export namespace Plugin {
       })
 
     // Write package.json back out.
-    writeFileSync(
+    fse.writeFileSync(
       path,
       JSON.stringify(manifest, null, indent) + trailingWhitespace,
     )
@@ -220,6 +220,38 @@ export namespace Plugin {
         return notes.join('\n\n')
       }
 
+      const publishGPR = async (context: SemanticRelease.Context) => {
+        const org = getOrgName(pkg.name)
+
+        if (!pkg.private && org) {
+          const globalNpmrc = resolve(homedir(), '.npmrc')
+          const localNpmrc = resolve(pkg.dir, '.npmrc')
+          const token = context.env.GITHUB_TOKEN
+          await fse.ensureFile(globalNpmrc)
+          await fse.ensureFile(localNpmrc)
+
+          await fse.writeFile(
+            globalNpmrc,
+            `//npm.pkg.github.com/:_authToken=${token}`,
+          )
+
+          await fse.writeFile(
+            localNpmrc,
+            `registry=https://npm.pkg.github.com/${org}`,
+          )
+
+          const pub = execa('npm', ['publish'], {
+            cwd: pkg.dir,
+            env: context.env,
+          }) as any
+
+          const ctx = context as any
+          pub.stdout.pipe(ctx.stdout, { end: false })
+          pub.stderr.pipe(ctx.stderr, { end: false })
+          return await pub
+        }
+      }
+
       const publish = async (
         pluginOptions: PluginOptions,
         context: SemanticRelease.Context,
@@ -233,41 +265,27 @@ export namespace Plugin {
         await waitForAll('prepared', (p) => p.nextType != null)
 
         const res = await plugins.publish(context)
-        const org = getOrgName(pkg.name)
+        const releases: SemanticRelease.Release[] = Array.isArray(res)
+          ? res
+          : res != null
+          ? [res]
+          : []
 
-        if (!pkg.private && org) {
-          const globalNpmrc = resolve(homedir(), '.npmrc')
-          const localNpmrc = resolve(pkg.dir, '.npmrc')
-          const token = context.env.GITHUB_TOKEN
-          await fse.ensureFile(globalNpmrc)
-          writeFileSync(
-            globalNpmrc,
-            `//npm.pkg.github.com/:_authToken=${token}`,
-          )
+        console.log(context)
 
-          writeFileSync(
-            localNpmrc,
-            `registry=https://npm.pkg.github.com/${org}`,
-          )
-
-          await fse.ensureFile(localNpmrc)
-
-          const result = execa('npm', ['publish'], {
-            cwd: pkg.dir,
-            env: context.env,
-          }) as any
-
-          const ctx = context as any
-          result.stdout.pipe(ctx.stdout, { end: false })
-          result.stderr.pipe(ctx.stderr, { end: false })
-          const a = await result
-          console.log(a)
+        const gpr = await publishGPR(context)
+        if (gpr && !gpr.failed) {
+          const release = cloneDeep(releases[0])
+          // const org = getOrgName(pkg.name)
+          release.name = 'GitHub package'
+          release.pluginName = 'inner plugin'
+          releases.push(release)
         }
 
         debug('published: %s', pkg.name)
-        const ret = res.length ? res[0] : {}
-        console.log(res)
-        return ret
+
+        console.log(releases)
+        return releases
       }
 
       const success = async (
