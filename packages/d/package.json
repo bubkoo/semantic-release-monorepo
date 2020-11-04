@@ -1,6 +1,6 @@
 {
   "name": "@bubkoo/msr-test-d",
-  "version": "1.2.24",
+  "version": "1.2.25",
   "private": true,
   "repository": "https://github.com/bubkoo/monorepo-semantic-release"
 }
