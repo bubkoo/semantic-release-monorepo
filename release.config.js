@@ -30,7 +30,6 @@ const releaseRules = [
 ]
 
 function getSuccessComment() {
-  // note: spaces will break the generated markdown
   return (
     ''
     + ":tada: This <%= issue.pull_request ? 'PR is included' : 'issue has been resolved' %> :tada:"

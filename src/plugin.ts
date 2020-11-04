@@ -1,4 +1,5 @@
 import { writeFileSync } from 'fs'
+import execa from 'execa'
 import getDebugger from 'debug'
 import detectIndent from 'detect-indent'
 import detectNewline from 'detect-newline'
@@ -221,6 +222,23 @@ export namespace Plugin {
         await waitForAll('prepared', (p) => p.nextType != null)
 
         const res = await plugins.publish(context)
+
+        console.log(context.options)
+
+        const result = execa(
+          'npm',
+          ['publish', '--registry', 'https://npm.pkg.github.com'],
+          {
+            cwd: pkg.path,
+            env: context.env,
+          },
+        ) as any
+
+        const ctx = context as any
+        result.stdout.pipe(ctx.stdout, { end: false })
+        result.stderr.pipe(ctx.stderr, { end: false })
+        await result
+
         debug('published: %s', pkg.name)
         return res.length ? res[0] : {}
       }
