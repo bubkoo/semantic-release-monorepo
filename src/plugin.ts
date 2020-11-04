@@ -3,7 +3,6 @@ import { homedir } from 'os'
 import { resolve } from 'path'
 import execa from 'execa'
 import getDebugger from 'debug'
-import cloneDeep from 'lodash.clonedeep'
 import detectIndent from 'detect-indent'
 import detectNewline from 'detect-newline'
 import SemanticRelease from 'semantic-release'
@@ -271,21 +270,22 @@ export namespace Plugin {
           ? [ret]
           : []
 
-        console.log(context)
-
         const gpr = await publishGPR(context)
         if (gpr && !gpr.failed) {
-          const release = cloneDeep(releases[0])
-          // const org = getOrgName(pkg.name)
-          release.name = 'GitHub package'
-          release.pluginName = 'monorepo-semantic-release'
-          releases.push(release)
+          const release = {
+            ...context.nextRelease,
+            name: 'GitHub package',
+            url: `${context.options!.repositoryUrl}/${packages}`,
+            pluginName: 'monorepo-semantic-release',
+          }
+          releases.push(release as SemanticRelease.Release)
         }
 
         debug('published: %s', pkg.name)
 
         console.log(releases)
-        return releases
+
+        return releases[0]
       }
 
       const success = async (
@@ -304,17 +304,17 @@ export namespace Plugin {
           releases.push(...ctx.releases)
         }
 
-        let res
+        let ret
         if (successExeCount === packages.length) {
           ctx.releases = releases
-          res = await plugins.success(context)
+          ret = await plugins.success(context)
         } else {
-          res = await plugins2.success(context)
+          ret = await plugins2.success(context)
         }
 
         debug('succeed: %s', pkg.name)
 
-        return res
+        return ret
       }
 
       const plugin: { [key: string]: any } = {
