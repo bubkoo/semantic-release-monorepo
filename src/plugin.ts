@@ -235,22 +235,23 @@ export namespace Plugin {
         const packages = todo().filter((p) => p.nextType != null)
         const ctx = context as any
 
-        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>', successExeCount)
-
         if (successExeCount < packages.length) {
           successExeCount += 1
-          console.log(ctx.releases)
+          console.log(pkg.name, successExeCount, ctx.releases)
           releases.push(...ctx.releases)
         }
 
+        let res
         if (successExeCount === packages.length) {
           ctx.releases = releases
-          await plugins.success(context)
+          res = await plugins.success(context)
         } else {
-          await plugins2.success(context)
+          res = await plugins2.success(context)
         }
 
         debug('succeed: %s', pkg.name)
+
+        return res
       }
 
       const plugin: { [key: string]: any } = {

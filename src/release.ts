@@ -93,17 +93,23 @@ export namespace Release {
     const pkgOptions = await Util.getConfig(dir)
     const finalOptions = Object.assign({}, globalOptions, pkgOptions)
     const logger = { error() {}, log() {} }
-    const forkOptions = cloneDeep(finalOptions)
-    if (forkOptions.plugins) {
-      forkOptions.plugins.forEach((plugin) => {
+    const cloneOptions = cloneDeep(finalOptions)
+    if (cloneOptions.plugins) {
+      const githubPlugin = '@semantic-release/github'
+      cloneOptions.plugins = cloneOptions.plugins.map((plugin) => {
         if (Array.isArray(plugin)) {
-          const [name, config] = plugin
-          if (name === '@semantic-release/github') {
-            if (config) {
-              config.successComment = false
-            }
+          const pluginName = plugin[0]
+          const pluginOptions = plugin[1]
+          if (pluginName === githubPlugin) {
+            return [pluginName, { ...pluginOptions, successComment: false }]
           }
         }
+
+        if (plugin === githubPlugin) {
+          return [plugin, { successComment: false }]
+        }
+
+        return plugin
       })
     }
 
@@ -115,7 +121,7 @@ export namespace Release {
     // We need this so we can call e.g. plugins.analyzeCommit() to be able to
     // affect the input and output of the whole set of plugins.
     const instance1 = await loadSemanticRelease(context, finalOptions)
-    const instance2 = await loadSemanticRelease(context, forkOptions)
+    const instance2 = await loadSemanticRelease(context, cloneOptions)
 
     return {
       path,
