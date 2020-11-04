@@ -9,7 +9,7 @@ import SemanticRelease from 'semantic-release'
 import { Commits } from './commits'
 import { Manifest } from './manifest'
 import { Synchronizer } from './synchronizer'
-import { Package, Context, Options } from './types'
+import { Package, Context, PluginOptions, Options } from './types'
 
 export namespace Plugin {
   const debug = getDebugger('msr:inline-plugin')
@@ -94,7 +94,7 @@ export namespace Plugin {
       let scopedCommits: Commits.Commit[]
 
       const verifyConditions = async (
-        pluginOptions: any,
+        pluginOptions: PluginOptions,
         context: SemanticRelease.Context,
       ) => {
         // Restore context for plugins that does not rely on parsed opts.
@@ -115,7 +115,7 @@ export namespace Plugin {
       }
 
       const analyzeCommits = async (
-        pluginOptions: any,
+        pluginOptions: PluginOptions,
         context: SemanticRelease.Context,
       ) => {
         const firstParentBranch: string | undefined = flags.firstParent
@@ -163,7 +163,7 @@ export namespace Plugin {
       }
 
       const generateNotes = async (
-        pluginOptions: any,
+        pluginOptions: PluginOptions,
         context: SemanticRelease.Context,
       ) => {
         // Set nextRelease for package.
@@ -246,7 +246,7 @@ export namespace Plugin {
       }
 
       const publish = async (
-        pluginOptions: any,
+        pluginOptions: PluginOptions,
         context: SemanticRelease.Context,
       ) => {
         pkg.prepared = true
@@ -287,7 +287,7 @@ export namespace Plugin {
       let successExeCount = 0
 
       const success = async (
-        pluginOptions: any,
+        pluginOptions: PluginOptions,
         context: SemanticRelease.Context,
       ) => {
         pkg.published = true
