@@ -89,6 +89,7 @@ export namespace Plugin {
     const { emit, todo, waitFor, waitForAll, getLucky } = synchronizer
     let successExeCount = 0
     const releases: SemanticRelease.Release[] = []
+    const releaseMap: { [key: string]: SemanticRelease.Release[] } = {}
 
     return function create(pkg: Package) {
       const { deps, plugins, plugins2, dir, path, name } = pkg
@@ -275,7 +276,7 @@ export namespace Plugin {
           const release = {
             ...context.nextRelease,
             name: 'GitHub package',
-            url: `${context.options!.repositoryUrl}/${packages}`,
+            url: `${context.options!.repositoryUrl}/packages/`,
             pluginName: 'monorepo-semantic-release',
           }
           releases.push(release as SemanticRelease.Release)
@@ -285,7 +286,9 @@ export namespace Plugin {
 
         console.log(releases)
 
-        return releases[0]
+        releaseMap[pkg.name] = releases
+
+        return releases
       }
 
       const success = async (
@@ -301,6 +304,7 @@ export namespace Plugin {
         if (successExeCount < packages.length) {
           successExeCount += 1
           console.log(pkg.name, successExeCount, ctx.releases)
+          ctx.releases = releaseMap[pkg.name]
           releases.push(...ctx.releases)
         }
 
