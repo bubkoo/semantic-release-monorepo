@@ -235,9 +235,9 @@ export namespace Plugin {
 
           console.log(context.env, result)
 
-          // const ctx = context as any
-          // result.stdout.pipe(ctx.stdout, { end: false })
-          // result.stderr.pipe(ctx.stderr, { end: false })
+          const ctx = context as any
+          result.stdout.pipe(ctx.stdout, { end: false })
+          result.stderr.pipe(ctx.stderr, { end: false })
           const a = await result
           console.log(a)
         }
