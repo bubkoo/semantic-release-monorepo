@@ -265,7 +265,9 @@ export namespace Plugin {
         }
 
         debug('published: %s', pkg.name)
-        return res.length ? res[0] : {}
+        const ret = res.length ? res[0] : {}
+        console.log(ret)
+        return ret
       }
 
       const success = async (
