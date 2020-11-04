@@ -1,13 +1,13 @@
 {
  "name": "@bubkoo/msr-test-c",
- "version": "1.2.25",
+ "version": "1.2.26",
  "private": true,
  "dependencies": {
-  "@bubkoo/msr-test-a": "^1.2.25"
+  "@bubkoo/msr-test-a": "^1.2.26"
  },
  "devDependencies": {
-  "@bubkoo/msr-test-b": "^1.2.25",
-  "@bubkoo/msr-test-d": "^1.2.25"
+  "@bubkoo/msr-test-b": "^1.2.26",
+  "@bubkoo/msr-test-d": "^1.2.26"
  },
  "repository": "https://github.com/bubkoo/monorepo-semantic-release"
 }
