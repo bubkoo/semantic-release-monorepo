@@ -277,9 +277,13 @@ export namespace Plugin {
 
         debug('published: %s', pkg.name)
 
-        console.log(releases)
-
         releaseMap[pkg.name] = releases
+          .filter((r) => r.name != null)
+          .map((r) => ({
+            ...r,
+            package: pkg.name,
+            private: pkg.private,
+          }))
 
         return releases[0]
       }
@@ -293,25 +297,26 @@ export namespace Plugin {
         pkg.published = true
         await waitForAll('published', (p) => p.nextType != null)
 
-        const releasedPkgs = todo().filter((p) => p.nextType != null)
+        const totalCount = todo().filter((p) => p.nextType != null).length
         const ctx = context as any
 
-        if (successExeCount < releasedPkgs.length) {
+        if (successExeCount < totalCount) {
           successExeCount += 1
-          ctx.releases = releaseMap[pkg.name]
-          console.log(pkg.name, successExeCount, ctx.releases)
         }
 
+        console.log(pkg.name, successExeCount, ctx.releases)
+
         let ret
-        if (successExeCount === releasedPkgs.length) {
+        if (successExeCount === totalCount) {
           ctx.releases = Object.keys(releaseMap).reduce<
             SemanticRelease.Release[]
           >((memo, key) => {
             return [...memo, ...releaseMap[key]]
           }, [])
-          ret = await plugins.success(context)
+          ret = await plugins.success(ctx)
         } else {
-          ret = await plugins2.success(context)
+          ctx.releases = releaseMap[pkg.name]
+          ret = await plugins2.success(ctx)
         }
 
         debug('succeed: %s', pkg.name)
