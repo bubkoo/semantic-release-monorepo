@@ -9,7 +9,6 @@ import { Commits } from './commits'
 import { Manifest } from './manifest'
 import { Synchronizer } from './synchronizer'
 import { Package, Context, PluginOptions, Options } from './types'
-import { await } from 'signale'
 
 export namespace Plugin {
   const debug = getDebugger('msr:inline-plugin')
