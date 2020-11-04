@@ -130,6 +130,7 @@ export namespace Release {
       manifest,
       deps,
       logger,
+      private: manifest.private === true,
       options: instance1.options,
       plugins: instance1.plugins,
       plugins2: instance2.plugins,

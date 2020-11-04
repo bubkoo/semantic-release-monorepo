@@ -18,6 +18,7 @@ export interface Package {
   path: string
   dir: string
   name: string
+  private: boolean
   manifest: { [name: string]: any }
   deps: string[]
   plugins: any

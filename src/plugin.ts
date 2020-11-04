@@ -223,21 +223,21 @@ export namespace Plugin {
 
         const res = await plugins.publish(context)
 
-        console.log(context.options)
+        if (!pkg.private) {
+          const result = execa(
+            'npm',
+            ['publish', '--registry', 'https://npm.pkg.github.com'],
+            {
+              cwd: pkg.path,
+              env: context.env,
+            },
+          ) as any
 
-        const result = execa(
-          'npm',
-          ['publish', '--registry', 'https://npm.pkg.github.com'],
-          {
-            cwd: pkg.path,
-            env: context.env,
-          },
-        ) as any
-
-        const ctx = context as any
-        result.stdout.pipe(ctx.stdout, { end: false })
-        result.stderr.pipe(ctx.stderr, { end: false })
-        await result
+          // const ctx = context as any
+          // result.stdout.pipe(ctx.stdout, { end: false })
+          // result.stderr.pipe(ctx.stderr, { end: false })
+          await result
+        }
 
         debug('published: %s', pkg.name)
         return res.length ? res[0] : {}
