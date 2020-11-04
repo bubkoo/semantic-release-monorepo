@@ -9,7 +9,7 @@ import SemanticRelease from 'semantic-release'
 import { Commits } from './commits'
 import { Manifest } from './manifest'
 import { Synchronizer } from './synchronizer'
-import { Package, Context, PluginOptions, Options } from './types'
+import { Package, Context, Options } from './types'
 
 export namespace Plugin {
   const debug = getDebugger('msr:inline-plugin')
@@ -91,11 +91,10 @@ export namespace Plugin {
 
     return function create(pkg: Package) {
       const { deps, plugins, plugins2, dir, path, name } = pkg
-      let filteredCommits: Commits.Commit[]
-      let oldCommits: Commits.Commit[]
+      let scopedCommits: Commits.Commit[]
 
       const verifyConditions = async (
-        pluginOptions: PluginOptions,
+        pluginOptions: any,
         context: SemanticRelease.Context,
       ) => {
         // Restore context for plugins that does not rely on parsed opts.
@@ -116,7 +115,7 @@ export namespace Plugin {
       }
 
       const analyzeCommits = async (
-        pluginOptions: PluginOptions,
+        pluginOptions: any,
         context: SemanticRelease.Context,
       ) => {
         const firstParentBranch: string | undefined = flags.firstParent
@@ -124,7 +123,7 @@ export namespace Plugin {
           : undefined
 
         // Filter commits by directory.
-        filteredCommits = await Commits.filter(
+        scopedCommits = await Commits.filter(
           cwd,
           dir,
           context.lastRelease ? context.lastRelease.gitHead : undefined,
@@ -133,12 +132,8 @@ export namespace Plugin {
 
         const ctx = context as any
 
-        if (oldCommits == null) {
-          oldCommits = ctx.commits
-        }
-
         // Set context.commits so analyzeCommits does correct analysis.
-        ctx.commits = filteredCommits
+        ctx.commits = scopedCommits
 
         // Set lastRelease for package from context.
         pkg.lastRelease = context.lastRelease
@@ -168,7 +163,7 @@ export namespace Plugin {
       }
 
       const generateNotes = async (
-        pluginOptions: PluginOptions,
+        pluginOptions: any,
         context: SemanticRelease.Context,
       ) => {
         // Set nextRelease for package.
@@ -190,7 +185,7 @@ export namespace Plugin {
         // Set context.commits so analyzeCommits does correct analysis. We
         // need to redo this because context is a different instance each time.
         const ctx = context as any
-        ctx.commits = filteredCommits
+        ctx.commits = scopedCommits
 
         // Get subnotes and add to list.
         // Inject pkg name into title if it matches e.g. `# 1.0.0` or `## [1.0.1]` (as generate-release-notes does).
@@ -251,7 +246,7 @@ export namespace Plugin {
       }
 
       const publish = async (
-        pluginOptions: PluginOptions,
+        pluginOptions: any,
         context: SemanticRelease.Context,
       ) => {
         pkg.prepared = true
@@ -292,7 +287,7 @@ export namespace Plugin {
       let successExeCount = 0
 
       const success = async (
-        pluginOptions: PluginOptions,
+        pluginOptions: any,
         context: SemanticRelease.Context,
       ) => {
         pkg.published = true

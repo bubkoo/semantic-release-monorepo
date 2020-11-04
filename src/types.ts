@@ -41,7 +41,3 @@ export interface Logger {
   log: () => void
   error: () => void
 }
-
-export interface PluginOptions {
-  [key: string]: string
-}
