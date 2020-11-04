@@ -266,7 +266,7 @@ export namespace Plugin {
 
         debug('published: %s', pkg.name)
         const ret = res.length ? res[0] : {}
-        console.log(ret)
+        console.log(res)
         return ret
       }
 
