@@ -9,6 +9,7 @@ import { Commits } from './commits'
 import { Manifest } from './manifest'
 import { Synchronizer } from './synchronizer'
 import { Package, Context, PluginOptions, Options } from './types'
+import { await } from 'signale'
 
 export namespace Plugin {
   const debug = getDebugger('msr:inline-plugin')
@@ -225,12 +226,13 @@ export namespace Plugin {
         const res = await plugins.publish(context)
 
         if (!pkg.private) {
-          const path = resolve(pkg.dir, '.npmrc')
+          const npmrc = resolve(pkg.dir, '.npmrc')
           const token = context.env.GITHUB_TOKEN
 
-          console.log(path)
+          console.log(npmrc)
+          await execa('touch', [npmrc])
           await execa(
-            `echo "https://npm.pkg.github.com/:_authToken=${token}" >> ${path}`,
+            `echo "//npm.pkg.github.com/:_authToken=${token}" >> ${npmrc}`,
           )
 
           const result = execa('npm', ['publish'], {
