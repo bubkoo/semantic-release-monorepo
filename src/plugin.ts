@@ -264,11 +264,11 @@ export namespace Plugin {
 
         await waitForAll('prepared', (p) => p.nextType != null)
 
-        const res = await plugins.publish(context)
-        const releases: SemanticRelease.Release[] = Array.isArray(res)
-          ? res
-          : res != null
-          ? [res]
+        const ret = await plugins.publish(context)
+        const releases: SemanticRelease.Release[] = Array.isArray(ret)
+          ? ret
+          : ret != null
+          ? [ret]
           : []
 
         console.log(context)
@@ -278,7 +278,7 @@ export namespace Plugin {
           const release = cloneDeep(releases[0])
           // const org = getOrgName(pkg.name)
           release.name = 'GitHub package'
-          release.pluginName = 'inner plugin'
+          release.pluginName = 'monorepo-semantic-release'
           releases.push(release)
         }
 
