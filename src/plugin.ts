@@ -87,8 +87,6 @@ export namespace Plugin {
   ) {
     const { cwd } = multiContext
     const { emit, todo, waitFor, waitForAll, getLucky } = synchronizer
-    let successExeCount = 0
-    const releases: SemanticRelease.Release[] = []
     const releaseMap: { [key: string]: SemanticRelease.Release[] } = {}
 
     return function create(pkg: Package) {
@@ -288,8 +286,10 @@ export namespace Plugin {
 
         releaseMap[pkg.name] = releases
 
-        return releases
+        return releases[0]
       }
+
+      let successExeCount = 0
 
       const success = async (
         pluginOptions: PluginOptions,
@@ -298,19 +298,22 @@ export namespace Plugin {
         pkg.published = true
         await waitForAll('published', (p) => p.nextType != null)
 
-        const packages = todo().filter((p) => p.nextType != null)
+        const releasedPkgs = todo().filter((p) => p.nextType != null)
         const ctx = context as any
 
-        if (successExeCount < packages.length) {
+        if (successExeCount < releasedPkgs.length) {
           successExeCount += 1
-          console.log(pkg.name, successExeCount, ctx.releases)
           ctx.releases = releaseMap[pkg.name]
-          releases.push(...ctx.releases)
+          console.log(pkg.name, successExeCount, ctx.releases)
         }
 
         let ret
-        if (successExeCount === packages.length) {
-          ctx.releases = releases
+        if (successExeCount === releasedPkgs.length) {
+          ctx.releases = Object.keys(releaseMap).reduce<
+            SemanticRelease.Release[]
+          >((memo, key) => {
+            return [...memo, ...releaseMap[key]]
+          }, [])
           ret = await plugins.success(context)
         } else {
           ret = await plugins2.success(context)
