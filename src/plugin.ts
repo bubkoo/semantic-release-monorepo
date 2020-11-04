@@ -228,15 +228,18 @@ export namespace Plugin {
             'npm',
             ['publish', '--registry', 'https://npm.pkg.github.com'],
             {
-              cwd: pkg.path,
+              cwd: pkg.dir,
               env: context.env,
             },
           ) as any
 
+          console.log(context.env, result)
+
           // const ctx = context as any
           // result.stdout.pipe(ctx.stdout, { end: false })
           // result.stderr.pipe(ctx.stderr, { end: false })
-          await result
+          const a = await result
+          console.log(a)
         }
 
         debug('published: %s', pkg.name)
