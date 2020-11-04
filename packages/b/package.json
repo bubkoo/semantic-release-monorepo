@@ -1,8 +1,8 @@
 {
 	"name": "@bubkoo/msr-test-b",
-	"version": "1.2.19",
+	"version": "1.2.20",
 	"dependencies": {
-		"@bubkoo/msr-test-a": "^1.2.19"
+		"@bubkoo/msr-test-a": "^1.2.20"
 	},
 	"publishConfig": {
 		"access": "public"
