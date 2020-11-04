@@ -1,3 +1,4 @@
+import * as fse from 'fs-extra'
 import { resolve } from 'path'
 import { writeFileSync } from 'fs'
 import execa from 'execa'
@@ -227,12 +228,10 @@ export namespace Plugin {
         if (!pkg.private) {
           const npmrc = resolve(pkg.dir, '.npmrc')
           const token = context.env.GITHUB_TOKEN
-
-          console.log(npmrc)
-          await execa('touch', [npmrc])
-          await execa(
-            `echo "//npm.pkg.github.com/:_authToken=${token}" >> ${npmrc}`,
-          )
+          await fse.ensureFile(npmrc)
+          writeFileSync(npmrc, `//npm.pkg.github.com/:_authToken=${token}`, {
+            encoding: 'utf-8',
+          })
 
           const result = execa('npm', ['publish'], {
             cwd: pkg.dir,
