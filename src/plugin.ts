@@ -304,8 +304,6 @@ export namespace Plugin {
           successExeCount += 1
         }
 
-        console.log(pkg.name, successExeCount, ctx.releases)
-
         let ret
         if (successExeCount === totalCount) {
           ctx.releases = Object.keys(releaseMap).reduce<
@@ -318,6 +316,8 @@ export namespace Plugin {
           ctx.releases = releaseMap[pkg.name]
           ret = await plugins2.success(ctx)
         }
+
+        console.log(pkg.name, successExeCount, ctx.releases)
 
         debug('succeed: %s', pkg.name)
 
