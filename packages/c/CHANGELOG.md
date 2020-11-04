@@ -1,0 +1,16 @@
+## @bubkoo/msr-test-c [1.2.30](https://github.com/bubkoo/monorepo-semantic-release/compare/monorepo-semantic-release-test-c@v1.2.29...monorepo-semantic-release-test-c@v1.2.30) (2020-11-04)
+
+
+### Bug Fixes
+
+* 🐛 publish result ([7af4e6d](https://github.com/bubkoo/monorepo-semantic-release/commit/7af4e6d67050ab70313ba0ed69999abf7f79bd49))
+
+
+
+
+
+### Dependencies
+
+* **@bubkoo/msr-test-a:** upgraded to 1.2.30
+* **@bubkoo/msr-test-b:** upgraded to 1.2.30
+* **@bubkoo/msr-test-d:** upgraded to 1.2.30
