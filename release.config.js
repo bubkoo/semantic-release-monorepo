@@ -34,7 +34,7 @@ function getSuccessComment() {
     ''
     + ":tada: This <%= issue.pull_request ? 'PR is included' : 'issue has been resolved' %> :tada:"
     + '<% if(typeof releases !== "undefined" && Array.isArray(releases) && releases.length > 0) { %>'
-      + '<% var releaseInfos = releases.filter(function(release) { return !!release.name }) %>'
+      + '<% var releaseInfos = releases.filter(function(release) { return !!release.name && !release.private }) %>'
       + '<% if(releaseInfos.length) { %>'
         + '<% var groups = {} %>'
         + '<% releaseInfos.forEach(function(release) { %>'
