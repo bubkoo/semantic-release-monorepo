@@ -1,0 +1,3 @@
+{
+  "tagFormat": "semantic-release-monorepo-test-c@v${version}"
+}

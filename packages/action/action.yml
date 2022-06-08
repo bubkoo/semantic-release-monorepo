@@ -1,0 +1,16 @@
+name: Monorepo Semantic Release
+description: Automatically comment issues or PRs on events triggered.
+author: bubkoo <bubkoo.wy@gmail.com>
+
+inputs:
+  GITHUB_TOKEN:
+    description: Your GitHub token for authentication
+    required: true
+
+runs:
+  using: node12
+  main: dist/index.js
+
+branding:
+  icon: send
+  color: green

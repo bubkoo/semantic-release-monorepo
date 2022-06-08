@@ -1,0 +1,25 @@
+{
+  "exclude": ["node_modules", "**/esm"],
+  "compilerOptions": {
+    "module": "node16",
+    "moduleResolution": "node16",
+    "moduleDetection": "force",
+    "sourceMap": true,
+    "declaration": true,
+    "skipLibCheck": true,
+    "importHelpers": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "noUnusedLocals": true,
+    "strictNullChecks": true,
+    "resolveJsonModule": false,
+    "preserveConstEnums": false,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react",
+    "target": "ES2020",
+    "lib": ["DOM", "ES2020"],
+    "outDir": "esm"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "@semantic-release-monorepo/action",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "action.yml"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "ncc build src/index.ts --minify --v8-cache",
+    "prebuild": "run-s lint clean"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^5.0.0",
+    "@semantic-release-monorepo/core": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.182",
+    "@vercel/ncc": "^0.31.1",
+    "rimraf": "^3.0.2",
+    "npm-run-all": "^4.1.5"
+  },
+  "author": {
+    "name": "bubkoo",
+    "email": "bubkoo.wy@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/bubkoo/semantic-release-monorepo",
+  "bugs": {
+    "url": "https://github.com/bubkoo/semantic-release-monorepo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com/bubkoo/semantic-release-monorepo.git",
+    "directory": "packages/action"
+  }
+}
