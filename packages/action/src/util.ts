@@ -11,9 +11,11 @@ function getBooleanInput(name: string, options?: core.InputOptions) {
 
 export function getMSROptions(): MSROptions {
   const ignorePackagesRaw = core.getInput('ignorePackages')
-  const ignorePackages = ignorePackagesRaw.split(
-    ignorePackagesRaw.indexOf(',') >= 0 ? ',' : /\s+/g,
-  )
+  const ignorePackages = ignorePackagesRaw
+    .split(ignorePackagesRaw.indexOf(',') >= 0 ? ',' : /\s+/g)
+    .map((str) => str.trim())
+    .filter((str) => str.length > 0)
+
   return {
     debug: getBooleanInput('debug'),
     dryRun: getBooleanInput('dryRun'),

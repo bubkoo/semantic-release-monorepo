@@ -87,10 +87,6 @@ export function getManifestPaths(cwd: string, ignorePackages?: string[]) {
     }
   }
 
-  workspace.root.packageJson = getManifest(
-    path.join(workspace.root.dir, 'package.json'),
-  )
-
   if (workspace.tool === 'root') {
     workspace.packages = []
   }
