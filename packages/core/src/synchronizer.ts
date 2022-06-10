@@ -84,4 +84,5 @@ export namespace Synchronizer {
     | 'readyForTagging'
     | 'analyzed'
     | 'nextRelease'
+    | 'published'
 }

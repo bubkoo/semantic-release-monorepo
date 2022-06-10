@@ -5,7 +5,7 @@ import { existsSync, lstatSync, readFileSync, Stats } from 'fs'
 import { getPackagesSync, Packages } from '@manypkg/get-packages'
 import { PackageJSON } from './types.js'
 
-function readManifest(path: string) {
+export function readManifest(path: string) {
   if (!existsSync(path)) {
     throw new ReferenceError(`package.json file not found: "${path}"`)
   }

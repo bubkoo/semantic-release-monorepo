@@ -1,20 +1,29 @@
 import _ from 'lodash'
+import signale, { Signale } from 'signale'
 import semanticRelease from 'semantic-release'
+import semanticGetConfig from 'semantic-release/lib/get-config.js'
+import { WritableStreamBuffer } from 'stream-buffers'
 import { dirname } from 'path'
-import { Signale } from 'signale'
 import { check } from './blork.js'
+import {
+  Logger,
+  MSRContext,
+  MSROptions,
+  Options,
+  Package,
+  Context,
+} from './types.js'
+import { getOptions, getSuccessComment } from './options.js'
 import { getManifest } from './manifest.js'
 import { Synchronizer } from './synchronizer.js'
 import { toAbsolutePath } from './util.js'
 import { RescopedStream } from './rescoped-stream.js'
-import { getOptions, getSemanticConfig } from './options.js'
-import { MSRContext, Flags, Options, Package, Context } from './types.js'
 import { CreateInlinePlugins, makeInlinePluginsCreator } from './plugins.js'
 
 export async function releasePackages(
   paths: string[],
   inputOptions: semanticRelease.Options,
-  flags: Flags,
+  msrOptions: MSROptions,
   { cwd, env, stdout, stderr }: Context,
   logger: Signale,
 ) {
@@ -41,10 +50,10 @@ export async function releasePackages(
 
   // Load packages from paths
   const allPackages = await Promise.all(
-    paths.map((path) => getPackage(path, context)),
+    paths.map((path) => loadPackage(path, context, msrOptions)),
   )
   const packages = allPackages.filter((pkg) => {
-    if (flags.ignorePrivatePackages && pkg.manifest.private === true) {
+    if (msrOptions.ignorePrivatePackages && pkg.manifest.private === true) {
       logger.info(`[${pkg.name}] is private, will be ignored`)
       return false
     }
@@ -67,17 +76,17 @@ export async function releasePackages(
     packages,
     context,
     synchronizer,
-    flags,
+    msrOptions,
   )
 
   await Promise.all(
     packages.map(async (pkg) => {
-      if (flags.sequential) {
+      if (msrOptions.sequential) {
         synchronizer.getLucky('readyForRelease', pkg)
         await synchronizer.waitFor('readyForRelease', pkg)
       }
 
-      return releasePackage(pkg, createInlinePlugins, context, flags)
+      return releasePackage(pkg, createInlinePlugins, context, msrOptions)
     }),
   )
 
@@ -89,9 +98,45 @@ export async function releasePackages(
   return packages
 }
 
-async function getPackage(
+async function releasePackage(
+  pkg: Package,
+  createInlinePlugins: CreateInlinePlugins,
+  context: MSRContext,
+  msrOptions: MSROptions,
+) {
+  const { options: pkgOptions, name, dir } = pkg
+  const { env, stdout, stderr } = context
+
+  // Make an 'inline plugin' for this package.
+  // The inline plugin is the only plugin we call `semanticRelease()` with.
+  const inlinePlugins = createInlinePlugins(pkg)
+
+  // Set the options that we call semanticRelease() with.
+  // This consists of:
+  // - The global options (e.g. from the top level package.json)
+  // - The package options (e.g. from the specific package's package.json)
+  const options: Options = {
+    ...msrOptions,
+    ...pkgOptions,
+    ...inlinePlugins,
+    pkgOptions,
+    tagFormat: `${name}@\${version}`,
+  }
+
+  // Call `semanticRelease()` on the directory and save result to pkg.
+  // No need to log out errors as semantic-release already does that.
+  pkg.result = await semanticRelease(options, {
+    env,
+    cwd: dir,
+    stdout: RescopedStream.create(stdout, name),
+    stderr: RescopedStream.create(stderr, name),
+  })
+}
+
+async function loadPackage(
   path: string,
   { globalOptions, inputOptions, env, cwd, stdout, stderr }: MSRContext,
+  msrOptions: MSROptions,
 ): Promise<Package> {
   // eslint-disable-next-line no-param-reassign
   path = toAbsolutePath(path, cwd)
@@ -128,6 +173,7 @@ async function getPackage(
   const { options, plugins } = await getSemanticConfig(
     { cwd: dir, env, stdout, stderr, logger },
     finalOptions,
+    msrOptions,
   )
 
   return {
@@ -145,38 +191,90 @@ async function getPackage(
   }
 }
 
-async function releasePackage(
-  pkg: Package,
-  createInlinePlugins: CreateInlinePlugins,
-  context: MSRContext,
-  flags: Flags,
-) {
-  const { options: pkgOptions, name, dir } = pkg
-  const { env, stdout, stderr } = context
-
-  // Make an 'inline plugin' for this package.
-  // The inline plugin is the only plugin we call `semanticRelease()` with.
-  const inlinePlugins = createInlinePlugins(pkg)
-
-  // Set the options that we call semanticRelease() with.
-  // This consists of:
-  // - The global options (e.g. from the top level package.json)
-  // - The package options (e.g. from the specific package's package.json)
-  // TODO filter flags
-  const options: Options = {
-    ...flags,
-    ...pkgOptions,
-    ...inlinePlugins,
-    pkgOptions,
-    tagFormat: `${name}@\${version}`,
-  }
-
-  // Call `semanticRelease()` on the directory and save result to pkg.
-  // No need to log out errors as semantic-release already does that.
-  pkg.result = await semanticRelease(options, {
+export async function getSemanticConfig(
+  {
+    cwd,
     env,
-    cwd: dir,
-    stdout: RescopedStream.create(stdout, name),
-    stderr: RescopedStream.create(stderr, name),
-  })
+    stdout,
+    stderr,
+    logger,
+  }: {
+    cwd: string
+    env: { [name: string]: string }
+    stdout: NodeJS.WriteStream
+    stderr: NodeJS.WriteStream
+    logger: Logger
+  },
+  options: semanticRelease.Options,
+  msrOptions: MSROptions,
+) {
+  try {
+    // blackhole logger (don't output verbose messages).
+    const blackhole = new signale.Signale({
+      stream: new WritableStreamBuffer() as any,
+    })
+
+    const options1 = _.cloneDeep(options)
+    const options2 = _.cloneDeep(options)
+    const githubPlugin = '@semantic-release/github'
+    if (options1.plugins) {
+      options1.plugins = options1.plugins.map((plugin) => {
+        if (Array.isArray(plugin)) {
+          const pluginName = plugin[0]
+          const pluginOptions = plugin[1] || {}
+          if (pluginName === githubPlugin) {
+            return [pluginName, { ...pluginOptions, successComment: false }]
+          }
+        }
+
+        if (plugin === githubPlugin) {
+          return [plugin, { successComment: false }]
+        }
+
+        return plugin
+      })
+    }
+
+    if (options2.plugins) {
+      options2.plugins = options2.plugins.map((plugin) => {
+        if (Array.isArray(plugin)) {
+          const pluginName = plugin[0]
+          const pluginOptions = plugin[1] || {}
+          if (pluginName === githubPlugin) {
+            const successComment =
+              pluginOptions.successComment ||
+              getSuccessComment(msrOptions.successCommentFooter)
+            return [
+              pluginName,
+              { ...pluginOptions, successComment, addReleases: false },
+            ]
+          }
+        }
+
+        if (plugin === githubPlugin) {
+          const successComment = getSuccessComment(
+            msrOptions.successCommentFooter,
+          )
+          return [plugin, { successComment, addReleases: false }]
+        }
+
+        return plugin
+      })
+    }
+
+    const context = { cwd, env, stdout, stderr, logger: blackhole }
+    const ret1 = await semanticGetConfig(context, options1)
+    const ret2 = await semanticGetConfig(context, options2)
+    return {
+      ...ret1,
+      plugins: {
+        ...ret1.plugins,
+        successWithoutComment: ret1.plugins.success,
+        successWithoutReleaseNote: ret2.plugins.success,
+      },
+    }
+  } catch (error) {
+    logger.error(`Error in semanticGetConfig(): %0`, error)
+    throw error
+  }
 }

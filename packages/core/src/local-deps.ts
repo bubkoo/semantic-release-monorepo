@@ -3,7 +3,7 @@ import SemanticRelease from 'semantic-release'
 import { writeFileSync } from 'fs'
 import { getManifest } from './manifest.js'
 import {
-  Flags,
+  MSROptions,
   Package,
   PackageJSON,
   BumpStrategy,
@@ -269,7 +269,7 @@ export async function updateNextReleaseType(
   pkg: Package,
   packages: Package[],
   synchronizer: Synchronizer,
-  flags: Flags,
+  msrOptions: MSROptions,
 ) {
   // Go in rounds to check for dependency changes that impact the release
   // type until no changes are found in any of the packages. Doing this in
@@ -284,7 +284,7 @@ export async function updateNextReleaseType(
   let stable = false
   while (!stable) {
     const key = `depsCheck_${counter}`
-    const rule = flags.deps || {}
+    const rule = msrOptions.deps || {}
     const nextType = resolveReleaseType(
       pkg,
       rule.bump,

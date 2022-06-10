@@ -1,14 +1,21 @@
 import _ from 'lodash'
+import path from 'path'
+import fse from 'fs-extra'
+import gitOwner from 'git-username'
+import SemanticRelease from 'semantic-release'
+import { homedir } from 'os'
+import { execa } from 'execa'
 import {
-  Flags,
   Package,
-  PluginOptions,
   MSRContext,
+  MSROptions,
+  PluginOptions,
   PrepareContext,
   PublishContext,
   VerifyReleaseContext,
   GenerateNotesContext,
   AnalyzeCommitsContext,
+  SuccessContext,
 } from './types.js'
 import { getTagHead } from './git.js'
 import { getDebugger } from './debugger.js'
@@ -16,6 +23,7 @@ import { getRootPkgs } from './npm-pkg-root.js'
 import { Synchronizer } from './synchronizer.js'
 import { getFilteredCommits } from './commits.js'
 import { updateManifestDeps, updateNextReleaseType } from './local-deps.js'
+import { getManifest, readManifest } from './manifest.js'
 
 const debug = getDebugger('plugins')
 
@@ -25,12 +33,14 @@ export function makeInlinePluginsCreator(
   packages: Package[],
   context: MSRContext,
   synchronizer: Synchronizer,
-  flags: Flags,
+  msrOptions: MSROptions,
 ) {
   const { cwd } = context
 
   const createInlinePlugins = (pkg: Package) => {
     const { plugins, dir, name } = pkg
+    const releaseMap: { [key: string]: SemanticRelease.Release[] } = {}
+    let succeedCount = 0
 
     const next = () => {
       pkg.status.tagged = true
@@ -80,7 +90,7 @@ export function makeInlinePluginsCreator(
       pkg.preRelease = context.branch.prerelease as string
 
       // Filter commits by directory.
-      const firstParentBranch = flags.firstParent
+      const firstParentBranch = msrOptions.firstParent
         ? context.branch.name
         : undefined
       const commits = await getFilteredCommits(
@@ -105,11 +115,11 @@ export function makeInlinePluginsCreator(
         (pkg) => pkg.status.analyzed === true,
       )
 
-      await updateNextReleaseType(pkg, packages, synchronizer, flags)
+      await updateNextReleaseType(pkg, packages, synchronizer, msrOptions)
 
       debug('commits analyzed: %s', pkg.name)
-      debug('release type (semrel): %s', pkg.rawNextType)
-      debug('release type (msr): %s', pkg.nextType)
+      debug('next release type [deps]: %s', pkg.rawNextType || '')
+      debug('next release type  [raw]: %s', pkg.nextType || '')
 
       return pkg.nextType
     }
@@ -147,7 +157,7 @@ export function makeInlinePluginsCreator(
       }
 
       // Filter commits by directory (and release range)
-      const firstParentBranch = flags.firstParent
+      const firstParentBranch = msrOptions.firstParent
         ? context.branch.name
         : undefined
       const commits = await getFilteredCommits(
@@ -212,13 +222,12 @@ export function makeInlinePluginsCreator(
         updateManifestDeps(
           item,
           true,
-          flags.deps ? flags.deps.bump : undefined,
-          flags.deps ? flags.deps.prefix : undefined,
+          msrOptions.deps ? msrOptions.deps.bump : undefined,
+          msrOptions.deps ? msrOptions.deps.prefix : undefined,
         ),
       )
 
       pkg.status.depsUpdated = true
-
       const res = await plugins.prepare(context)
       pkg.status.prepared = true
 
@@ -227,17 +236,135 @@ export function makeInlinePluginsCreator(
       return res
     }
 
+    const publishGPR = async (context: PublishContext) => {
+      if (!pkg.manifest.private) {
+        // Only Personal Access Token or GitHub Actions token can publish to GPR
+        const token = context.env.GITHUB_TOKEN
+        const host = 'npm.pkg.github.com'
+        const registry = `https://${host}`
+        const pkgPath = pkg.path
+        const oldManifest = readManifest(pkgPath)
+        const manifest = getManifest(pkgPath)
+
+        // fix package name and publish registry
+        let gprScope =
+          msrOptions.publishGPRScope || gitOwner({ cwd: context.cwd })!
+        if (gprScope[0] === '@') {
+          gprScope = gprScope.substring(1)
+        }
+        const nameParts = manifest.name.split('/')
+        const gprName = nameParts.length === 2 ? nameParts[1] : nameParts[0]
+        manifest.name = `@${gprScope}/${gprName}`
+        manifest.publishConfig = { registry, access: 'public' }
+
+        const npmrcPath = path.join(homedir(), '.npmrc')
+        const hasNpmrc = await fse.pathExists(npmrcPath)
+        const oldNpmrc = hasNpmrc ? await fse.readFile(npmrcPath) : null
+        await fse.writeFile(
+          npmrcPath,
+          `//${host}/:_authToken=${token}\nscripts-prepend-node-path=true`,
+        )
+        await fse.writeFile(pkgPath, JSON.stringify(manifest, null, 2))
+
+        const pub = execa('npm', ['publish'], {
+          cwd: pkg.dir,
+          env: context.env,
+        }) as any
+
+        pub.stdout.pipe(context.stdout, { end: false })
+        pub.stderr.pipe(context.stderr, { end: false })
+
+        const ret = await pub
+
+        await fse.writeFile(pkgPath, oldManifest)
+        if (hasNpmrc) {
+          await fse.writeFile(npmrcPath, oldNpmrc)
+        }
+
+        return ret
+      }
+    }
+
     const publish = async (
       pluginOptions: PluginOptions,
       context: PublishContext,
     ) => {
       next()
       const res = await plugins.publish(context)
-      pkg.status.published = true
+      const releases: SemanticRelease.Release[] = Array.isArray(res)
+        ? res
+        : res != null
+        ? [res]
+        : []
+
+      if (msrOptions.publishGPR) {
+        const gpr = await publishGPR(context)
+        if (gpr && !gpr.failed) {
+          const release = {
+            ...context.nextRelease,
+            name: 'GitHub package',
+            url: `${context.options.repositoryUrl}/packages/`,
+            pluginName: 'msr',
+          }
+          releases.push(release as SemanticRelease.Release)
+        }
+      }
+
+      releaseMap[pkg.name] = releases
+        .filter((r) => r.name != null)
+        .map((r) => ({
+          ...r,
+          package: pkg.name,
+          private: pkg.manifest.private,
+          hasCommit: context.commits != null && context.commits.length > 0,
+        }))
 
       debug('published: %s', pkg.name)
 
-      return res.length ? res[0] : {}
+      return releases[0]
+    }
+
+    const success = async (
+      pluginOptions: PluginOptions,
+      context: SuccessContext,
+    ) => {
+      pkg.status.published = true
+      const filter = (p: Package) => p.nextType != null
+      await synchronizer.waitForAll('published', filter)
+
+      context.releases = releaseMap[pkg.name]
+      // Add release links to the GitHub Release, adding comments to
+      // issue/pr was delayed
+      const ret = await plugins.successWithoutComment(context)
+
+      const totalCount = synchronizer.todo().filter(filter).length
+      if (succeedCount < totalCount) {
+        succeedCount += 1
+      }
+
+      debug('succeed: %s', pkg.name)
+      debug(`progress: ${succeedCount}/${totalCount}`)
+
+      if (succeedCount === totalCount) {
+        debug('all released, comment issue/pr')
+        const ctx = {
+          ...context,
+          releases: Object.keys(releaseMap)
+            .sort()
+            .reduce<SemanticRelease.Release[]>((arr, key) => {
+              return [...arr, ...releaseMap[key]]
+            }, []),
+        }
+        const shouldComment = ctx.releases.some(
+          (release: any) => !release.private && release.hasCommit,
+        )
+
+        if (shouldComment) {
+          await plugins.successWithoutReleaseNote(ctx)
+        }
+      }
+
+      return ret
     }
 
     const inlinePlugin = {
@@ -246,6 +373,7 @@ export function makeInlinePluginsCreator(
       generateNotes,
       prepare,
       publish,
+      success,
     } as const
 
     // Add labels for logs.

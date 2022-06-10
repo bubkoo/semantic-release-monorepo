@@ -3,15 +3,15 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import SemanticRelease from 'semantic-release'
 // import srPkgJSON from 'semantic-release/package.json'
-import { Context, Flags } from './types.js'
+import { Context, MSROptions } from './types.js'
 import { getManifest, getManifestPaths } from './manifest.js'
 import { getLogger } from './logger.js'
 import { enableDebugger } from './debugger.js'
 import { releasePackages } from './release.js'
 
-export default function (
-  flags: Flags = {},
-  options: SemanticRelease.Options = {},
+function release(
+  msrOptions: MSROptions = {},
+  srOptions: SemanticRelease.Options = {},
   context: Context = {
     cwd: process.cwd(),
     env: process.env as { [name: string]: string },
@@ -19,7 +19,7 @@ export default function (
     stderr: process.stderr,
   },
 ) {
-  enableDebugger(flags.debug)
+  enableDebugger(msrOptions.debug)
   const logger = getLogger(context)
   const filename = fileURLToPath(import.meta.url)
   const dirname = path.dirname(filename)
@@ -28,8 +28,8 @@ export default function (
   try {
     logger.info(`Running msr version ${msrPkgJSON.version}`)
 
-    const paths = getManifestPaths(context.cwd, flags.ignorePackages)
-    releasePackages(paths, options, flags, context, logger).then(
+    const paths = getManifestPaths(context.cwd, msrOptions.ignorePackages)
+    releasePackages(paths, srOptions, msrOptions, context, logger).then(
       () => {
         process.exit(0)
       },
@@ -43,3 +43,8 @@ export default function (
     process.exit(1)
   }
 }
+
+export { MSROptions }
+export { release }
+
+export default release

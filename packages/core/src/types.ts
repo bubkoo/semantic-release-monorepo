@@ -33,7 +33,8 @@ export interface Package {
     addChannel: (context: AddChannelContext) => Promise<any>
     prepare: (context: PrepareContext) => Promise<any>
     publish: (context: PublishContext) => Promise<any>
-    success: (context: SuccessContext) => Promise<any>
+    successWithoutComment: (context: SuccessContext) => Promise<any>
+    successWithoutReleaseNote: (context: SuccessContext) => Promise<any>
     fail: (context: FailContext) => Promise<any>
   }
   result?: SemanticRelease.Result
@@ -85,7 +86,7 @@ export type BumpStrategy = 'override' | 'satisfy' | 'inherit'
  */
 export type VersionPrefix = '^' | '~' | ''
 
-export interface Flags {
+export interface MSROptions {
   /**
    * The objective of the dry-run mode is to get a preview of the pending
    * release. Dry-run mode skips the following steps: `prepare`, `publish`,
@@ -97,6 +98,9 @@ export interface Flags {
    * potential configuration issues.
    */
   dryRun?: boolean
+  /**
+   * Output debugging information
+   */
   debug?: boolean | string
   /**
    * Avoid hypothetical concurrent initialization collisions
@@ -128,6 +132,16 @@ export interface Flags {
      */
     release?: 'patch' | 'minor' | 'major' | 'inherit'
   }
+  /**
+   * Publish to Github Package Registry
+   */
+  publishGPR?: boolean
+  /**
+   * The scope of Github Package Registry, default to the repo owner
+   */
+  publishGPRScope?: string
+
+  successCommentFooter?: string
 }
 
 export interface Commit extends SemanticRelease.Commit {
