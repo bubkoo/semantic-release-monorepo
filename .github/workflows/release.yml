@@ -25,6 +25,7 @@ jobs:
       - name: Release
         uses: ./packages/action
         env:
+          debug: true
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.PAT }}
           GIT_AUTHOR_NAME: msr-bot

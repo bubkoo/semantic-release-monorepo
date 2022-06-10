@@ -6,6 +6,7 @@ import { getMSROptions } from './util.js'
 try {
   console.warn(github, core, process.cwd(), process.env)
   const msrOptions = getMSROptions()
+  core.info(JSON.stringify(msrOptions))
   release(msrOptions)
 } catch (e) {
   core.error(e)

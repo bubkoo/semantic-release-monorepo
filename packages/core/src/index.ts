@@ -27,6 +27,7 @@ function release(
 
   try {
     logger.info(`Running msr version ${msrPkgJSON.version}`)
+    logger.info(`Load packages from: ${context.cwd}`)
 
     const paths = getManifestPaths(context.cwd, msrOptions.ignorePackages)
     releasePackages(paths, srOptions, msrOptions, context, logger).then(
