@@ -87,6 +87,7 @@
   "bugs": {
     "url": "https://github.com/bubkoo/semantic-release-monorepo/issues"
   },
+  "packageManager": "pnpm@7.1.9",
   "engines": {
     "node": ">=14.6.0"
   }
