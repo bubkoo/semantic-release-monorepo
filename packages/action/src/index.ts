@@ -4,7 +4,7 @@ import release from '@semantic-release-monorepo/core'
 import { getMSROptions } from './util.js'
 
 try {
-  console.warn(github, core, process.cwd())
+  console.warn(github, core, process.cwd(), process.env)
   const msrOptions = getMSROptions()
   release(msrOptions)
 } catch (e) {
