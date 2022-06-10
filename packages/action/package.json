@@ -1,26 +1,31 @@
 {
   "name": "@semantic-release-monorepo/action",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "type": "module",
+  "exports": "dist/index.js",
   "files": [
     "dist",
     "action.yml"
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "build": "ncc build src/index.ts --minify --v8-cache",
-    "prebuild": "run-s lint clean"
+    "build": "ncc build src/index.ts -m -s --v8-cache",
+    "prebuild": "run-s clean"
   },
   "dependencies": {
-    "@actions/core": "^1.2.6",
-    "@actions/github": "^5.0.0",
-    "@semantic-release-monorepo/core": "^1.0.0"
+    "@actions/core": "^1.8.2",
+    "@actions/github": "^5.0.3",
+    "@semantic-release-monorepo/core": "workspace:*",
+    "semantic-release": "^19.0.2"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.182",
-    "@vercel/ncc": "^0.31.1",
+    "@types/node": "^17.0.41",
+    "@vercel/ncc": "^0.34.0",
+    "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
-    "npm-run-all": "^4.1.5"
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.3"
   },
   "author": {
     "name": "bubkoo",

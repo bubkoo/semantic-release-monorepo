@@ -2,7 +2,7 @@
 
 import _ from 'lodash'
 import meow from 'meow'
-import msr from '@semantic-release-monorepo/core'
+import { release } from '@semantic-release-monorepo/core'
 
 const cli = meow(
   `
@@ -74,4 +74,4 @@ function processFlags(flags) {
 
 const flags = processFlags(cli.flags)
 
-msr(flags)
+release(flags)

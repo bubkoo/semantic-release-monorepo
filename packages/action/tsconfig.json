@@ -1,20 +1,24 @@
 {
+  "exclude": ["node_modules", "**/esm"],
   "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "node16",
+    "moduleResolution": "node16",
+    "moduleDetection": "force",
     "sourceMap": true,
     "declaration": true,
     "skipLibCheck": true,
+    "importHelpers": true,
     "esModuleInterop": true,
     "noImplicitAny": true,
     "noEmitOnError": true,
     "noUnusedLocals": true,
     "strictNullChecks": true,
-    "resolveJsonModule": true,
+    "resolveJsonModule": false,
+    "preserveConstEnums": false,
     "experimentalDecorators": true,
-    "outDir": "lib",
-    "target": "es5",
-    "lib": ["dom", "es2015"]
-  },
-  "include": ["src/**/*.ts"]
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react",
+    "target": "ES2020",
+    "lib": ["DOM", "ES2020"]
+  }
 }
