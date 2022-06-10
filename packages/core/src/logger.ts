@@ -16,7 +16,7 @@ export function getLogger({
       error: { color: 'red', label: '', badge: '✖', stream: [stderr] },
       log: { color: 'magenta', label: '', badge: '•', stream: [stdout] },
       success: { color: 'green', label: '', badge: '✔', stream: [stdout] },
-      complete: { color: 'green', label: '', badge: '☺', stream: [stdout] },
+      complete: { color: 'red', label: '', badge: '❤', stream: [stdout] },
       start: { color: 'cyan', label: '', badge: '✈', stream: [stdout] },
     },
   })
