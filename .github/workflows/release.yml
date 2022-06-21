@@ -33,4 +33,5 @@ jobs:
           GIT_COMMITTER_EMAIL: msr-bot@users.noreply.github.com
         with:
           debug: true
+          dryRun: true
 

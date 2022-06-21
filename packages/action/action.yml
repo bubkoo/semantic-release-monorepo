@@ -1,4 +1,4 @@
-name: Semantic Release Monorepo
+name: Monorepo Semantic Release
 description: Apply semantic-release's automatic publishing to a monorepo
 author: bubkoo <bubkoo.wy@gmail.com>
 
@@ -53,7 +53,7 @@ inputs:
       up the chain.
 
 runs:
-  using: node16
+  using: node12
   main: dist/index.js
 
 branding:
