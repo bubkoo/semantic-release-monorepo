@@ -5,9 +5,10 @@ import SemanticRelease from 'semantic-release'
 import { Context, SRMOptions } from './types.js'
 import { getManifest, getManifestPaths } from './manifest.js'
 import { getLogger } from './logger.js'
-import { enableDebugger } from './debugger.js'
+import { enableDebugger, getDebugger } from './debugger.js'
 import { releasePackages } from './release.js'
 
+const debug = getDebugger('options')
 function release(
   srmOptions: SRMOptions = {},
   srOptions: SemanticRelease.Options = {},
@@ -27,6 +28,8 @@ function release(
   try {
     logger.info(`Running srm version ${srmPkgJSON.version}`)
     logger.info(`Load packages from: ${context.cwd}`)
+
+    debug(`srm options: ${JSON.stringify(srmOptions, null, 2)}`)
 
     const paths = getManifestPaths(context.cwd, srmOptions.ignorePackages)
     releasePackages(paths, srOptions, srmOptions, context, logger).then(

@@ -1,6 +1,6 @@
 import debug from 'debug'
 
-export type DebugModule = 'commits' | 'deps' | 'plugins' | 'sync'
+export type DebugModule = 'options' | 'commits' | 'deps' | 'plugins' | 'sync'
 
 const prefix = 'srm'
 
