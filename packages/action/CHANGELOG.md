@@ -1,3 +1,13 @@
+## @semantic-release-monorepo/action [1.0.1](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/action@1.0.0...@semantic-release-monorepo/action@1.0.1) (2022-06-21)
+
+
+
+
+
+### Dependencies
+
+* **@semantic-release-monorepo/core:** upgraded to 1.0.1
+
 # @semantic-release-monorepo/action 1.0.0 (2022-06-21)
 
 
