@@ -1,0 +1,3 @@
+#!/bin/sh
+
+node ./packages/cli/index.js --debug --dryRun
