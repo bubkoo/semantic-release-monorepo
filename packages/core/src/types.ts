@@ -63,7 +63,7 @@ export interface Context {
   stderr: NodeJS.WriteStream
 }
 
-export interface MSRContext extends Context {
+export interface SRMContext extends Context {
   globalOptions: SemanticRelease.Options
   inputOptions: SemanticRelease.Options
 }
@@ -86,7 +86,7 @@ export type BumpStrategy = 'override' | 'satisfy' | 'inherit'
  */
 export type VersionPrefix = '^' | '~' | ''
 
-export interface MSROptions {
+export interface SRMOptions {
   /**
    * The objective of the dry-run mode is to get a preview of the pending
    * release. Dry-run mode skips the following steps: `prepare`, `publish`,

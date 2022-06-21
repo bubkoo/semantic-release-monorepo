@@ -9,7 +9,7 @@ export function getLogger({
 }) {
   return new signale.Signale({
     config: { displayTimestamp: true, displayLabel: false },
-    scope: 'msr',
+    scope: 'srm',
     stream: stdout,
     types: {
       info: { color: 'magenta', label: '', badge: 'ℹ', stream: [stdout] },

@@ -2,7 +2,7 @@ import debug from 'debug'
 
 export type DebugModule = 'commits' | 'deps' | 'plugins' | 'sync'
 
-const prefix = 'msr'
+const prefix = 'srm'
 
 export function getDebugger(module: DebugModule) {
   return debug(`${prefix}:${module}`)

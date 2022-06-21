@@ -16,7 +16,7 @@ function getBooleanInput(name, options) {
   return core.getInput(name, options) === 'true'
 }
 
-function getMSROptions() {
+function getSRMOptions() {
   const ignorePackagesRaw = core.getInput('ignorePackages')
   const ignorePackages = ignorePackagesRaw
     .split(ignorePackagesRaw.indexOf(',') >= 0 ? ',' : /\s+/g)
@@ -40,9 +40,9 @@ function getMSROptions() {
 
 try {
   console.warn(github, core, process.cwd(), process.env)
-  const msrOptions = getMSROptions()
-  core.info(JSON.stringify(msrOptions))
-  release(msrOptions)
+  const srmOptions = getSRMOptions()
+  core.info(JSON.stringify(srmOptions))
+  release(srmOptions)
 } catch (e) {
   core.error(e)
   core.setFailed(e.message)

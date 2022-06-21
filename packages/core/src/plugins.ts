@@ -7,8 +7,8 @@ import { homedir } from 'os'
 import { execa } from 'execa'
 import {
   Package,
-  MSRContext,
-  MSROptions,
+  SRMContext,
+  SRMOptions,
   PluginOptions,
   PrepareContext,
   PublishContext,
@@ -31,9 +31,9 @@ export type CreateInlinePlugins = ReturnType<typeof makeInlinePluginsCreator>
 
 export function makeInlinePluginsCreator(
   packages: Package[],
-  context: MSRContext,
+  context: SRMContext,
   synchronizer: Synchronizer,
-  msrOptions: MSROptions,
+  srmOptions: SRMOptions,
 ) {
   const { cwd } = context
 
@@ -90,7 +90,7 @@ export function makeInlinePluginsCreator(
       pkg.preRelease = context.branch.prerelease as string
 
       // Filter commits by directory.
-      const firstParentBranch = msrOptions.firstParent
+      const firstParentBranch = srmOptions.firstParent
         ? context.branch.name
         : undefined
       const commits = await getFilteredCommits(
@@ -115,7 +115,7 @@ export function makeInlinePluginsCreator(
         (pkg) => pkg.status.analyzed === true,
       )
 
-      await updateNextReleaseType(pkg, packages, synchronizer, msrOptions)
+      await updateNextReleaseType(pkg, packages, synchronizer, srmOptions)
 
       debug('commits analyzed: %s', pkg.name)
       debug('next release type [deps]: %s', pkg.rawNextType || '')
@@ -157,7 +157,7 @@ export function makeInlinePluginsCreator(
       }
 
       // Filter commits by directory (and release range)
-      const firstParentBranch = msrOptions.firstParent
+      const firstParentBranch = srmOptions.firstParent
         ? context.branch.name
         : undefined
       const commits = await getFilteredCommits(
@@ -222,8 +222,8 @@ export function makeInlinePluginsCreator(
         updateManifestDeps(
           item,
           true,
-          msrOptions.deps ? msrOptions.deps.bump : undefined,
-          msrOptions.deps ? msrOptions.deps.prefix : undefined,
+          srmOptions.deps ? srmOptions.deps.bump : undefined,
+          srmOptions.deps ? srmOptions.deps.prefix : undefined,
         ),
       )
 
@@ -248,7 +248,7 @@ export function makeInlinePluginsCreator(
 
         // fix package name and publish registry
         let gprScope =
-          msrOptions.publishGPRScope || gitOwner({ cwd: context.cwd })!
+          srmOptions.publishGPRScope || gitOwner({ cwd: context.cwd })!
         if (gprScope[0] === '@') {
           gprScope = gprScope.substring(1)
         }
@@ -297,14 +297,14 @@ export function makeInlinePluginsCreator(
         ? [res]
         : []
 
-      if (msrOptions.publishGPR) {
+      if (srmOptions.publishGPR) {
         const gpr = await publishGPR(context)
         if (gpr && !gpr.failed) {
           const release = {
             ...context.nextRelease,
             name: 'GitHub package',
             url: `${context.options.repositoryUrl}/packages/`,
-            pluginName: 'msr',
+            pluginName: 'srm',
           }
           releases.push(release as SemanticRelease.Release)
         }
@@ -379,7 +379,7 @@ export function makeInlinePluginsCreator(
     // Add labels for logs.
     Object.keys(inlinePlugin).forEach((type: keyof typeof inlinePlugin) =>
       Reflect.defineProperty(inlinePlugin[type], 'pluginName', {
-        value: 'msr inline plugin',
+        value: 'srm inline plugin',
         writable: false,
         enumerable: true,
       }),

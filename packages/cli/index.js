@@ -7,7 +7,7 @@ import { release } from '@semantic-release-monorepo/core'
 const cli = meow(
   `
   Usage
-    $ msr
+    $ srm [options]
 
   Options
     --dry-run Dry run mode.
@@ -17,14 +17,14 @@ const cli = meow(
     --deps.bump Define deps version updating rule. Allowed: override, satisfy, inherit.
     --deps.prefix Optional prefix to be attached to the next dep version if '--deps.bump' set to 'override'. Supported values: '^' | '~' | '' (empty string as default).
     --deps.release Define release type for dependent package if any of its deps changes. Supported values: patch, minor, major, inherit.
-    --ignore-packages xPackages' list to be ignored on bumping process
+    --ignore-packages Packages list to be ignored on bumping process
     --ignore-private-packages Ignore private packages
 	  --help Help info.
 
   Examples
-    $ msr --debug
-    $ msr --deps.bump=satisfy --deps.release=patch
-    $ msr --ignore-packages=packages/a/**,packages/b/**
+    $ srm --debug
+    $ srm --deps.bump=satisfy --deps.release=patch
+    $ srm --ignore-packages=packages/a/**,packages/b/**
 `,
   {
     flags: {

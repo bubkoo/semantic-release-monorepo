@@ -7,8 +7,8 @@ import { dirname } from 'path'
 import { check } from './blork.js'
 import {
   Logger,
-  MSRContext,
-  MSROptions,
+  SRMContext,
+  SRMOptions,
   Options,
   Package,
   Context,
@@ -23,7 +23,7 @@ import { CreateInlinePlugins, makeInlinePluginsCreator } from './plugins.js'
 export async function releasePackages(
   paths: string[],
   inputOptions: semanticRelease.Options,
-  msrOptions: MSROptions,
+  srmOptions: SRMOptions,
   { cwd, env, stdout, stderr }: Context,
   logger: Signale,
 ) {
@@ -39,7 +39,7 @@ export async function releasePackages(
   logger.start(`Loading ${paths.length} packages...`)
 
   const globalOptions = await getOptions(cwd)
-  const context: MSRContext = {
+  const context: SRMContext = {
     globalOptions,
     inputOptions,
     cwd,
@@ -50,10 +50,10 @@ export async function releasePackages(
 
   // Load packages from paths
   const allPackages = await Promise.all(
-    paths.map((path) => loadPackage(path, context, msrOptions)),
+    paths.map((path) => loadPackage(path, context, srmOptions)),
   )
   const packages = allPackages.filter((pkg) => {
-    if (msrOptions.ignorePrivatePackages && pkg.manifest.private === true) {
+    if (srmOptions.ignorePrivatePackages && pkg.manifest.private === true) {
       logger.info(`[${pkg.name}] is private, will be ignored`)
       return false
     }
@@ -76,17 +76,17 @@ export async function releasePackages(
     packages,
     context,
     synchronizer,
-    msrOptions,
+    srmOptions,
   )
 
   await Promise.all(
     packages.map(async (pkg) => {
-      if (msrOptions.sequential) {
+      if (srmOptions.sequential) {
         synchronizer.getLucky('readyForRelease', pkg)
         await synchronizer.waitFor('readyForRelease', pkg)
       }
 
-      return releasePackage(pkg, createInlinePlugins, context, msrOptions)
+      return releasePackage(pkg, createInlinePlugins, context, srmOptions)
     }),
   )
 
@@ -101,8 +101,8 @@ export async function releasePackages(
 async function releasePackage(
   pkg: Package,
   createInlinePlugins: CreateInlinePlugins,
-  context: MSRContext,
-  msrOptions: MSROptions,
+  context: SRMContext,
+  srmOptions: SRMOptions,
 ) {
   const { options: pkgOptions, name, dir } = pkg
   const { env, stdout, stderr } = context
@@ -116,7 +116,7 @@ async function releasePackage(
   // - The global options (e.g. from the top level package.json)
   // - The package options (e.g. from the specific package's package.json)
   const options: Options = {
-    ...msrOptions,
+    ...srmOptions,
     ...pkgOptions,
     ...inlinePlugins,
     pkgOptions,
@@ -135,8 +135,8 @@ async function releasePackage(
 
 async function loadPackage(
   path: string,
-  { globalOptions, inputOptions, env, cwd, stdout, stderr }: MSRContext,
-  msrOptions: MSROptions,
+  { globalOptions, inputOptions, env, cwd, stdout, stderr }: SRMContext,
+  srmOptions: SRMOptions,
 ): Promise<Package> {
   // eslint-disable-next-line no-param-reassign
   path = toAbsolutePath(path, cwd)
@@ -173,7 +173,7 @@ async function loadPackage(
   const { options, plugins } = await getSemanticConfig(
     { cwd: dir, env, stdout, stderr, logger },
     finalOptions,
-    msrOptions,
+    srmOptions,
   )
 
   return {
@@ -206,7 +206,7 @@ export async function getSemanticConfig(
     logger: Logger
   },
   options: semanticRelease.Options,
-  msrOptions: MSROptions,
+  srmOptions: SRMOptions,
 ) {
   try {
     // blackhole logger (don't output verbose messages).
@@ -243,7 +243,7 @@ export async function getSemanticConfig(
           if (pluginName === githubPlugin) {
             const successComment =
               pluginOptions.successComment ||
-              getSuccessComment(msrOptions.successCommentFooter)
+              getSuccessComment(srmOptions.successCommentFooter)
             return [
               pluginName,
               { ...pluginOptions, successComment, addReleases: false },
@@ -253,7 +253,7 @@ export async function getSemanticConfig(
 
         if (plugin === githubPlugin) {
           const successComment = getSuccessComment(
-            msrOptions.successCommentFooter,
+            srmOptions.successCommentFooter,
           )
           return [plugin, { successComment, addReleases: false }]
         }

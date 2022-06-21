@@ -24,8 +24,8 @@ export async function getOptions(
   return res ? res.config : {}
 }
 
-const MSR_HOME_URL = 'https://github.com/bubkoo/semantic-release-monorepo'
-const DEFAULT_FOOTER = `Your **[semantic-release-monorepo](${MSR_HOME_URL})** bot base on **[semantic-release](https://github.com/semantic-release/semantic-release)** 💪💯`
+const SRM_HOME_URL = 'https://github.com/bubkoo/semantic-release-monorepo'
+const DEFAULT_FOOTER = `Your **[semantic-release-monorepo](${SRM_HOME_URL})** bot base on **[semantic-release](https://github.com/semantic-release/semantic-release)** 💪💯`
 
 export function getSuccessComment(footer?: string) {
   const footerMsg = footer || DEFAULT_FOOTER

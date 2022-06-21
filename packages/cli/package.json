@@ -7,7 +7,7 @@
     "bin"
   ],
   "bin": {
-    "msr": "./index.js"
+    "srm": "./index.js"
   },
   "scripts": {},
   "peerDependencies": {

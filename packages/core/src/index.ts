@@ -3,14 +3,14 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import SemanticRelease from 'semantic-release'
 // import srPkgJSON from 'semantic-release/package.json'
-import { Context, MSROptions } from './types.js'
+import { Context, SRMOptions } from './types.js'
 import { getManifest, getManifestPaths } from './manifest.js'
 import { getLogger } from './logger.js'
 import { enableDebugger } from './debugger.js'
 import { releasePackages } from './release.js'
 
 function release(
-  msrOptions: MSROptions = {},
+  srmOptions: SRMOptions = {},
   srOptions: SemanticRelease.Options = {},
   context: Context = {
     cwd: process.cwd(),
@@ -19,33 +19,33 @@ function release(
     stderr: process.stderr,
   },
 ) {
-  enableDebugger(msrOptions.debug)
+  enableDebugger(srmOptions.debug)
   const logger = getLogger(context)
   const filename = fileURLToPath(import.meta.url)
   const dirname = path.dirname(filename)
-  const msrPkgJSON = getManifest(path.resolve(dirname, `../package.json`))
+  const srmPkgJSON = getManifest(path.resolve(dirname, `../package.json`))
 
   try {
-    logger.info(`Running msr version ${msrPkgJSON.version}`)
+    logger.info(`Running srm version ${srmPkgJSON.version}`)
     logger.info(`Load packages from: ${context.cwd}`)
 
-    const paths = getManifestPaths(context.cwd, msrOptions.ignorePackages)
-    releasePackages(paths, srOptions, msrOptions, context, logger).then(
+    const paths = getManifestPaths(context.cwd, srmOptions.ignorePackages)
+    releasePackages(paths, srOptions, srmOptions, context, logger).then(
       () => {
         process.exit(0)
       },
       (error) => {
-        logger.error(`[msr]:`, error)
+        logger.error(`[srm]:`, error)
         process.exit(1)
       },
     )
   } catch (error) {
-    logger.error(`[msr]:`, error)
+    logger.error(`[srm]:`, error)
     process.exit(1)
   }
 }
 
-export { MSROptions }
+export { SRMOptions }
 export { release }
 
 export default release
