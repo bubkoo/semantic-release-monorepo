@@ -1,3 +1,10 @@
+## @semantic-release-monorepo/cli [1.0.4](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/cli@1.0.3...@semantic-release-monorepo/cli@1.0.4) (2022-06-21)
+
+
+### Bug Fixes
+
+* 🐛 do not normalize GPR flags ([2e75833](https://github.com/bubkoo/semantic-release-monorepo/commit/2e758337c7faffbb7fe4d6e36643fb12a291ad58))
+
 ## @semantic-release-monorepo/cli [1.0.3](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/cli@1.0.2...@semantic-release-monorepo/cli@1.0.3) (2022-06-21)
 
 
