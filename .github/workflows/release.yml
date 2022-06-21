@@ -28,7 +28,7 @@ jobs:
       - name: Release
         run: node ./packages/cli/index.js --debug --dryRun
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKENs }}
           GITHUB_TOKEN: ${{ secrets.PAT }}
           GIT_AUTHOR_NAME: srm-bot
           GIT_AUTHOR_EMAIL: srm-bot@users.noreply.github.com
