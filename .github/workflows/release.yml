@@ -23,8 +23,7 @@ jobs:
         run: pnpm run build
 
       - name: Release
-        run: |
-          node ./packages/cli/index.js --debug
+        uses: ./packages/action
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.PAT }}
@@ -32,4 +31,6 @@ jobs:
           GIT_AUTHOR_EMAIL: msr-bot@users.noreply.github.com
           GIT_COMMITTER_NAME: msr-bot
           GIT_COMMITTER_EMAIL: msr-bot@users.noreply.github.com
+        with:
+          debug: true
 
