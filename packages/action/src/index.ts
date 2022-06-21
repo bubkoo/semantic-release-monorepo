@@ -8,7 +8,7 @@ try {
   const msrOptions = getMSROptions()
   core.info(JSON.stringify(msrOptions))
   release(msrOptions)
-} catch (e) {
+} catch (e: any) {
   core.error(e)
   core.setFailed(e.message)
 }

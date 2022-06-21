@@ -23,7 +23,8 @@ jobs:
         run: pnpm run build
 
       - name: Release
-        uses: ./packages/action
+        run: |
+          node ./packages/cli/index.js
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.PAT }}

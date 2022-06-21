@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "build": "ncc build src/index.ts -m -s --v8-cache",
+    "build": "ncc build src/index.ts --v8-cache",
     "prebuild": "run-s clean"
   },
   "dependencies": {
@@ -19,12 +19,10 @@
     "semantic-release": "^19.0.2"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.182",
     "@types/node": "^17.0.41",
     "@vercel/ncc": "^0.34.0",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
-    "ts-node": "^10.8.1",
     "typescript": "^4.7.3"
   },
   "author": {
