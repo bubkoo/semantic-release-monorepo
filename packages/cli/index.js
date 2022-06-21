@@ -68,6 +68,10 @@ const cli = meow(
         type: 'string',
       },
     },
+    unnormalizedFlags: {
+      publishGPR: true,
+      publishGPRScope: true,
+    },
     importMeta: import.meta,
     allowUnknownFlags: true,
     version: true,
