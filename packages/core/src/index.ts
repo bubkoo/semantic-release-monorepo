@@ -24,9 +24,6 @@ function release(
   const dirname = path.dirname(filename)
   const srmPkgJSON = getManifest(path.resolve(dirname, `../package.json`))
 
-  logger.info(srmOptions)
-  logger.info(context.env)
-
   try {
     logger.info(`Running srm version ${srmPkgJSON.version}`)
     logger.info(`Load packages from: ${context.cwd}`)
