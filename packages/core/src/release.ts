@@ -243,7 +243,7 @@ export async function getSemanticConfig(
           if (pluginName === githubPlugin) {
             const successComment =
               pluginOptions.successComment ||
-              getSuccessComment(srmOptions.successCommentFooter)
+              getSuccessComment(srmOptions.commentFooter)
             return [
               pluginName,
               { ...pluginOptions, successComment, addReleases: false },
@@ -252,9 +252,7 @@ export async function getSemanticConfig(
         }
 
         if (plugin === githubPlugin) {
-          const successComment = getSuccessComment(
-            srmOptions.successCommentFooter,
-          )
+          const successComment = getSuccessComment(srmOptions.commentFooter)
           return [plugin, { successComment, addReleases: false }]
         }
 

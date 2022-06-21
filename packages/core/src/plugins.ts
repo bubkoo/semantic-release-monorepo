@@ -329,15 +329,19 @@ export function makeInlinePluginsCreator(
       context: SuccessContext,
     ) => {
       pkg.status.published = true
-      const filter = (p: Package) => p.nextType != null
-      await synchronizer.waitForAll('published', filter)
+      await synchronizer.waitForAll(
+        'published',
+        (p: Package) => p.nextType != null,
+      )
 
       context.releases = releaseMap[pkg.name]
       // Add release links to the GitHub Release, adding comments to
       // issue/pr was delayed
       const ret = await plugins.successWithoutComment(context)
 
-      const totalCount = synchronizer.todo().filter(filter).length
+      const totalCount = synchronizer
+        .todo()
+        .filter((p: Package) => p.nextType != null).length
       if (succeedCount < totalCount) {
         succeedCount += 1
       }

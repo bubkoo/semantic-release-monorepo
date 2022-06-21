@@ -37,6 +37,9 @@ const cli = meow(
       debug: {
         type: 'boolean',
       },
+      dryRun: {
+        type: 'boolean',
+      },
       'deps.bump': {
         type: 'string',
         default: 'override',
@@ -55,8 +58,14 @@ const cli = meow(
       ignorePrivatePackages: {
         type: 'boolean',
       },
-      dryRun: {
+      publishGPR: {
         type: 'boolean',
+      },
+      publishGPRScope: {
+        type: 'string',
+      },
+      commentFooter: {
+        type: 'string',
       },
     },
     importMeta: import.meta,

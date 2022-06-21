@@ -141,7 +141,7 @@ export interface SRMOptions {
    */
   publishGPRScope?: string
 
-  successCommentFooter?: string
+  commentFooter?: string
 }
 
 export interface Commit extends SemanticRelease.Commit {
