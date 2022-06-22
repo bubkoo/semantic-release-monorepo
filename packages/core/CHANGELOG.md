@@ -1,3 +1,5 @@
+## @semantic-release-monorepo/core [1.0.7](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.0.6...@semantic-release-monorepo/core@1.0.7) (2022-06-22)
+
 ## @semantic-release-monorepo/core [1.0.6](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.0.5...@semantic-release-monorepo/core@1.0.6) (2022-06-22)
 
 
