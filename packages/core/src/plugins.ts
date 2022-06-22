@@ -310,7 +310,7 @@ export function makeInlinePluginsCreator(
         if (gpr && !gpr.failed) {
           let repoUrl = context.options.repositoryUrl || ''
           if (repoUrl.endsWith('.git')) {
-            repoUrl = repoUrl.substring(0, -4)
+            repoUrl = repoUrl.substring(0, repoUrl.length - 4)
           }
           const release = {
             ...context.nextRelease,
