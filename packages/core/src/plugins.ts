@@ -247,8 +247,7 @@ export function makeInlinePluginsCreator(
         const manifest = getManifest(pkgPath)
 
         // fix package name and publish registry
-        let gprScope =
-          srmOptions.publishGPRScope || gitOwner({ cwd: context.cwd })!
+        let gprScope = srmOptions.gprScope || gitOwner({ cwd: context.cwd })!
         if (gprScope[0] === '@') {
           gprScope = gprScope.substring(1)
         }
@@ -297,7 +296,7 @@ export function makeInlinePluginsCreator(
         ? [res]
         : []
 
-      if (srmOptions.publishGPR) {
+      if (srmOptions.gpr) {
         const gpr = await publishGPR(context)
         if (gpr && !gpr.failed) {
           const release = {

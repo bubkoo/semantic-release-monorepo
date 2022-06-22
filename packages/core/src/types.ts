@@ -135,12 +135,16 @@ export interface SRMOptions {
   /**
    * Publish to Github Package Registry
    */
-  publishGPR?: boolean
+  gpr?: boolean
   /**
    * The scope of Github Package Registry, default to the repo owner
    */
-  publishGPRScope?: string
+  gprScope?: string
 
+  /**
+   * The footer message in the `successComment` or `failComment` created by
+   * "@semantic-release/github" plugin
+   */
   commentFooter?: string
 }
 

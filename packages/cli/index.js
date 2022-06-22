@@ -10,16 +10,20 @@ const cli = meow(
     $ srm [options]
 
   Options
-    --dry-run Dry run mode.
-    --debug Output debugging information.
-    --sequential Avoid hypothetical concurrent initialization collisions.
-    --first-parent Apply commit filtering to current branch only.
-    --deps.bump Define deps version updating rule. Allowed: override, satisfy, inherit.
-    --deps.prefix Optional prefix to be attached to the next dep version if '--deps.bump' set to 'override'. Supported values: '^' | '~' | '' (empty string as default).
-    --deps.release Define release type for dependent package if any of its deps changes. Supported values: patch, minor, major, inherit.
+    --dry-run Dry run mode
+    --debug Output debugging information
+    --sequential Avoid hypothetical concurrent initialization collisions
+    --first-parent Apply commit filtering to current branch only
+    --deps.bump Define deps version updating rule. Allowed: override, satisfy, inherit
+    --deps.prefix Optional prefix to be attached to the next dep version if '--deps.bump' set to 'override'. Supported values: '^' | '~' | '' (empty string as default)
+    --deps.release Define release type for dependent package if any of its deps changes. Supported values: patch, minor, major, inherit
     --ignore-packages Packages list to be ignored on bumping process
     --ignore-private-packages Ignore private packages
-	  --help Help info.
+    --gpr Publish to Github Package Registry
+    --gpr-scope The scope of Github Package Registry, default to the repo owner
+    --comment-footer The footer message in the 'successComment' or 'failComment' created by @semantic-release/github plugin
+    --version Show version info
+	  --help Show help info
 
   Examples
     $ srm --debug
@@ -58,19 +62,15 @@ const cli = meow(
       ignorePrivatePackages: {
         type: 'boolean',
       },
-      publishGPR: {
+      gpr: {
         type: 'boolean',
       },
-      publishGPRScope: {
+      gprScope: {
         type: 'string',
       },
       commentFooter: {
         type: 'string',
       },
-    },
-    unnormalizedFlags: {
-      publishGPR: false,
-      publishGPRScope: false,
     },
     importMeta: import.meta,
     allowUnknownFlags: true,
