@@ -1,3 +1,10 @@
+## @semantic-release-monorepo/core [1.0.8](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.0.7...@semantic-release-monorepo/core@1.0.8) (2022-06-22)
+
+
+### Bug Fixes
+
+* 🐛 fix gpr release link ([f600769](https://github.com/bubkoo/semantic-release-monorepo/commit/f6007697c9b2c13814a223910bcbb54b4fce5813)), closes [#1](https://github.com/bubkoo/semantic-release-monorepo/issues/1)
+
 ## @semantic-release-monorepo/core [1.0.7](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.0.6...@semantic-release-monorepo/core@1.0.7) (2022-06-22)
 
 ## @semantic-release-monorepo/core [1.0.6](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.0.5...@semantic-release-monorepo/core@1.0.6) (2022-06-22)
