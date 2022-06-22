@@ -3,7 +3,6 @@ import path from 'path'
 import fse from 'fs-extra'
 import gitOwner from 'git-username'
 import SemanticRelease from 'semantic-release'
-import { homedir } from 'os'
 import { execa } from 'execa'
 import {
   Package,
@@ -263,12 +262,12 @@ export function makeInlinePluginsCreator(
         manifest.name = `@${gprScope}/${gprName}`
         manifest.publishConfig = { registry, access: 'public' }
 
-        const npmrcPath = path.join(homedir(), '.npmrc')
+        const npmrcPath = path.join(path.dirname(pkgPath), '.npmrc')
         const hasNpmrc = await fse.pathExists(npmrcPath)
         const oldNpmrc = hasNpmrc ? await fse.readFile(npmrcPath) : null
         await fse.writeFile(
           npmrcPath,
-          `//${host}/:_authToken=${token}\n@${gprScope}:registry=https://npm.pkg.github.com\nscripts-prepend-node-path=true`,
+          `@${gprScope}:registry=https://npm.pkg.github.com\n//${host}/:_authToken=${token}\nscripts-prepend-node-path=true`,
         )
         await fse.writeFile(pkgPath, JSON.stringify(manifest, null, 2))
 
