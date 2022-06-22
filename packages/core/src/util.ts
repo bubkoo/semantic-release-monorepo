@@ -19,3 +19,12 @@ export function detectFormat(contents: string) {
     trailingWhitespace: detectNewline(contents) || '',
   }
 }
+
+export function normalizeRepoUrl(url: string) {
+  const index = url.indexOf('github.com')
+  let ret = index >= 0 ? `https://${url.substring(index)}` : url
+  if (ret.endsWith('.git')) {
+    ret = ret.substring(0, ret.length - 4)
+  }
+  return ret
+}

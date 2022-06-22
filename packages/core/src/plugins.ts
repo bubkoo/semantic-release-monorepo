@@ -20,9 +20,10 @@ import { getTagHead } from './git.js'
 import { getDebugger } from './debugger.js'
 import { getRootPkgs } from './npm-pkg-root.js'
 import { Synchronizer } from './synchronizer.js'
+import { normalizeRepoUrl } from './util.js'
 import { getFilteredCommits } from './commits.js'
-import { updateManifestDeps, updateNextReleaseType } from './local-deps.js'
 import { getManifest, readManifest } from './manifest.js'
+import { updateManifestDeps, updateNextReleaseType } from './local-deps.js'
 
 const debug = getDebugger('plugins')
 
@@ -308,10 +309,7 @@ export function makeInlinePluginsCreator(
       if (srmOptions.gpr) {
         const gpr = await publishGPR(context)
         if (gpr && !gpr.failed) {
-          let repoUrl = context.options.repositoryUrl || ''
-          if (repoUrl.endsWith('.git')) {
-            repoUrl = repoUrl.substring(0, repoUrl.length - 4)
-          }
+          const repoUrl = normalizeRepoUrl(context.options.repositoryUrl || '')
           const release = {
             ...context.nextRelease,
             name: 'GitHub package',
