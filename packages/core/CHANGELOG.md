@@ -1,3 +1,11 @@
+## @semantic-release-monorepo/core [1.0.4](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.0.3...@semantic-release-monorepo/core@1.0.4) (2022-06-22)
+
+
+### Bug Fixes
+
+* 🐛 fix .npmrc file path ([25012f2](https://github.com/bubkoo/semantic-release-monorepo/commit/25012f25779689666e7e3d3e39658d7f475bd7f4))
+* 🐛 gpr package name ([fb1f77a](https://github.com/bubkoo/semantic-release-monorepo/commit/fb1f77ab00b351a28d6aaf57e0527a6a2218c895))
+
 ## @semantic-release-monorepo/core [1.0.3](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.0.2...@semantic-release-monorepo/core@1.0.3) (2022-06-22)
 
 ## @semantic-release-monorepo/core [1.0.2](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.0.1...@semantic-release-monorepo/core@1.0.2) (2022-06-21)
