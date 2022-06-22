@@ -1,3 +1,10 @@
+## @semantic-release-monorepo/core [1.0.5](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.0.4...@semantic-release-monorepo/core@1.0.5) (2022-06-22)
+
+
+### Bug Fixes
+
+* 🐛 should restore/remove .npmrc after publish to gpr ([4d59487](https://github.com/bubkoo/semantic-release-monorepo/commit/4d594870b7bcc7e2266a6fa268f58391bec3df26))
+
 ## @semantic-release-monorepo/core [1.0.4](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.0.3...@semantic-release-monorepo/core@1.0.4) (2022-06-22)
 
 
