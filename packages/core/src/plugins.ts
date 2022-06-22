@@ -308,10 +308,14 @@ export function makeInlinePluginsCreator(
       if (srmOptions.gpr) {
         const gpr = await publishGPR(context)
         if (gpr && !gpr.failed) {
+          let repoUrl = context.options.repositoryUrl || ''
+          if (repoUrl.endsWith('.git')) {
+            repoUrl = repoUrl.substring(0, -4)
+          }
           const release = {
             ...context.nextRelease,
             name: 'GitHub package',
-            url: `${context.options.repositoryUrl}/packages/`,
+            url: `${repoUrl}/packages`,
             pluginName: 'srm',
           }
           releases.push(release as SemanticRelease.Release)
