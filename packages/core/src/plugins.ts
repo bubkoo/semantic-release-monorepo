@@ -284,6 +284,8 @@ export function makeInlinePluginsCreator(
         await fse.writeFile(pkgPath, oldManifest)
         if (hasNpmrc) {
           await fse.writeFile(npmrcPath, oldNpmrc)
+        } else {
+          await fse.remove(npmrcPath)
         }
 
         return ret
