@@ -248,9 +248,13 @@ export function makeInlinePluginsCreator(
 
         // fix package name and publish registry
         let gprScope = srmOptions.gprScope || gitOwner({ cwd: context.cwd })!
+        debug(
+          `Publish ${pkg.name} to Github Package Registry with scope ${gprScope}`,
+        )
         if (gprScope[0] === '@') {
           gprScope = gprScope.substring(1)
         }
+
         const nameParts = manifest.name.split('/')
         const gprName = nameParts.length === 2 ? nameParts[1] : nameParts[0]
         manifest.name = `@${gprScope}/${gprName}`
