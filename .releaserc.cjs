@@ -42,10 +42,9 @@ module.exports = {
     '@semantic-release/npm',
     [
       '@semantic-release/github',
-      // {
-      //   successComment: getSuccessComment(),
-      //   addReleases: 'bottom',
-      // },
+      {
+        addReleases: 'bottom',
+      },
     ],
     [
       '@semantic-release/git',

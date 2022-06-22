@@ -47,10 +47,6 @@ export function makeInlinePluginsCreator(
         'readyForTagging',
         synchronizer.find((pkg) => pkg.nextType != null && !pkg.status.tagged),
       )
-      synchronizer.emit(
-        'readyToGenerateNotes',
-        synchronizer.find((p) => p.nextType != null && !p.status.prepared),
-      )
     }
 
     const verifyConditions = async (
@@ -143,10 +139,6 @@ export function makeInlinePluginsCreator(
         (pkg) => pkg.nextRelease != null,
         (pkg) => pkg.nextType != null,
       )
-
-      // Wait until the current pkg is ready to generate notes
-      synchronizer.getLucky('readyToGenerateNotes', pkg)
-      await synchronizer.waitFor('readyToGenerateNotes', pkg)
 
       const notes = []
       const { lastRelease, nextRelease } = context

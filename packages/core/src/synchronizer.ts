@@ -82,7 +82,6 @@ export namespace Synchronizer {
   export type Probe =
     | 'readyForRelease'
     | 'readyForTagging'
-    | 'readyToGenerateNotes'
     | 'analyzed'
     | 'nextRelease'
     | 'published'
