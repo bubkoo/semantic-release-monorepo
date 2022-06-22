@@ -1,3 +1,10 @@
+## @semantic-release-monorepo/core [1.0.10](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.0.9...@semantic-release-monorepo/core@1.0.10) (2022-06-22)
+
+
+### Bug Fixes
+
+* 🐛 fix git repo url ([72ad515](https://github.com/bubkoo/semantic-release-monorepo/commit/72ad515e84a55b758a1a2e5b519436b501004cc9)), closes [#1](https://github.com/bubkoo/semantic-release-monorepo/issues/1)
+
 ## @semantic-release-monorepo/core [1.0.9](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.0.8...@semantic-release-monorepo/core@1.0.9) (2022-06-22)
 
 
