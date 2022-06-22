@@ -1,6 +1,6 @@
 {
   "name": "@semantic-release-monorepo/action",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "dist/index.js",
   "files": [
     "dist",
@@ -14,7 +14,7 @@
   "dependencies": {
     "@actions/core": "^1.8.2",
     "@actions/github": "^5.0.3",
-    "@semantic-release-monorepo/core": "1.0.4",
+    "@semantic-release-monorepo/core": "1.0.5",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/commit-analyzer": "^9.0.2",
     "@semantic-release/git": "^10.0.1",
