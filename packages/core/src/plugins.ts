@@ -246,8 +246,9 @@ export function makeInlinePluginsCreator(
         const oldManifest = readManifest(pkgPath)
         const manifest = getManifest(pkgPath)
 
+        debug(context)
         // fix package name and publish registry
-        let gprScope = srmOptions.gprScope || gitOwner({ cwd: context.cwd })!
+        let gprScope = srmOptions.gprScope || gitOwner()!
         debug(
           `Publish ${pkg.name} to Github Package Registry with scope ${gprScope}`,
         )
