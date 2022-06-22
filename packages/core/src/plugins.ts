@@ -257,7 +257,9 @@ export function makeInlinePluginsCreator(
 
         const nameParts = manifest.name.split('/')
         const gprName =
-          nameParts.length === 2 ? nameParts.join('-') : nameParts[0]
+          nameParts.length === 2
+            ? `${nameParts[0].substring(1)}-${nameParts[1]}`
+            : nameParts[0]
         manifest.name = `@${gprScope}/${gprName}`
         manifest.publishConfig = { registry, access: 'public' }
 
