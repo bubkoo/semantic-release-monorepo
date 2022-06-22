@@ -246,7 +246,6 @@ export function makeInlinePluginsCreator(
         const oldManifest = readManifest(pkgPath)
         const manifest = getManifest(pkgPath)
 
-        debug(context)
         // fix package name and publish registry
         let gprScope = srmOptions.gprScope || gitOwner()!
         debug(
@@ -257,7 +256,8 @@ export function makeInlinePluginsCreator(
         }
 
         const nameParts = manifest.name.split('/')
-        const gprName = nameParts.length === 2 ? nameParts[1] : nameParts[0]
+        const gprName =
+          nameParts.length === 2 ? nameParts.join('-') : nameParts[0]
         manifest.name = `@${gprScope}/${gprName}`
         manifest.publishConfig = { registry, access: 'public' }
 
@@ -266,7 +266,7 @@ export function makeInlinePluginsCreator(
         const oldNpmrc = hasNpmrc ? await fse.readFile(npmrcPath) : null
         await fse.writeFile(
           npmrcPath,
-          `//${host}/:_authToken=${token}\nscripts-prepend-node-path=true`,
+          `//${host}/:_authToken=${token}\n@${gprScope}:registry=https://npm.pkg.github.com\nscripts-prepend-node-path=true`,
         )
         await fse.writeFile(pkgPath, JSON.stringify(manifest, null, 2))
 
