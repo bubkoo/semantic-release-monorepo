@@ -17,6 +17,7 @@ import { getManifest } from './manifest.js'
 import { Synchronizer } from './synchronizer.js'
 import { toAbsolutePath } from './util.js'
 import { RescopedStream } from './rescoped-stream.js'
+import { COMMIT_NAME, COMMIT_EMAIL } from './constants.js'
 import { CreateInlinePlugins, makeInlinePluginsCreator } from './plugins.js'
 import { getOptions, getSuccessComment, getFailComment } from './options.js'
 
@@ -35,6 +36,14 @@ export async function releasePackages(
 
   // eslint-disable-next-line no-param-reassign
   cwd = toAbsolutePath(cwd)
+  // set the commits author and commiter info
+  Object.assign(env, {
+    GIT_AUTHOR_NAME: COMMIT_NAME,
+    GIT_AUTHOR_EMAIL: COMMIT_EMAIL,
+    GIT_COMMITTER_NAME: COMMIT_NAME,
+    GIT_COMMITTER_EMAIL: COMMIT_EMAIL,
+    ...env,
+  })
 
   logger.start(`Loading ${paths.length} packages...`)
 
