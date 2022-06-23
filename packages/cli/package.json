@@ -9,6 +9,17 @@
   "bin": {
     "srm": "./index.js"
   },
+  "keywords": [
+    "srm",
+    "cli",
+    "release",
+    "semantic-release",
+    "semantic-release-monorepo",
+    "npm",
+    "github",
+    "git",
+    "changelog"
+  ],
   "scripts": {},
   "peerDependencies": {
     "semantic-release": "^19.x"

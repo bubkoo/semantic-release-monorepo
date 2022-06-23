@@ -92,7 +92,7 @@ If those don't help, or if this issue is reporting something you think isn't rig
   <% if(error.details) { %>
     <% return header + error.details %>
   <% } else { %>
-    <% var msg = 'Unfortunately this error doesn't have any additional information.' %>
+    <% var msg = "Unfortunately this error doesn't have any additional information." %>
     <% if(error.pluginName) { %>
       <% return header + msg + ' Feel free to kindly ask the author of the "' + error.pluginName + '" plugin to add more helpful information.' %>
     <% } else {%>
