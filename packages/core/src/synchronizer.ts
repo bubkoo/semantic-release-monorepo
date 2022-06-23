@@ -22,12 +22,12 @@ export class Synchronizer {
     return `${probe}${pkg ? `:${pkg.name}` : ''}`
   }
 
-  todo() {
-    return this.packages.filter((p) => p.result == null)
+  filter(condition: (p: Package) => boolean) {
+    return this.packages.filter(condition)
   }
 
-  find(condition: (pkg: Package) => boolean) {
-    return this.packages.filter((p) => p.result == null).find(condition)
+  todo() {
+    return this.filter((p) => p.result == null)
   }
 
   emit(probe: Synchronizer.Probe, pkg?: Package) {

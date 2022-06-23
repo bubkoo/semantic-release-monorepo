@@ -15,7 +15,6 @@ import {
   GenerateNotesContext,
   AnalyzeCommitsContext,
   SuccessContext,
-  FailContext,
 } from './types.js'
 import { getTagHead } from './git.js'
 import { getDebugger } from './debugger.js'
@@ -47,7 +46,9 @@ export function makeInlinePluginsCreator(
       pkg.status.tagged = true
       synchronizer.emit(
         'readyForTagging',
-        synchronizer.find((pkg) => pkg.nextType != null && !pkg.status.tagged),
+        synchronizer
+          .todo()
+          .find((pkg) => pkg.nextType != null && !pkg.status.tagged),
       )
     }
 
@@ -63,7 +64,7 @@ export function makeInlinePluginsCreator(
       pkg.status.ready = true
       synchronizer.emit(
         'readyForRelease',
-        synchronizer.find((pkg) => !pkg.status.ready),
+        synchronizer.todo().find((pkg) => !pkg.status.ready),
       )
 
       const res = await plugins.verifyConditions(context)
@@ -350,9 +351,9 @@ export function makeInlinePluginsCreator(
       // issue/pr was delayed
       const ret = await plugins.successWithoutComment(context)
 
-      const totalCount = synchronizer
-        .todo()
-        .filter((p: Package) => p.nextType != null).length
+      const totalCount = synchronizer.filter(
+        (p: Package) => p.nextType != null,
+      ).length
       if (succeedCount < totalCount) {
         succeedCount += 1
       }
@@ -382,12 +383,6 @@ export function makeInlinePluginsCreator(
       return ret
     }
 
-    const fail = async (pluginOptions: PluginOptions, context: FailContext) => {
-      debug('failed: %s', pkg.name)
-      const ret = await plugins.fail(context)
-      return ret
-    }
-
     const inlinePlugin = {
       verifyConditions,
       analyzeCommits,
@@ -395,7 +390,6 @@ export function makeInlinePluginsCreator(
       prepare,
       publish,
       success,
-      fail,
     } as const
 
     // Add labels for logs.
