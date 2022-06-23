@@ -341,11 +341,11 @@ export function makeInlinePluginsCreator(
       context: SuccessContext,
     ) => {
       pkg.status.published = true
-      await synchronizer.waitForAll(
-        'published',
-        (p: Package) => p.status.published === true,
-        (p: Package) => p.nextType != null,
-      )
+      // await synchronizer.waitForAll(
+      //   'published',
+      //   (p: Package) => p.status.published === true,
+      //   (p: Package) => p.nextType != null,
+      // )
 
       context.releases = releaseMap[pkg.name]
       // Add release links to the GitHub Release, adding comments to
