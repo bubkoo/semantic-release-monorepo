@@ -1,3 +1,16 @@
+# @semantic-release-monorepo/core [1.1.0](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.0.10...@semantic-release-monorepo/core@1.1.0) (2022-06-23)
+
+
+### Bug Fixes
+
+* 🐛 fix template error ([57c77b4](https://github.com/bubkoo/semantic-release-monorepo/commit/57c77b4ff14771f3ab2a1ee1c9b618d2d223210a))
+* 🐛 typos of fail comment ([42849f4](https://github.com/bubkoo/semantic-release-monorepo/commit/42849f498f01ca87c9b7e5c3a624f77d1ff57e4f))
+
+
+### Features
+
+* ✨ add default fail comment ([874aef9](https://github.com/bubkoo/semantic-release-monorepo/commit/874aef9a834c0b50e99b4cda2ff4ccfd86009964))
+
 ## @semantic-release-monorepo/core [1.0.10](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.0.9...@semantic-release-monorepo/core@1.0.10) (2022-06-22)
 
 
