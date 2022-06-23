@@ -4,7 +4,7 @@
   "description": "Apply semantic-release's automatic publishing to a monorepo",
   "type": "module",
   "exports": "./esm/index.js",
-  "types": "lib/index.d.ts",
+  "types": "esm/index.d.ts",
   "files": [
     "dist",
     "esm",
