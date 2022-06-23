@@ -1,3 +1,18 @@
+## @semantic-release-monorepo/cli [1.0.13](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/cli@1.0.12...@semantic-release-monorepo/cli@1.0.13) (2022-06-23)
+
+
+### Bug Fixes
+
+* 🐛 typos of fail comment ([42849f4](https://github.com/bubkoo/semantic-release-monorepo/commit/42849f498f01ca87c9b7e5c3a624f77d1ff57e4f))
+
+
+
+
+
+### Dependencies
+
+* **@semantic-release-monorepo/core:** upgraded to 1.1.0
+
 ## @semantic-release-monorepo/cli [1.0.12](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/cli@1.0.11...@semantic-release-monorepo/cli@1.0.12) (2022-06-22)
 
 
