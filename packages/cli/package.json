@@ -1,6 +1,6 @@
 {
   "name": "@semantic-release-monorepo/cli",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "type": "module",
   "exports": "./index.js",
   "files": [
@@ -25,7 +25,7 @@
     "semantic-release": "^19.x"
   },
   "dependencies": {
-    "@semantic-release-monorepo/core": "1.1.1",
+    "@semantic-release-monorepo/core": "1.2.0",
     "lodash": "^4.17.21",
     "meow": "^10.1.2"
   },
