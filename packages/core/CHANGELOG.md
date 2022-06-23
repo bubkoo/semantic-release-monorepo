@@ -1,3 +1,15 @@
+# @semantic-release-monorepo/core [1.2.0](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.1.1...@semantic-release-monorepo/core@1.2.0) (2022-06-23)
+
+
+### Bug Fixes
+
+* 🐛 fix release progress ([b8656d3](https://github.com/bubkoo/semantic-release-monorepo/commit/b8656d39a4dd04d35d895f7364005ba380338516))
+
+
+### Features
+
+* ✨ set default commits author and commiter info ([c626c2b](https://github.com/bubkoo/semantic-release-monorepo/commit/c626c2b97046aa55baf6381c71d518fe019b5c1f))
+
 ## @semantic-release-monorepo/core [1.1.1](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.1.0...@semantic-release-monorepo/core@1.1.1) (2022-06-23)
 
 
