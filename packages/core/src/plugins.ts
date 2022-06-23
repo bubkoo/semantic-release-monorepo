@@ -40,7 +40,6 @@ export function makeInlinePluginsCreator(
   const createInlinePlugins = (pkg: Package) => {
     const { plugins, dir, name } = pkg
     const releaseMap: { [key: string]: SemanticRelease.Release[] } = {}
-    let successCount = 0
 
     const next = () => {
       pkg.status.tagged = true
@@ -341,11 +340,11 @@ export function makeInlinePluginsCreator(
       context: SuccessContext,
     ) => {
       pkg.status.published = true
-      // await synchronizer.waitForAll(
-      //   'published',
-      //   (p: Package) => p.status.published === true,
-      //   (p: Package) => p.nextType != null,
-      // )
+      await synchronizer.waitForAll(
+        'published',
+        (p: Package) => p.status.published === true,
+        (p: Package) => p.nextType != null,
+      )
 
       context.releases = releaseMap[pkg.name]
       // Add release links to the GitHub Release, adding comments to
@@ -355,14 +354,14 @@ export function makeInlinePluginsCreator(
       const totalCount = synchronizer.filter(
         (p: Package) => p.nextType != null,
       ).length
-      if (successCount < totalCount) {
-        successCount += 1
-      }
+      const leftCount = synchronizer
+        .todo()
+        .filter((p: Package) => p.nextType != null).length
 
       debug('succeed: %s', pkg.name)
-      debug(`progress: ${successCount}/${totalCount}`)
+      debug(`progress: ${totalCount - leftCount + 1}/${totalCount}`)
 
-      if (successCount === totalCount) {
+      if (leftCount === 1) {
         debug('all released, comment issue/pr')
         const ctx = {
           ...context,
