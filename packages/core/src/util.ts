@@ -20,11 +20,27 @@ export function detectFormat(contents: string) {
   }
 }
 
-export function normalizeRepoUrl(url: string) {
-  const index = url.indexOf('github.com')
-  let ret = index >= 0 ? `https://${url.substring(index)}` : url
-  if (ret.endsWith('.git')) {
-    ret = ret.substring(0, ret.length - 4)
+export function normalizeRepoUrl(repositoryUrl: string) {
+  const { owner, repo } = parseGithubUrl(repositoryUrl)
+  return `https://github.com/${owner}/${repo}`
+}
+
+export function parseGithubUrl(repositoryUrl: string) {
+  const [match, auth, host, path] =
+    /^(?!.+:\/\/)(?:(?<auth>.*)@)?(?<host>.*?):(?<path>.*)$/.exec(
+      repositoryUrl,
+    ) || []
+  try {
+    const [, owner, repo] =
+      /^\/(?<owner>[^/]+)?\/?(?<repo>.+?)(?:\.git)?$/.exec(
+        new URL(
+          match
+            ? `ssh://${auth ? `${auth}@` : ''}${host}/${path}`
+            : repositoryUrl,
+        ).pathname,
+      )!
+    return { owner, repo }
+  } catch {
+    return {}
   }
-  return ret
 }

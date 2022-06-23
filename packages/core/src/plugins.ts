@@ -15,6 +15,7 @@ import {
   GenerateNotesContext,
   AnalyzeCommitsContext,
   SuccessContext,
+  FailContext,
 } from './types.js'
 import { getTagHead } from './git.js'
 import { getDebugger } from './debugger.js'
@@ -381,6 +382,12 @@ export function makeInlinePluginsCreator(
       return ret
     }
 
+    const fail = async (pluginOptions: PluginOptions, context: FailContext) => {
+      debug('failed: %s', pkg.name)
+      const ret = await plugins.fail(context)
+      return ret
+    }
+
     const inlinePlugin = {
       verifyConditions,
       analyzeCommits,
@@ -388,6 +395,7 @@ export function makeInlinePluginsCreator(
       prepare,
       publish,
       success,
+      fail,
     } as const
 
     // Add labels for logs.

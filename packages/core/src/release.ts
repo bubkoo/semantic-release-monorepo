@@ -13,12 +13,12 @@ import {
   Package,
   Context,
 } from './types.js'
-import { getOptions, getSuccessComment } from './options.js'
 import { getManifest } from './manifest.js'
 import { Synchronizer } from './synchronizer.js'
 import { toAbsolutePath } from './util.js'
 import { RescopedStream } from './rescoped-stream.js'
 import { CreateInlinePlugins, makeInlinePluginsCreator } from './plugins.js'
+import { getOptions, getSuccessComment, getFailComment } from './options.js'
 
 export async function releasePackages(
   paths: string[],
@@ -216,6 +216,7 @@ export async function getSemanticConfig(
 
     const options1 = _.cloneDeep(options)
     const options2 = _.cloneDeep(options)
+
     const githubPlugin = '@semantic-release/github'
     if (options1.plugins) {
       options1.plugins = options1.plugins.map((plugin) => {
@@ -223,12 +224,20 @@ export async function getSemanticConfig(
           const pluginName = plugin[0]
           const pluginOptions = plugin[1] || {}
           if (pluginName === githubPlugin) {
-            return [pluginName, { ...pluginOptions, successComment: false }]
+            const failComment =
+              pluginOptions.failComment ||
+              getFailComment(srmOptions.commentFooter)
+
+            return [
+              pluginName,
+              { ...pluginOptions, failComment, successComment: false },
+            ]
           }
         }
 
         if (plugin === githubPlugin) {
-          return [plugin, { successComment: false }]
+          const failComment = getFailComment(srmOptions.commentFooter)
+          return [plugin, { failComment, successComment: false }]
         }
 
         return plugin
@@ -244,16 +253,25 @@ export async function getSemanticConfig(
             const successComment =
               pluginOptions.successComment ||
               getSuccessComment(srmOptions.commentFooter)
+            const failComment =
+              pluginOptions.failComment ||
+              getFailComment(srmOptions.commentFooter)
             return [
               pluginName,
-              { ...pluginOptions, successComment, addReleases: false },
+              {
+                ...pluginOptions,
+                successComment,
+                failComment,
+                addReleases: false,
+              },
             ]
           }
         }
 
         if (plugin === githubPlugin) {
           const successComment = getSuccessComment(srmOptions.commentFooter)
-          return [plugin, { successComment, addReleases: false }]
+          const failComment = getFailComment(srmOptions.commentFooter)
+          return [plugin, { successComment, failComment, addReleases: false }]
         }
 
         return plugin
