@@ -77,6 +77,7 @@ export function getManifestPaths(cwd: string, ignorePackages?: string[]) {
   try {
     workspace = getPackagesSync(cwd)
   } catch (e) {
+    console.warn(e)
     workspace = {
       tool: 'root',
       root: {
