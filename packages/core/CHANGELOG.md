@@ -1,3 +1,10 @@
+## @semantic-release-monorepo/core [1.2.3](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.2.2...@semantic-release-monorepo/core@1.2.3) (2022-08-12)
+
+
+### Bug Fixes
+
+* 🐛 parse packages ([be09955](https://github.com/bubkoo/semantic-release-monorepo/commit/be099550acf35a10e86ec86dadd2f917fd77ed11))
+
 ## @semantic-release-monorepo/core [1.2.2](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.2.1...@semantic-release-monorepo/core@1.2.2) (2022-06-23)
 
 
