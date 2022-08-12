@@ -44,9 +44,10 @@ export async function getFilteredCommits(
     throw new ValueError('dir: Must be inside cwd', dir)
   }
 
-  if (dir === cwd) {
-    throw new ValueError('dir: Must not be equal to cwd', dir)
-  }
+  // disable following code to support normal-repo
+  // if (dir === cwd) {
+  //   throw new ValueError('dir: Must not be equal to cwd', dir)
+  // }
 
   // Get top-level Git directory as it might be higher up the tree than cwd.
   const root = (await execa('git', ['rev-parse', '--show-toplevel'], { cwd }))
