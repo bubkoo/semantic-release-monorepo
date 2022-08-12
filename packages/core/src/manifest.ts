@@ -88,10 +88,6 @@ export function getManifestPaths(cwd: string, ignorePackages?: string[]) {
     }
   }
 
-  if (workspace.tool === 'root') {
-    workspace.packages = []
-  }
-
   const packages = workspace.packages.map((p) => path.relative(cwd, p.dir))
   if (ignorePackages) {
     packages.push(...ignorePackages.map((p) => `!${p}`))
