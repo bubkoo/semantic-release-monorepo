@@ -13,6 +13,7 @@ export function enableDebugger(module?: string | boolean) {
     if (typeof module === 'string') {
       module.split(/,\|/).forEach((ns) => debug.enable(`${prefix}:${ns}`))
     } else {
+      debug.enable(`semantic-release:*`)
       debug.enable(`${prefix}:*`)
     }
   }
