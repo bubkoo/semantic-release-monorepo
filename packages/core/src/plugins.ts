@@ -37,13 +37,14 @@ export function makeInlinePluginsCreator(
 ) {
   const { cwd } = context
 
-  const logContext = (
-    ns: string,
-    context: VerifyReleaseContext | AnalyzeCommitsContext,
-  ) => {
-    const { logger, stderr, stdout, ...meta } = context
-    debug(`${ns}: ${JSON.stringify(meta, null, 2)}`)
-  }
+  // eslint-disable-next-line
+  // const logContext = (
+  //   ns: string,
+  //   context: VerifyReleaseContext | AnalyzeCommitsContext,
+  // ) => {
+  //   const { logger, stderr, stdout, ...meta } = context
+  //   debug(`${ns}: ${JSON.stringify(meta, null, 2)}`)
+  // }
 
   const createInlinePlugins = (pkg: Package) => {
     const { plugins, dir, name } = pkg
@@ -90,7 +91,7 @@ export function makeInlinePluginsCreator(
 
       const res = await plugins.verifyConditions(context)
       debug('verified conditions: %s', pkg.name)
-      logContext(`verifyConditions context:`, context)
+      // logContext(`verifyConditions context:`, context)
 
       return res
     }
@@ -111,7 +112,7 @@ export function makeInlinePluginsCreator(
       pluginOptions: PluginOptions,
       context: AnalyzeCommitsContext,
     ) => {
-      logContext(`analyzeCommits context:`, context)
+      // logContext(`analyzeCommits context:`, context)
 
       pkg.branchName = context.branch.name
       pkg.preRelease = context.branch.prerelease as string
