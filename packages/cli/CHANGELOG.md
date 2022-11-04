@@ -1,3 +1,10 @@
+## @semantic-release-monorepo/cli [1.0.22](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/cli@1.0.21...@semantic-release-monorepo/cli@1.0.22) (2022-11-04)
+
+
+### Bug Fixes
+
+* set "inherit" as default bump rule ([89a4e5b](https://github.com/bubkoo/semantic-release-monorepo/commit/89a4e5b8cc6dfad0d9bc4e7895c39341c8e626e0))
+
 ## @semantic-release-monorepo/cli [1.0.21](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/cli@1.0.20...@semantic-release-monorepo/cli@1.0.21) (2022-11-04)
 
 
