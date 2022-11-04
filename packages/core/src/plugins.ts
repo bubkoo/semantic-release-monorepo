@@ -81,11 +81,13 @@ export function makeInlinePluginsCreator(
           (b) => b.name === proxyBranch,
         )
         if (targetBranch) {
-          debug('proxy branch: %s', proxyBranch)
+          debug('proxy to branch: %s', proxyBranch)
+          debug('origin branch: %s', JSON.stringify(context.branch, null, 2))
           context.branch = {
             ...targetBranch,
             name: context.branch.name,
           }
+          debug('proxy branch: %s', JSON.stringify(context.branch, null, 2))
         }
       }
 
