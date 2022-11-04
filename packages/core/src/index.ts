@@ -19,11 +19,6 @@ function release(
     stderr: process.stderr,
   },
 ) {
-  srmOptions.deps = {
-    bump: 'inherit',
-    ...srmOptions.deps,
-  }
-
   enableDebugger(srmOptions.debug)
   const logger = getLogger(context)
   const filename = fileURLToPath(import.meta.url)

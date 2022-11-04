@@ -46,7 +46,7 @@ const cli = meow(
       },
       'deps.bump': {
         type: 'string',
-        default: 'override',
+        default: 'inherit',
       },
       'deps.release': {
         type: 'string',
