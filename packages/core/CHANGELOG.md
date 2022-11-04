@@ -1,3 +1,11 @@
+## @semantic-release-monorepo/core [1.2.9](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.2.8...@semantic-release-monorepo/core@1.2.9) (2022-11-04)
+
+
+### Bug Fixes
+
+* converting circular structure to JSON ([1b15be6](https://github.com/bubkoo/semantic-release-monorepo/commit/1b15be6f8963660605bf8b7eb97df6559c6bfcc2))
+* find proxy branch ([15ab5f7](https://github.com/bubkoo/semantic-release-monorepo/commit/15ab5f791c6787f1f14f197604e76c1f4b1826e9))
+
 ## @semantic-release-monorepo/core [1.2.8](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.2.7...@semantic-release-monorepo/core@1.2.8) (2022-11-04)
 
 
