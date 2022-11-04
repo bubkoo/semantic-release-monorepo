@@ -1,3 +1,10 @@
+## @semantic-release-monorepo/core [1.2.7](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.2.6...@semantic-release-monorepo/core@1.2.7) (2022-11-04)
+
+
+### Bug Fixes
+
+* set "inherit" as default bump rule ([89a4e5b](https://github.com/bubkoo/semantic-release-monorepo/commit/89a4e5b8cc6dfad0d9bc4e7895c39341c8e626e0))
+
 ## @semantic-release-monorepo/core [1.2.6](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.2.5...@semantic-release-monorepo/core@1.2.6) (2022-11-04)
 
 ## @semantic-release-monorepo/core [1.2.5](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.2.4...@semantic-release-monorepo/core@1.2.5) (2022-08-12)
