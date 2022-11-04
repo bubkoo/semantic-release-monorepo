@@ -1,3 +1,10 @@
+## @semantic-release-monorepo/cli [1.0.23](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/cli@1.0.22...@semantic-release-monorepo/cli@1.0.23) (2022-11-04)
+
+
+### Bug Fixes
+
+* add default deps prefix ([1573486](https://github.com/bubkoo/semantic-release-monorepo/commit/157348660170491dfb6d20cc4b54b8f5171eef5e))
+
 ## @semantic-release-monorepo/cli [1.0.22](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/cli@1.0.21...@semantic-release-monorepo/cli@1.0.22) (2022-11-04)
 
 
