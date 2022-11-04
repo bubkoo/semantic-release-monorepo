@@ -2,11 +2,11 @@ import 'dotenv/config'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import SemanticRelease from 'semantic-release'
+import { getLogger } from './logger.js'
+import { releasePackages } from './release.js'
 import { Context, SRMOptions } from './types.js'
 import { getManifest, getManifestPaths } from './manifest.js'
-import { getLogger } from './logger.js'
 import { enableDebugger, getDebugger } from './debugger.js'
-import { releasePackages } from './release.js'
 
 const debug = getDebugger('options')
 function release(
@@ -19,6 +19,11 @@ function release(
     stderr: process.stderr,
   },
 ) {
+  srmOptions.deps = {
+    bump: 'inherit',
+    ...srmOptions.deps,
+  }
+
   enableDebugger(srmOptions.debug)
   const logger = getLogger(context)
   const filename = fileURLToPath(import.meta.url)
