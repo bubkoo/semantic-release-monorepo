@@ -2,7 +2,7 @@ import _ from 'lodash'
 import path from 'path'
 import fse from 'fs-extra'
 import gitOwner from 'git-username'
-import SemanticRelease from 'semantic-release'
+import SemanticRelease, { BranchSpec } from 'semantic-release'
 import { execa } from 'execa'
 import {
   Package,
@@ -83,10 +83,13 @@ export function makeInlinePluginsCreator(
         if (targetBranch) {
           debug('proxy to branch: %s', proxyBranch)
           debug('origin branch: %s', JSON.stringify(context.branch, null, 2))
-          context.branch = {
-            ...targetBranch,
-            name: context.branch.name,
-          }
+
+          Object.keys(context.branch).forEach((key: keyof BranchSpec) => {
+            if (key !== 'name') {
+              context.branch[key] = targetBranch[key]
+            }
+          })
+
           debug('proxy branch: %s', JSON.stringify(context.branch, null, 2))
         }
       }

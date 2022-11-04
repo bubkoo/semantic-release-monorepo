@@ -162,7 +162,7 @@ export interface PluginOptions {
   [key: string]: any
 }
 
-type Branch = Exclude<SemanticRelease.BranchSpec, string>
+export type Branch = Exclude<SemanticRelease.BranchSpec, string>
 
 export interface VerifyConditionsPluginContext {
   cwd: string
