@@ -54,7 +54,7 @@ const cli = meow(
       },
       'deps.prefix': {
         type: 'string',
-        default: '',
+        default: '^',
       },
       ignorePackages: {
         type: 'string',
