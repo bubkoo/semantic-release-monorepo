@@ -68,7 +68,8 @@ export function makeInlinePluginsCreator(
 
       const res = await plugins.verifyConditions(context)
       debug('verified conditions: %s', pkg.name)
-      debug(`verifyConditions context: ${JSON.stringify(context, null, 2)}`)
+      // eslint-disable-next-line no-console
+      console.log(`verifyConditions context:`, context)
       const branch = context.branch as any
       const branchs = context.branchs as any
       branch.tags = branchs.master.tags
@@ -92,7 +93,8 @@ export function makeInlinePluginsCreator(
       pluginOptions: PluginOptions,
       context: AnalyzeCommitsContext,
     ) => {
-      debug(`analyzeCommits context: ${JSON.stringify(context, null, 2)}`)
+      // eslint-disable-next-line no-console
+      console.log(`analyzeCommits context:`, context)
 
       pkg.branchName = context.branch.name
       pkg.preRelease = context.branch.prerelease as string
