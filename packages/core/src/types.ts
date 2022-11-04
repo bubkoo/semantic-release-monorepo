@@ -182,7 +182,7 @@ export interface VerifyConditionsPluginContext {
   }
   options: Options
   branch: Branch
-  branchs: Branch[]
+  branches: Branch[]
 }
 
 export interface AnalyzeCommitsContext extends VerifyConditionsPluginContext {

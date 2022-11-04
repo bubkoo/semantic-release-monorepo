@@ -70,9 +70,14 @@ export function makeInlinePluginsCreator(
       debug('verified conditions: %s', pkg.name)
       // eslint-disable-next-line no-console
       console.log(`verifyConditions context:`, context)
-      const branch = context.branch as any
-      const branchs = context.branchs as any
-      branch.tags = branchs.master.tags
+
+      const targetBranch = context.branches.find((b) => b.name === 'master')
+      if (targetBranch) {
+        context.branch = {
+          ...targetBranch,
+          name: context.branch.name,
+        }
+      }
 
       return res
     }
