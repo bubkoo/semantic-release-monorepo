@@ -146,6 +146,7 @@ export interface SRMOptions {
    * "@semantic-release/github" plugin
    */
   commentFooter?: string
+  proxyBranch?: string
 }
 
 export interface Commit extends SemanticRelease.Commit {

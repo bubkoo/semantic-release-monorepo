@@ -37,6 +37,14 @@ export function makeInlinePluginsCreator(
 ) {
   const { cwd } = context
 
+  const logContext = (
+    ns: string,
+    context: VerifyReleaseContext | AnalyzeCommitsContext,
+  ) => {
+    const { logger, stderr, stdout, ...meta } = context
+    debug(`${ns}: ${JSON.stringify(meta, null, 2)}`)
+  }
+
   const createInlinePlugins = (pkg: Package) => {
     const { plugins, dir, name } = pkg
     const releaseMap: { [key: string]: SemanticRelease.Release[] } = {}
@@ -66,18 +74,23 @@ export function makeInlinePluginsCreator(
         synchronizer.todo().find((pkg) => !pkg.status.ready),
       )
 
-      const res = await plugins.verifyConditions(context)
-      debug('verified conditions: %s', pkg.name)
-      // eslint-disable-next-line no-console
-      console.log(`verifyConditions context:`, context)
-
-      const targetBranch = context.branches.find((b) => b.name === 'master')
-      if (targetBranch) {
-        context.branch = {
-          ...targetBranch,
-          name: context.branch.name,
+      const proxyBranch = srmOptions.proxyBranch || 'master'
+      if (proxyBranch) {
+        const targetBranch = context.branches.find(
+          (b) => b.name === proxyBranch,
+        )
+        if (targetBranch) {
+          debug('proxy branch: %s', proxyBranch)
+          context.branch = {
+            ...targetBranch,
+            name: context.branch.name,
+          }
         }
       }
+
+      const res = await plugins.verifyConditions(context)
+      debug('verified conditions: %s', pkg.name)
+      logContext(`verifyConditions context:`, context)
 
       return res
     }
@@ -98,8 +111,7 @@ export function makeInlinePluginsCreator(
       pluginOptions: PluginOptions,
       context: AnalyzeCommitsContext,
     ) => {
-      // eslint-disable-next-line no-console
-      console.log(`analyzeCommits context:`, context)
+      logContext(`analyzeCommits context:`, context)
 
       pkg.branchName = context.branch.name
       pkg.preRelease = context.branch.prerelease as string
