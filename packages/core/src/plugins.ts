@@ -82,7 +82,13 @@ export function makeInlinePluginsCreator(
         )
         if (targetBranch) {
           debug('proxy to branch: %s', proxyBranch)
-          debug('origin branch: %s', JSON.stringify(context.branch, null, 2))
+          const log = (type: string) => {
+            const { tags, ...meta } = context.branch as any
+            debug(
+              `${type} branch: ${JSON.stringify(meta, null, 2)}, tags: ${tags}`,
+            )
+          }
+          log('origin')
 
           Object.keys(context.branch).forEach((key: keyof BranchSpec) => {
             if (key !== 'name') {
@@ -90,7 +96,7 @@ export function makeInlinePluginsCreator(
             }
           })
 
-          debug('proxy branch: %s', JSON.stringify(context.branch, null, 2))
+          log('proxy')
         }
       }
 
