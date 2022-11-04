@@ -66,6 +66,10 @@ export function makeInlinePluginsCreator(
         synchronizer.todo().find((pkg) => !pkg.status.ready),
       )
 
+      const branch = context.branch as any
+      const branchs = context.branchs as any
+      branch.tags = branchs.master.tags
+
       const res = await plugins.verifyConditions(context)
       debug('verified conditions: %s', pkg.name)
       return res
