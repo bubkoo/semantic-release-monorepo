@@ -85,7 +85,11 @@ export function makeInlinePluginsCreator(
           const log = (type: string) => {
             const { tags, ...meta } = context.branch as any
             debug(
-              `${type} branch: ${JSON.stringify(meta, null, 2)}, tags: ${tags}`,
+              `${type} branch: ${JSON.stringify(
+                meta,
+                null,
+                2,
+              )}, tags: ${JSON.stringify(tags)}`,
             )
           }
           log('origin')
