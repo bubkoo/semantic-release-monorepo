@@ -1,3 +1,5 @@
+## @semantic-release-monorepo/cli [1.0.24](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/cli@1.0.23...@semantic-release-monorepo/cli@1.0.24) (2022-11-04)
+
 ## @semantic-release-monorepo/cli [1.0.23](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/cli@1.0.22...@semantic-release-monorepo/cli@1.0.23) (2022-11-04)
 
 
