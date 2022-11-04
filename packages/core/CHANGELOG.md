@@ -1,3 +1,10 @@
+## @semantic-release-monorepo/core [1.2.8](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.2.7...@semantic-release-monorepo/core@1.2.8) (2022-11-04)
+
+
+### Bug Fixes
+
+* debug namespace ([ad091d9](https://github.com/bubkoo/semantic-release-monorepo/commit/ad091d9944bbac19e197add82bc034c12a8eecb4))
+
 ## @semantic-release-monorepo/core [1.2.7](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.2.6...@semantic-release-monorepo/core@1.2.7) (2022-11-04)
 
 
