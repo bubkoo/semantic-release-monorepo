@@ -87,6 +87,8 @@ export function makeInlinePluginsCreator(
       pluginOptions: PluginOptions,
       context: AnalyzeCommitsContext,
     ) => {
+      debug(`analyzeCommits context: ${JSON.stringify(context, null, 2)}`)
+
       pkg.branchName = context.branch.name
       pkg.preRelease = context.branch.prerelease as string
 
