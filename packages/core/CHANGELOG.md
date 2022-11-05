@@ -1,3 +1,10 @@
+## @semantic-release-monorepo/core [1.2.15](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.2.14...@semantic-release-monorepo/core@1.2.15) (2022-11-05)
+
+
+### Bug Fixes
+
+* remove proxy branch ([65db42a](https://github.com/bubkoo/semantic-release-monorepo/commit/65db42a04282ab5acc47b3313da8fbf720773a90))
+
 ## @semantic-release-monorepo/core [1.2.14](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.2.13...@semantic-release-monorepo/core@1.2.14) (2022-11-04)
 
 ## @semantic-release-monorepo/core [1.2.13](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@1.2.12...@semantic-release-monorepo/core@1.2.13) (2022-11-04)
