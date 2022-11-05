@@ -79,7 +79,8 @@ export async function getFilteredCommits(
   })
 
   debug('git log filter query: %o', gitLogFilterQuery)
-  debug('filtered commits: %O', commits)
+  // debug('filtered commits: %O', commits)
+  debug('filtered commits count: %s', commits.length)
 
   return commits
 }
