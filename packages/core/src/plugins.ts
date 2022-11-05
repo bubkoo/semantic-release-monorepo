@@ -37,15 +37,6 @@ export function makeInlinePluginsCreator(
 ) {
   const { cwd } = context
 
-  // eslint-disable-next-line
-  // const logContext = (
-  //   ns: string,
-  //   context: VerifyReleaseContext | AnalyzeCommitsContext,
-  // ) => {
-  //   const { logger, stderr, stdout, ...meta } = context
-  //   debug(`${ns}: ${JSON.stringify(meta, null, 2)}`)
-  // }
-
   const createInlinePlugins = (pkg: Package) => {
     const { plugins, dir, name } = pkg
     const releaseMap: { [key: string]: SemanticRelease.Release[] } = {}
@@ -75,7 +66,7 @@ export function makeInlinePluginsCreator(
         synchronizer.todo().find((pkg) => !pkg.status.ready),
       )
 
-      debug(`branches: ${JSON.stringify(context.branches, null, 2)}`)
+      // debug(`branches: ${JSON.stringify(context.branches, null, 2)}`)
 
       const res = await plugins.verifyConditions(context)
       debug('verified conditions: %s', pkg.name)
