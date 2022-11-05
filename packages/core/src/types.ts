@@ -146,11 +146,6 @@ export interface SRMOptions {
    * "@semantic-release/github" plugin
    */
   commentFooter?: string
-  /**
-   * 当在特定 PR 中发布时，获取到的分支就不一定是主分支，此时需要将主分支的元信息(Branch)
-   * 复制到当前分支上，尤其是与主分支关联的 `tags` 信息
-   */
-  proxyBranch?: string
 }
 
 export interface Commit extends SemanticRelease.Commit {

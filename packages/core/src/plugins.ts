@@ -2,7 +2,7 @@ import _ from 'lodash'
 import path from 'path'
 import fse from 'fs-extra'
 import gitOwner from 'git-username'
-import SemanticRelease, { BranchSpec } from 'semantic-release'
+import SemanticRelease from 'semantic-release'
 import { execa } from 'execa'
 import {
   Package,
@@ -75,34 +75,7 @@ export function makeInlinePluginsCreator(
         synchronizer.todo().find((pkg) => !pkg.status.ready),
       )
 
-      const proxyBranch = srmOptions.proxyBranch || 'master'
-      if (proxyBranch) {
-        const targetBranch = context.branches.find(
-          (b) => b.name === proxyBranch,
-        )
-        if (targetBranch) {
-          debug('proxy to branch: %s', proxyBranch)
-          const log = (type: string) => {
-            const { tags, ...meta } = context.branch as any
-            debug(
-              `${type} branch: ${JSON.stringify(
-                meta,
-                null,
-                2,
-              )}, tags: ${JSON.stringify(tags)}`,
-            )
-          }
-          log('origin')
-
-          Object.keys(context.branch).forEach((key: keyof BranchSpec) => {
-            if (key !== 'name') {
-              context.branch[key] = targetBranch[key]
-            }
-          })
-
-          log('proxy')
-        }
-      }
+      debug(`branches: ${JSON.stringify(context.branches, null, 2)}`)
 
       const res = await plugins.verifyConditions(context)
       debug('verified conditions: %s', pkg.name)
