@@ -193,7 +193,7 @@ export function updateManifestDeps(
     scopes.forEach((scope) => {
       if (scope[dep.name]) {
         scope[dep.name] = resolveNextVersion(
-          (dep.lastRelease && dep.lastRelease.version) || '0.0.0',
+          scope[dep.name],
           release.version,
           bumpStrategy,
           versionPrefix,

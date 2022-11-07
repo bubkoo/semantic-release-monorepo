@@ -164,6 +164,9 @@ export function resolveNextVersion(
   bumpStrategy: BumpStrategy,
   prefix: VersionPrefix,
 ) {
+  // eslint-disable-next-line
+  currentVersion = substituteWorkspaceVersion(currentVersion, nextVersion)
+
   if (currentVersion === nextVersion) {
     return currentVersion
   }
@@ -199,4 +202,31 @@ export function resolveNextVersion(
   // "override"
   // By default next package version would be set as is for the all dependants.
   return prefix + nextVersion
+}
+
+/**
+ * Substitute "workspace:" in currentVersion
+ * See:
+ * {@link https://yarnpkg.com/features/workspaces#publishing-workspaces}
+ * {@link https://pnpm.io/workspaces#publishing-workspace-packages}
+ *
+ * @param {string} currentVersion Current version, may start with "workspace:"
+ * @param {string} nextVersion Next version
+ * @returns {string} current version without "workspace:"
+ */
+function substituteWorkspaceVersion(
+  currentVersion: string,
+  nextVersion: string,
+) {
+  if (currentVersion.startsWith('workspace:')) {
+    const [, range, caret] = /^workspace:(([\^~*])?.*)$/.exec(currentVersion)!
+
+    return caret === range
+      ? caret === '*'
+        ? nextVersion
+        : caret + nextVersion
+      : range
+  }
+
+  return currentVersion
 }
