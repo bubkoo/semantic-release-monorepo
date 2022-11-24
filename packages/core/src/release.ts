@@ -226,11 +226,18 @@ export async function getSemanticConfig(
     const gitPluginName = '@semantic-release/git'
     const githubPluginName = '@semantic-release/github'
 
+    // eslint-disable-next-line no-console
+    console.log('plugins:', options.plugins)
+
     const plugins: semanticRelease.PluginSpec[] = (options.plugins as any) || []
     const index = plugins.findIndex((plugin) => {
       const pluginName = Array.isArray(plugin) ? plugin[0] : plugin
       return pluginName === gitPluginName
     })
+    // eslint-disable-next-line no-console
+    console.log('index:', index)
+    // eslint-disable-next-line no-console
+    console.log('plugins:', plugins)
 
     // remove git plugin from plugins
     const gitPlugins = index >= 0 ? plugins.splice(index, 1) : []
