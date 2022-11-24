@@ -25,7 +25,10 @@ export function normalizeRepoUrl(repositoryUrl: string) {
   return `https://github.com/${owner}/${repo}`
 }
 
-export function parseGithubUrl(repositoryUrl: string) {
+export function parseGithubUrl(repositoryUrl: string): {
+  repo?: string
+  owner?: string
+} {
   const [match, auth, host, path] =
     /^(?!.+:\/\/)(?:(?<auth>.*)@)?(?<host>.*?):(?<path>.*)$/.exec(
       repositoryUrl,

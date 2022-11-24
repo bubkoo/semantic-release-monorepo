@@ -219,12 +219,12 @@ function substituteWorkspaceVersion(
   nextVersion: string,
 ) {
   if (currentVersion.startsWith('workspace:')) {
-    const [, range, caret] = /^workspace:(([\^~*])?.*)$/.exec(currentVersion)!
+    const [, range, prefix] = /^workspace:(([\^~*])?.*)$/.exec(currentVersion)!
 
-    return caret === range
-      ? caret === '*'
+    return prefix === range
+      ? prefix === '*'
         ? nextVersion
-        : caret + nextVersion
+        : prefix + nextVersion
       : range
   }
 
