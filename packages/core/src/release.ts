@@ -234,11 +234,15 @@ export async function getSemanticConfig(
 
     // remove git plugin from plugins
     const gitPlugins = index >= 0 ? plugins.splice(index, 1) : []
-
+    // eslint-disable-next-line no-console
+    console.log('gitPlugins:', gitPlugins)
+    // eslint-disable-next-line no-console
+    console.log('plugins:', plugins)
     const innerOptions = { ...options, plugins }
 
     const options1 = _.cloneDeep(innerOptions)
     const options2 = _.cloneDeep(innerOptions)
+    const options3 = { ..._.cloneDeep(options), plugins: gitPlugins }
 
     options1.plugins = options1.plugins.map((plugin) => {
       if (Array.isArray(plugin)) {
@@ -295,8 +299,6 @@ export async function getSemanticConfig(
 
       return plugin
     })
-
-    const options3 = { ...options, plugins: gitPlugins }
 
     const context = { cwd, env, stdout, stderr, logger: blackhole }
     const ret1 = await semanticGetConfig(context, options1)

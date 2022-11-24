@@ -66,14 +66,10 @@ export function makeInlinePluginsCreator(
         synchronizer.todo().find((pkg) => !pkg.status.ready),
       )
 
-      // debug(`branches: ${JSON.stringify(context.branches, null, 2)}`)
-
+      await plugins.verifyConditionsGit(context)
       const res = await plugins.verifyConditions(context)
 
-      await plugins.verifyConditionsGit(context)
-
       debug('verified conditions: %s', pkg.name)
-      // logContext(`verifyConditions context:`, context)
 
       return res
     }
