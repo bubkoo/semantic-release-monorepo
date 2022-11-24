@@ -39,7 +39,8 @@ export function makeInlinePluginsCreator(
 
   const createInlinePlugins = (pkg: Package) => {
     const { plugins, dir, name } = pkg
-    const releaseMap: { [key: string]: SemanticRelease.Release[] } = {}
+    const nextReleaseMap: { [key: string]: SemanticRelease.Release[] } = {}
+    const lastReleaseMap: { [key: string]: SemanticRelease.LastRelease } = {}
 
     const next = () => {
       pkg.status.tagged = true
@@ -326,7 +327,7 @@ export function makeInlinePluginsCreator(
         }
       }
 
-      releaseMap[pkg.name] = releases
+      nextReleaseMap[pkg.name] = releases
         .filter((r) => r.name != null)
         .map((r) => ({
           ...r,
@@ -334,6 +335,7 @@ export function makeInlinePluginsCreator(
           private: pkg.manifest.private,
           hasCommit: context.commits != null && context.commits.length > 0,
         }))
+      lastReleaseMap[pkg.name] = context.lastRelease
 
       debug('published: %s', pkg.name)
 
@@ -351,7 +353,7 @@ export function makeInlinePluginsCreator(
         (p: Package) => p.nextType != null,
       )
 
-      context.releases = releaseMap[pkg.name]
+      context.releases = nextReleaseMap[pkg.name]
       // Add release links to the GitHub Release, adding comments to
       // issue/pr was delayed
       const ret = await plugins.successWithoutComment(context)
@@ -367,18 +369,26 @@ export function makeInlinePluginsCreator(
       debug(`progress: ${totalCount - leftCount + 1}/${totalCount}`)
 
       if (leftCount === 1) {
-        debug('all released, push changed file to git')
-        await plugins.prepareGit({ ...context, cwd: process.cwd() })
-
-        debug('all released, comment issue/pr')
+        const pkgs = Object.keys(nextReleaseMap).sort()
         const ctx = {
           ...context,
-          releases: Object.keys(releaseMap)
-            .sort()
-            .reduce<SemanticRelease.Release[]>((arr, key) => {
-              return [...arr, ...releaseMap[key]]
-            }, []),
+          releases: pkgs.reduce<SemanticRelease.Release[]>((arr, key) => {
+            return [...arr, ...nextReleaseMap[key]]
+          }, []),
         }
+
+        debug('all released, push changed file to git')
+        const makePushToGit = plugins.makePushToGit
+        if (makePushToGit) {
+          const releases = pkgs.map((pkg) => ({
+            lastRelease: lastReleaseMap[pkg],
+            nextReleases: nextReleaseMap[pkg],
+          }))
+          const pushToGit = await makePushToGit(context.branch, releases)
+          await pushToGit({ ...context, cwd: process.cwd() })
+        }
+
+        debug('all released, comment issue/pr')
         const shouldComment = ctx.releases.some(
           (release: any) => !release.private && release.hasCommit,
         )

@@ -35,7 +35,13 @@ export interface Package {
     generateNotes: (context: GenerateNotesContext) => Promise<any>
     addChannel: (context: AddChannelContext) => Promise<any>
     prepare: (context: PrepareContext) => Promise<any>
-    prepareGit: (context: PrepareContext) => Promise<any>
+    makePushToGit: (
+      branch: SemanticRelease.BranchObject,
+      releases: {
+        lastRelease: SemanticRelease.LastRelease
+        nextReleases: SemanticRelease.Release[]
+      }[],
+    ) => Promise<(context: PrepareContext) => Promise<any>>
     publish: (context: PublishContext) => Promise<any>
     successWithoutComment: (context: SuccessContext) => Promise<any>
     successWithoutReleaseNote: (context: SuccessContext) => Promise<any>

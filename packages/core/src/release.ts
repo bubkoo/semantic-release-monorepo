@@ -200,6 +200,78 @@ async function loadPackage(
   }
 }
 
+function makePrepareGit(
+  context: any,
+  parsedOptions: semanticRelease.Options,
+  plugin: undefined | string | [string, any],
+) {
+  // https://github.com/semantic-release/git
+  if (plugin) {
+    return async (
+      branch: semanticRelease.BranchObject,
+      releases: {
+        lastRelease: semanticRelease.LastRelease
+        nextReleases: semanticRelease.Release[]
+      }[],
+    ) => {
+      const pluginName = Array.isArray(plugin) ? plugin[0] : plugin
+      const pluginOptions = Array.isArray(plugin) ? plugin[1] || {} : {}
+
+      let assets: string[] = pluginOptions.assets || []
+      if (!Array.isArray(assets)) {
+        assets = [assets]
+      }
+      assets = assets.map((asset) => {
+        if (asset.startsWith('**/')) {
+          return asset
+        }
+        if (asset.startsWith('./')) {
+          return `**/${asset.substring(2)}`
+        }
+
+        if (asset.startsWith('../')) {
+          return `**/${asset.substring(3)}`
+        }
+
+        return `**/${asset}`
+      })
+
+      const message: string =
+        pluginOptions.message ||
+        // eslint-disable-next-line no-template-curly-in-string
+        'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}'
+
+      const header = `chore(release): release ${releases.length} package${
+        releases.length > 1 ? 's' : ''
+      } [skip ci]`
+      const body = releases
+        .map(({ lastRelease, nextReleases }) =>
+          nextReleases
+            .map((nextRelease) =>
+              _.template(message)({
+                branch: branch.name,
+                lastRelease,
+                nextRelease,
+              }),
+            )
+            .join('\n\n'),
+        )
+        .join('\n\n')
+
+      const options = _.cloneDeep({
+        ...parsedOptions,
+        plugins: [[pluginName, { assets, message: `${header} \n\n ${body}` }]],
+      })
+
+      const ret = await semanticGetConfig(context, options)
+
+      return ret.plugins.prepare
+    }
+  }
+
+  return null
+}
+
 export async function getSemanticConfig(
   {
     cwd,
@@ -310,7 +382,7 @@ export async function getSemanticConfig(
       plugins: {
         ...ret1.plugins,
         verifyConditionsGit: ret3.plugins.verifyConditions,
-        prepareGit: ret3.plugins.prepare,
+        makePrepareGit: makePrepareGit(context, parsedOptions, gitPlugins[0]),
         successWithoutComment: ret1.plugins.success,
         successWithoutReleaseNote: ret2.plugins.success,
       },
