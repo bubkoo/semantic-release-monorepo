@@ -254,7 +254,7 @@ function shouldUpdateManifest(actualManifest: PackageJSON, path: string) {
   }, {})
 
   const debugPrefix = `[${actualManifest.name}]`
-  debug(debugPrefix, 'packageon path=', path)
+  debug(debugPrefix, 'package.json path=', path)
 
   if (Object.keys(changes).length) {
     debug(debugPrefix, 'changes=', changes)
