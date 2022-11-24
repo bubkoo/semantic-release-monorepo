@@ -223,33 +223,27 @@ export async function getSemanticConfig(
       stream: new WritableStreamBuffer() as any,
     })
 
+    const context = { cwd, env, stdout, stderr, logger: blackhole }
+    const raw = await semanticGetConfig(context, options)
+    const parsedOptions: semanticRelease.Options = raw.options
+
     const gitPluginName = '@semantic-release/git'
     const githubPluginName = '@semantic-release/github'
 
-    // eslint-disable-next-line no-console
-    console.log('options:', options)
-
-    const plugins: semanticRelease.PluginSpec[] = (options.plugins as any) || []
+    const plugins: semanticRelease.PluginSpec[] = parsedOptions.plugins
+      ? parsedOptions.plugins.slice()
+      : []
     const index = plugins.findIndex((plugin) => {
       const pluginName = Array.isArray(plugin) ? plugin[0] : plugin
       return pluginName === gitPluginName
     })
-    // eslint-disable-next-line no-console
-    console.log('index:', index)
-    // eslint-disable-next-line no-console
-    console.log('plugins:', plugins)
 
     // remove git plugin from plugins
     const gitPlugins = index >= 0 ? plugins.splice(index, 1) : []
-    // eslint-disable-next-line no-console
-    console.log('gitPlugins:', gitPlugins)
-    // eslint-disable-next-line no-console
-    console.log('plugins:', plugins)
-    const innerOptions = { ...options, plugins }
 
-    const options1 = _.cloneDeep(innerOptions)
-    const options2 = _.cloneDeep(innerOptions)
-    const options3 = { ..._.cloneDeep(options), plugins: gitPlugins }
+    const options1 = _.cloneDeep({ ...parsedOptions, plugins })
+    const options2 = _.cloneDeep({ ...parsedOptions, plugins })
+    const options3 = _.cloneDeep({ ...parsedOptions, plugins: gitPlugins })
 
     options1.plugins = options1.plugins.map((plugin) => {
       if (Array.isArray(plugin)) {
@@ -307,7 +301,6 @@ export async function getSemanticConfig(
       return plugin
     })
 
-    const context = { cwd, env, stdout, stderr, logger: blackhole }
     const ret1 = await semanticGetConfig(context, options1)
     const ret2 = await semanticGetConfig(context, options2)
     const ret3 = await semanticGetConfig(context, options3)
