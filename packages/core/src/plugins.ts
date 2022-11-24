@@ -368,7 +368,7 @@ export function makeInlinePluginsCreator(
 
       if (leftCount === 1) {
         debug('all released, push changed file to git')
-        await plugins.prepareGit(context)
+        await plugins.prepareGit({ ...context, cwd: process.cwd() })
 
         debug('all released, comment issue/pr')
         const ctx = {
