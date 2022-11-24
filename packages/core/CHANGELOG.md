@@ -1,3 +1,10 @@
+## @semantic-release-monorepo/core [2.1.1](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@2.1.0...@semantic-release-monorepo/core@2.1.1) (2022-11-24)
+
+
+### Bug Fixes
+
+* should parse options with "extends" before hack options ([b3bc0b2](https://github.com/bubkoo/semantic-release-monorepo/commit/b3bc0b22327834fa1c5962067a0fe1e98dade535))
+
 ## @semantic-release-monorepo/core [2.0.4](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@2.0.3...@semantic-release-monorepo/core@2.0.4) (2022-11-24)
 
 ## @semantic-release-monorepo/core [2.0.3](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@2.0.2...@semantic-release-monorepo/core@2.0.3) (2022-11-24)
