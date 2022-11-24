@@ -69,6 +69,9 @@ export function makeInlinePluginsCreator(
       // debug(`branches: ${JSON.stringify(context.branches, null, 2)}`)
 
       const res = await plugins.verifyConditions(context)
+
+      await plugins.verifyConditionsGit(context)
+
       debug('verified conditions: %s', pkg.name)
       // logContext(`verifyConditions context:`, context)
 
@@ -368,6 +371,9 @@ export function makeInlinePluginsCreator(
       debug(`progress: ${totalCount - leftCount + 1}/${totalCount}`)
 
       if (leftCount === 1) {
+        debug('all released, push changed file to git')
+        await plugins.prepareGit(context)
+
         debug('all released, comment issue/pr')
         const ctx = {
           ...context,

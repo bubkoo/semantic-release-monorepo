@@ -223,77 +223,92 @@ export async function getSemanticConfig(
       stream: new WritableStreamBuffer() as any,
     })
 
-    const options1 = _.cloneDeep(options)
-    const options2 = _.cloneDeep(options)
+    const gitPluginName = '@semantic-release/git'
+    const githubPluginName = '@semantic-release/github'
 
-    const githubPlugin = '@semantic-release/github'
-    if (options1.plugins) {
-      options1.plugins = options1.plugins.map((plugin) => {
-        if (Array.isArray(plugin)) {
-          const pluginName = plugin[0]
-          const pluginOptions = plugin[1] || {}
-          if (pluginName === githubPlugin) {
-            const failComment =
-              pluginOptions.failComment ||
-              getFailComment(srmOptions.commentFooter)
+    const plugins: semanticRelease.PluginSpec[] = (options.plugins as any) || []
+    const index = plugins.findIndex((plugin) => {
+      const pluginName = Array.isArray(plugin) ? plugin[0] : plugin
+      return pluginName === gitPluginName
+    })
 
-            return [
-              pluginName,
-              { ...pluginOptions, failComment, successComment: false },
-            ]
-          }
+    // remove git plugin from plugins
+    const gitPlugins = index >= 0 ? plugins.splice(index, 1) : []
+
+    const innerOptions = { ...options, plugins }
+
+    const options1 = _.cloneDeep(innerOptions)
+    const options2 = _.cloneDeep(innerOptions)
+
+    options1.plugins = options1.plugins.map((plugin) => {
+      if (Array.isArray(plugin)) {
+        const pluginName = plugin[0]
+        const pluginOptions = plugin[1] || {}
+        if (pluginName === githubPluginName) {
+          const failComment =
+            pluginOptions.failComment ||
+            getFailComment(srmOptions.commentFooter)
+
+          return [
+            pluginName,
+            { ...pluginOptions, failComment, successComment: false },
+          ]
         }
+      }
 
-        if (plugin === githubPlugin) {
-          const failComment = getFailComment(srmOptions.commentFooter)
-          return [plugin, { failComment, successComment: false }]
+      if (plugin === githubPluginName) {
+        const failComment = getFailComment(srmOptions.commentFooter)
+        return [plugin, { failComment, successComment: false }]
+      }
+
+      return plugin
+    })
+
+    options2.plugins = options2.plugins.map((plugin) => {
+      if (Array.isArray(plugin)) {
+        const pluginName = plugin[0]
+        const pluginOptions = plugin[1] || {}
+        if (pluginName === githubPluginName) {
+          const successComment =
+            pluginOptions.successComment ||
+            getSuccessComment(srmOptions.commentFooter)
+          const failComment =
+            pluginOptions.failComment ||
+            getFailComment(srmOptions.commentFooter)
+          return [
+            pluginName,
+            {
+              ...pluginOptions,
+              successComment,
+              failComment,
+              addReleases: false,
+            },
+          ]
         }
+      }
 
-        return plugin
-      })
-    }
+      if (plugin === githubPluginName) {
+        const successComment = getSuccessComment(srmOptions.commentFooter)
+        const failComment = getFailComment(srmOptions.commentFooter)
+        return [plugin, { successComment, failComment, addReleases: false }]
+      }
 
-    if (options2.plugins) {
-      options2.plugins = options2.plugins.map((plugin) => {
-        if (Array.isArray(plugin)) {
-          const pluginName = plugin[0]
-          const pluginOptions = plugin[1] || {}
-          if (pluginName === githubPlugin) {
-            const successComment =
-              pluginOptions.successComment ||
-              getSuccessComment(srmOptions.commentFooter)
-            const failComment =
-              pluginOptions.failComment ||
-              getFailComment(srmOptions.commentFooter)
-            return [
-              pluginName,
-              {
-                ...pluginOptions,
-                successComment,
-                failComment,
-                addReleases: false,
-              },
-            ]
-          }
-        }
+      return plugin
+    })
 
-        if (plugin === githubPlugin) {
-          const successComment = getSuccessComment(srmOptions.commentFooter)
-          const failComment = getFailComment(srmOptions.commentFooter)
-          return [plugin, { successComment, failComment, addReleases: false }]
-        }
-
-        return plugin
-      })
-    }
+    const options3 = { ...options, plugins: gitPlugins }
 
     const context = { cwd, env, stdout, stderr, logger: blackhole }
     const ret1 = await semanticGetConfig(context, options1)
     const ret2 = await semanticGetConfig(context, options2)
+    const ret3 = await semanticGetConfig(context, options3)
+
     return {
       ...ret1,
       plugins: {
         ...ret1.plugins,
+        verifyConditionsGit: ret3.plugins.verifyConditions,
+        prepareGit: ret3.plugins.prepare,
         successWithoutComment: ret1.plugins.success,
         successWithoutReleaseNote: ret2.plugins.success,
       },
