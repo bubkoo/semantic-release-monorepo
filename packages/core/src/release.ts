@@ -227,7 +227,7 @@ export async function getSemanticConfig(
     const githubPluginName = '@semantic-release/github'
 
     // eslint-disable-next-line no-console
-    console.log('plugins:', options.plugins)
+    console.log('options:', options)
 
     const plugins: semanticRelease.PluginSpec[] = (options.plugins as any) || []
     const index = plugins.findIndex((plugin) => {
