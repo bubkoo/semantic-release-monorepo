@@ -231,9 +231,6 @@ function makePrepareGit(
         }),
       )
 
-      // eslint-disable-next-line no-console
-      console.log(allAssets)
-
       const message: string =
         pluginOptions.message ||
         // eslint-disable-next-line no-template-curly-in-string

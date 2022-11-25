@@ -91,8 +91,6 @@ export function makeInlinePluginsCreator(
       pluginOptions: PluginOptions,
       context: AnalyzeCommitsContext,
     ) => {
-      // logContext(`analyzeCommits context:`, context)
-
       pkg.branchName = context.branch.name
       pkg.preRelease = context.branch.prerelease as string
 
@@ -196,6 +194,7 @@ export function makeInlinePluginsCreator(
           (d) => `* **${d.name}:** upgraded to ${d.nextRelease!.version}`,
         )
         notes.push(bullets.join('\n'))
+        notes.push('\n')
       }
 
       debug('notes generated: %s', pkg.name)
@@ -385,9 +384,8 @@ export function makeInlinePluginsCreator(
             lastRelease: lastReleaseMap[pkg],
             nextReleases: nextReleaseMap[pkg],
           }))
-          await makePushToGit(context.branch, releases)
-          // const pushToGit = await makePushToGit(context.branch, releases)
-          // await pushToGit({ ...context, cwd: process.cwd() })
+          const pushToGit = await makePushToGit(context.branch, releases)
+          await pushToGit({ ...context, cwd: process.cwd() })
         }
 
         debug('all released, comment issue/pr')
