@@ -36,11 +36,11 @@ export function makeInlinePluginsCreator(
   srmOptions: SRMOptions,
 ) {
   const { cwd } = context
+  const nextReleaseMap: { [key: string]: SemanticRelease.Release[] } = {}
+  const lastReleaseMap: { [key: string]: SemanticRelease.LastRelease } = {}
 
   const createInlinePlugins = (pkg: Package) => {
     const { plugins, dir, name } = pkg
-    const nextReleaseMap: { [key: string]: SemanticRelease.Release[] } = {}
-    const lastReleaseMap: { [key: string]: SemanticRelease.LastRelease } = {}
 
     const next = () => {
       pkg.status.tagged = true
@@ -337,7 +337,7 @@ export function makeInlinePluginsCreator(
         }))
       lastReleaseMap[pkg.name] = context.lastRelease
 
-      debug('published: %s', pkg.name, nextReleaseMap)
+      debug('published: %s', pkg.name, Object.keys(nextReleaseMap))
 
       return releases[0]
     }
