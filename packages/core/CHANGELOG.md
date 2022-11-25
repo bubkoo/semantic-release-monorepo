@@ -1,3 +1,10 @@
+# @semantic-release-monorepo/core [2.2.0](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@2.1.20...@semantic-release-monorepo/core@2.2.0) (2022-11-25)
+
+
+### Features
+
+* add option for combining commits ([8c07410](https://github.com/bubkoo/semantic-release-monorepo/commit/8c074102468200cee0cbaf64ce7dac1828984e1d))
+
 ## @semantic-release-monorepo/core [2.1.20](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@2.1.19...@semantic-release-monorepo/core@2.1.20) (2022-11-25)
 
 ## @semantic-release-monorepo/core [2.1.19](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@2.1.18...@semantic-release-monorepo/core@2.1.19) (2022-11-25)
