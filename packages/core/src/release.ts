@@ -237,7 +237,7 @@ function makePrepareGit(
       const message: string =
         pluginOptions.message ||
         // eslint-disable-next-line no-template-curly-in-string
-        'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}'
+        'chore(release): ${nextRelease.gitTag} [skip ci]\n\n${nextRelease.notes}'
 
       const header = `chore(release): release ${releases.length} package${
         releases.length > 1 ? 's' : ''

@@ -1,6 +1,6 @@
 {
   "name": "@semantic-release-monorepo/core",
-  "version": "2.1.13",
+  "version": "2.1.14",
   "description": "Apply semantic-release's automatic publishing to a monorepo",
   "type": "module",
   "exports": "./esm/index.js",
