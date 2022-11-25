@@ -1,3 +1,10 @@
+# @semantic-release-monorepo/cli [2.1.0](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/cli@2.0.25...@semantic-release-monorepo/cli@2.1.0) (2022-11-25)
+
+
+### Features
+
+* add "--combine-commits" option ([6ed25d3](https://github.com/bubkoo/semantic-release-monorepo/commit/6ed25d3c9f8c3944749806528cf690d07861e571))
+
 ## @semantic-release-monorepo/cli [2.0.25](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/cli@2.0.24...@semantic-release-monorepo/cli@2.0.25) (2022-11-25)
 
 
