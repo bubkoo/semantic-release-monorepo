@@ -10,20 +10,30 @@ const cli = meow(
     $ srm [options]
 
   Options
-    --dry-run Dry run mode
-    --debug Output debugging information
-    --sequential Avoid hypothetical concurrent initialization collisions
-    --first-parent Apply commit filtering to current branch only
-    --deps.bump Define deps version updating rule. Allowed: override, satisfy, inherit
-    --deps.prefix Optional prefix to be attached to the next dep version if '--deps.bump' set to 'override'. Supported values: '^' | '~' | '' (empty string as default)
-    --deps.release Define release type for dependent package if any of its deps changes. Supported values: patch, minor, major, inherit
-    --ignore-packages Packages list to be ignored on bumping process
-    --ignore-private-packages Ignore private packages
-    --gpr Publish to Github Package Registry
-    --gpr-scope The scope of Github Package Registry, default to the repo owner
-    --comment-footer The footer message in the 'successComment' or 'failComment' created by @semantic-release/github plugin
-    --version Show version info
-	  --help Show help info
+    --debug ······················ Output debugging information
+    --dry-run ···················· Dry run mode
+    --sequential ················· Avoid hypothetical concurrent initialization collisions
+    --first-parent ··············· Apply commit filtering to current branch only
+    --deps.bump ·················· Define deps version updating rule.
+                                   Allowed: override, satisfy, inherit
+    --deps.prefix ················ Optional prefix to be attached to the next dep version
+                                   when '--deps.bump' set to 'override'. Supported values:
+                                   '^' | '~' | '' (empty string as default)
+    --deps.release ··············· Define release type for dependent package if any of its
+                                   deps changes.
+                                   Supported values: patch, minor, major, inherit
+    --gpr ························ Publish to Github Package Registry
+    --gpr-scope ·················· The scope of Github Package Registry
+                                   Default to the repo owner
+    --ignore-packages ············ Packages to be ignored on bumping process
+    --ignore-private-packages ···· Ignore private packages
+    --comment-footer ············· The footer message in the 'successComment' or 'failComment'
+                                   created by "@semantic-release/github" plugin
+    --combine-commits ············ Combine the commits of released paclages
+    --combined-message-header ···· The header of combined commit message
+    --combined-message-body ······ The body of combined commit message
+    --version ···················· Show version info
+ 	  --help ······················· Show help info
 
   Examples
     $ srm --debug
@@ -69,6 +79,15 @@ const cli = meow(
         type: 'string',
       },
       commentFooter: {
+        type: 'string',
+      },
+      combineCommits: {
+        type: 'boolean',
+      },
+      combinedMessageHeader: {
+        type: 'string',
+      },
+      combinedMessageBody: {
         type: 'string',
       },
     },
