@@ -1,3 +1,13 @@
+## @semantic-release-monorepo/cli [2.0.15](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/cli@2.0.14...@semantic-release-monorepo/cli@2.0.15) (2022-11-25)
+
+
+
+
+
+### Dependencies
+
+* **@semantic-release-monorepo/core:** upgraded to 2.1.11
+
 ## @semantic-release-monorepo/cli [2.0.14](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/cli@2.0.13...@semantic-release-monorepo/cli@2.0.14) (2022-11-25)
 
 

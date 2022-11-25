@@ -337,7 +337,7 @@ export function makeInlinePluginsCreator(
         }))
       lastReleaseMap[pkg.name] = context.lastRelease
 
-      debug('published: %s', pkg.name)
+      debug('published: %s', pkg.name, nextReleaseMap)
 
       return releases[0]
     }
