@@ -379,6 +379,8 @@ export function makeInlinePluginsCreator(
 
         debug('all released, push changed file to git')
         const makePushToGit = plugins.makePushToGit
+        // eslint-disable-next-line no-console
+        console.log(context.branch, makePushToGit)
         if (makePushToGit) {
           const releases = pkgs.map((pkg) => ({
             lastRelease: lastReleaseMap[pkg],
