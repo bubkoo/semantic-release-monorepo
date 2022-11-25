@@ -253,9 +253,6 @@ function makePrepareGit(
         )
         .join('\n\n')
 
-      // eslint-disable-next-line no-console
-      console.log(`${header}\n\n${body}`)
-
       const options = _.cloneDeep({
         ...parsedOptions,
         plugins: [
