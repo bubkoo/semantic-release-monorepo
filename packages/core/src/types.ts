@@ -157,6 +157,9 @@ export interface SRMOptions {
    * "@semantic-release/github" plugin
    */
   commentFooter?: string
+  combineCommits?: boolean
+  combinedMessageHeader?: string
+  combinedMessageBody?: string
 }
 
 export interface Commit extends SemanticRelease.Commit {

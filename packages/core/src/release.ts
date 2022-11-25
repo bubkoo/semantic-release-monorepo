@@ -18,7 +18,7 @@ import { Synchronizer } from './synchronizer.js'
 import { toAbsolutePath } from './util.js'
 import { RescopedStream } from './rescoped-stream.js'
 import { COMMIT_NAME, COMMIT_EMAIL } from './constants.js'
-import { CreateInlinePlugins, makeInlinePluginsCreator } from './plugins.js'
+import { CreateInlinePlugins, getInlinePluginsCreator } from './plugins.js'
 import { getOptions, getSuccessComment, getFailComment } from './options.js'
 
 export async function releasePackages(
@@ -81,7 +81,7 @@ export async function releasePackages(
   logger.start(`Queued ${packages.length} packages! Starting release...`)
 
   const synchronizer = new Synchronizer(packages)
-  const createInlinePlugins = makeInlinePluginsCreator(
+  const createInlinePlugins = getInlinePluginsCreator(
     packages,
     context,
     synchronizer,
@@ -200,10 +200,11 @@ async function loadPackage(
   }
 }
 
-function makePrepareGit(
+function makePushToGitMethod(
   context: any,
   parsedOptions: semanticRelease.Options,
   plugin: undefined | string | [string, any],
+  srmOptions: SRMOptions,
 ) {
   // https://github.com/semantic-release/git
   if (plugin) {
@@ -219,7 +220,7 @@ function makePrepareGit(
       const pluginOptions = Array.isArray(plugin) ? plugin[1] || {} : {}
       const cwd = process.cwd()
       const packageDirs = releases.map((r) => path.relative(cwd, r.package.dir))
-      const allAssets: string[] = []
+      const parsedAssets: string[] = []
 
       let assets: string[] = pluginOptions.assets || []
       if (!Array.isArray(assets)) {
@@ -227,29 +228,35 @@ function makePrepareGit(
       }
       packageDirs.forEach((dir) =>
         assets.forEach((asset) => {
-          allAssets.push(path.join(dir, asset))
+          parsedAssets.push(path.join(dir, asset))
         }),
       )
 
-      const message: string =
-        pluginOptions.message ||
-        // eslint-disable-next-line no-template-curly-in-string
-        'chore(release): ${nextRelease.gitTag} [skip ci]\n\n${nextRelease.notes}'
+      const bodyTemplate =
+        srmOptions.combinedMessageBody ||
+        '[${nextRelease.gitTag}](${nextRelease.url})'
 
-      const header = `chore(release): release ${releases.length} package${
-        releases.length > 1 ? 's' : ''
-      } [skip ci]`
+      const headerTemplate =
+        srmOptions.combinedMessageHeader ||
+        `chore(release): release ${releases.length} package${
+          releases.length > 1 ? 's' : ''
+        } [skip ci]`
+
+      const header = _.template(headerTemplate)({
+        releases,
+        branch: branch.name,
+      })
       const body = releases
         .map(({ lastRelease, nextReleases }) =>
           nextReleases
             .map((nextRelease) =>
-              _.template(message)({
+              _.template(bodyTemplate)({
                 branch: branch.name,
                 lastRelease,
                 nextRelease,
               }),
             )
-            .join('\n\n'),
+            .join('\n'),
         )
         .join('\n\n')
 
@@ -259,7 +266,7 @@ function makePrepareGit(
           [
             pluginName,
             {
-              assets: allAssets,
+              assets: parsedAssets,
               message: `${header}\n\n${body}`,
             },
           ],
@@ -301,24 +308,28 @@ export async function getSemanticConfig(
     const context = { cwd, env, stdout, stderr, logger: blackhole }
     const raw = await semanticGetConfig(context, options)
     const parsedOptions: semanticRelease.Options = raw.options
-
-    const gitPluginName = '@semantic-release/git'
-    const githubPluginName = '@semantic-release/github'
-
     const plugins: semanticRelease.PluginSpec[] = parsedOptions.plugins
       ? parsedOptions.plugins.slice()
       : []
-    const index = plugins.findIndex((plugin) => {
-      const name = Array.isArray(plugin) ? plugin[0] : plugin
-      return name === gitPluginName
-    })
 
-    // remove git plugin from plugins
-    const gitPlugins = index >= 0 ? plugins.splice(index, 1) : []
+    const gitPlugins = []
+    if (srmOptions.combineCommits) {
+      const gitPluginName = '@semantic-release/git'
+      const index = plugins.findIndex((plugin) => {
+        const name = Array.isArray(plugin) ? plugin[0] : plugin
+        return name === gitPluginName
+      })
+      if (index >= 0) {
+        // remove git plugin from plugins
+        gitPlugins.push(...plugins.splice(index, 1))
+      }
+    }
 
     const options1 = _.cloneDeep({ ...parsedOptions, plugins })
     const options2 = _.cloneDeep({ ...parsedOptions, plugins })
     const options3 = _.cloneDeep({ ...parsedOptions, plugins: gitPlugins })
+
+    const githubPluginName = '@semantic-release/github'
 
     options1.plugins = options1.plugins.map((plugin) => {
       if (Array.isArray(plugin)) {
@@ -379,13 +390,16 @@ export async function getSemanticConfig(
     const ret1 = await semanticGetConfig(context, options1)
     const ret2 = await semanticGetConfig(context, options2)
     const ret3 = await semanticGetConfig(context, options3)
-    const makePushToGit = makePrepareGit(context, parsedOptions, gitPlugins[0])
+    const makePushToGit = srmOptions.combineCommits
+      ? makePushToGitMethod(context, parsedOptions, gitPlugins[0], srmOptions)
+      : null
+
     return {
       ...ret1,
       plugins: {
         ...ret1.plugins,
-        verifyConditionsGit: ret3.plugins.verifyConditions,
         makePushToGit,
+        verifyConditionsGit: ret3.plugins.verifyConditions,
         successWithoutComment: ret1.plugins.success,
         successWithoutReleaseNote: ret2.plugins.success,
       },

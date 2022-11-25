@@ -27,9 +27,9 @@ import { updateManifestDeps, updateNextReleaseType } from './local-deps.js'
 
 const debug = getDebugger('plugins')
 
-export type CreateInlinePlugins = ReturnType<typeof makeInlinePluginsCreator>
+export type CreateInlinePlugins = ReturnType<typeof getInlinePluginsCreator>
 
-export function makeInlinePluginsCreator(
+export function getInlinePluginsCreator(
   packages: Package[],
   context: SRMContext,
   synchronizer: Synchronizer,
@@ -67,7 +67,10 @@ export function makeInlinePluginsCreator(
         synchronizer.todo().find((pkg) => !pkg.status.ready),
       )
 
-      await plugins.verifyConditionsGit(context)
+      if (srmOptions.combineCommits) {
+        await plugins.verifyConditionsGit(context)
+      }
+
       const res = await plugins.verifyConditions(context)
 
       debug('verified conditions: %s', pkg.name)
@@ -376,16 +379,18 @@ export function makeInlinePluginsCreator(
           }, []),
         }
 
-        debug('all released, push changed file to git')
-        const makePushToGit = plugins.makePushToGit
-        if (makePushToGit) {
-          const releases = pkgs.map((pkg) => ({
-            package: packages.find(({ name }) => name === pkg)!,
-            lastRelease: lastReleaseMap[pkg],
-            nextReleases: nextReleaseMap[pkg],
-          }))
-          const pushToGit = await makePushToGit(context.branch, releases)
-          await pushToGit({ ...context, cwd: process.cwd() })
+        if (srmOptions.combineCommits) {
+          debug('all released, push changed file to git')
+          const makePushToGit = plugins.makePushToGit
+          if (makePushToGit) {
+            const releases = pkgs.map((pkg) => ({
+              package: packages.find(({ name }) => name === pkg)!,
+              lastRelease: lastReleaseMap[pkg],
+              nextReleases: nextReleaseMap[pkg],
+            }))
+            const pushToGit = await makePushToGit(context.branch, releases)
+            await pushToGit({ ...context, cwd: process.cwd() })
+          }
         }
 
         debug('all released, comment issue/pr')
