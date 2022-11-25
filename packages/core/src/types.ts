@@ -38,6 +38,7 @@ export interface Package {
     makePushToGit: (
       branch: SemanticRelease.BranchObject,
       releases: {
+        package: Package
         lastRelease: SemanticRelease.LastRelease
         nextReleases: SemanticRelease.Release[]
       }[],
