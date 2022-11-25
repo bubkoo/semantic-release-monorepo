@@ -258,7 +258,15 @@ function makePrepareGit(
 
       const options = _.cloneDeep({
         ...parsedOptions,
-        plugins: [[pluginName, { assets, message: `${header}\n\n${body}` }]],
+        plugins: [
+          [
+            pluginName,
+            {
+              assets: allAssets,
+              message: `${header}\n\n${body}`,
+            },
+          ],
+        ],
       })
 
       const ret = await semanticGetConfig(context, options)
