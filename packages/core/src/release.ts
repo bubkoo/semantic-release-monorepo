@@ -1,9 +1,9 @@
 import _ from 'lodash'
+import path, { dirname } from 'path'
 import signale, { Signale } from 'signale'
 import semanticRelease from 'semantic-release'
 import semanticGetConfig from 'semantic-release/lib/get-config.js'
 import { WritableStreamBuffer } from 'stream-buffers'
-import { dirname } from 'path'
 import { check } from './blork.js'
 import {
   Logger,
@@ -210,36 +210,29 @@ function makePrepareGit(
     return async (
       branch: semanticRelease.BranchObject,
       releases: {
+        package: Package
         lastRelease: semanticRelease.LastRelease
         nextReleases: semanticRelease.Release[]
       }[],
     ) => {
       const pluginName = Array.isArray(plugin) ? plugin[0] : plugin
       const pluginOptions = Array.isArray(plugin) ? plugin[1] || {} : {}
+      const cwd = process.cwd()
+      const packageDirs = releases.map((r) => path.relative(cwd, r.package.dir))
+      const allAssets: string[] = []
 
       let assets: string[] = pluginOptions.assets || []
       if (!Array.isArray(assets)) {
         assets = [assets]
       }
-      // eslint-disable-next-line no-console
-      console.log(assets)
-      assets = assets.map((asset) => {
-        if (asset.startsWith('**/')) {
-          return asset
-        }
-        if (asset.startsWith('./')) {
-          return `**/${asset.substring(2)}`
-        }
-
-        if (asset.startsWith('../')) {
-          return `**/${asset.substring(3)}`
-        }
-
-        return `**/${asset}`
-      })
+      packageDirs.forEach((dir) =>
+        assets.forEach((asset) => {
+          allAssets.push(path.join(dir, asset))
+        }),
+      )
 
       // eslint-disable-next-line no-console
-      console.log(assets)
+      console.log(allAssets)
 
       const message: string =
         pluginOptions.message ||

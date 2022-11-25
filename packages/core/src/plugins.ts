@@ -385,10 +385,9 @@ export function makeInlinePluginsCreator(
             lastRelease: lastReleaseMap[pkg],
             nextReleases: nextReleaseMap[pkg],
           }))
-          const pushToGit = await makePushToGit(context.branch, releases)
-          // eslint-disable-next-line no-console
-          console.log(releases, pushToGit)
-          await pushToGit({ ...context, cwd: process.cwd() })
+          await makePushToGit(context.branch, releases)
+          // const pushToGit = await makePushToGit(context.branch, releases)
+          // await pushToGit({ ...context, cwd: process.cwd() })
         }
 
         debug('all released, comment issue/pr')
