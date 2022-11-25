@@ -82,8 +82,7 @@
         "assets": [
           "package.json",
           "CHANGELOG.md"
-        ],
-        "message": "[${nextRelease.gitTag}](${nextRelease.url})"
+        ]
       }
     ]
   ]
