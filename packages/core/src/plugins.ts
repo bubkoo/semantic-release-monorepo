@@ -337,7 +337,7 @@ export function makeInlinePluginsCreator(
         }))
       lastReleaseMap[pkg.name] = context.lastRelease
 
-      debug('published: %s', pkg.name, Object.keys(nextReleaseMap))
+      debug('published: %s', pkg.name)
 
       return releases[0]
     }
@@ -385,8 +385,6 @@ export function makeInlinePluginsCreator(
             lastRelease: lastReleaseMap[pkg],
             nextReleases: nextReleaseMap[pkg],
           }))
-          // eslint-disable-next-line no-console
-          console.log(pkgs, releases)
           await makePushToGit(context.branch, releases)
           // const pushToGit = await makePushToGit(context.branch, releases)
           // await pushToGit({ ...context, cwd: process.cwd() })
