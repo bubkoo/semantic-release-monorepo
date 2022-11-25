@@ -384,17 +384,13 @@ export async function getSemanticConfig(
     const ret1 = await semanticGetConfig(context, options1)
     const ret2 = await semanticGetConfig(context, options2)
     const ret3 = await semanticGetConfig(context, options3)
-    // eslint-disable-next-line no-console
-    console.log(gitPlugins)
-    const prepareGit = makePrepareGit(context, parsedOptions, gitPlugins[0])
-    // eslint-disable-next-line no-console
-    console.log('prepareGit', prepareGit)
+    const makePushToGit = makePrepareGit(context, parsedOptions, gitPlugins[0])
     return {
       ...ret1,
       plugins: {
         ...ret1.plugins,
         verifyConditionsGit: ret3.plugins.verifyConditions,
-        makePrepareGit: prepareGit,
+        makePushToGit,
         successWithoutComment: ret1.plugins.success,
         successWithoutReleaseNote: ret2.plugins.success,
       },
