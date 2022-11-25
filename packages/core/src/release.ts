@@ -221,6 +221,8 @@ function makePrepareGit(
       if (!Array.isArray(assets)) {
         assets = [assets]
       }
+      // eslint-disable-next-line no-console
+      console.log(assets)
       assets = assets.map((asset) => {
         if (asset.startsWith('**/')) {
           return asset
@@ -235,6 +237,9 @@ function makePrepareGit(
 
         return `**/${asset}`
       })
+
+      // eslint-disable-next-line no-console
+      console.log(assets)
 
       const message: string =
         pluginOptions.message ||
@@ -257,6 +262,9 @@ function makePrepareGit(
             .join('\n\n'),
         )
         .join('\n\n')
+
+      // eslint-disable-next-line no-console
+      console.log(message)
 
       const options = _.cloneDeep({
         ...parsedOptions,
@@ -306,8 +314,8 @@ export async function getSemanticConfig(
       ? parsedOptions.plugins.slice()
       : []
     const index = plugins.findIndex((plugin) => {
-      const pluginName = Array.isArray(plugin) ? plugin[0] : plugin
-      return pluginName === gitPluginName
+      const name = Array.isArray(plugin) ? plugin[0] : plugin
+      return name === gitPluginName
     })
 
     // remove git plugin from plugins
@@ -376,13 +384,17 @@ export async function getSemanticConfig(
     const ret1 = await semanticGetConfig(context, options1)
     const ret2 = await semanticGetConfig(context, options2)
     const ret3 = await semanticGetConfig(context, options3)
-
+    // eslint-disable-next-line no-console
+    console.log(gitPlugins)
+    const prepareGit = makePrepareGit(context, parsedOptions, gitPlugins[0])
+    // eslint-disable-next-line no-console
+    console.log('prepareGit', prepareGit)
     return {
       ...ret1,
       plugins: {
         ...ret1.plugins,
         verifyConditionsGit: ret3.plugins.verifyConditions,
-        makePrepareGit: makePrepareGit(context, parsedOptions, gitPlugins[0]),
+        makePrepareGit: prepareGit,
         successWithoutComment: ret1.plugins.success,
         successWithoutReleaseNote: ret2.plugins.success,
       },
