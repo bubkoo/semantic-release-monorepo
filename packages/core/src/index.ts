@@ -20,7 +20,7 @@ async function release(
     stderr: process.stderr,
   },
 ) {
-  enableDebugger(srmOptions.debug)
+  enableDebugger(srmOptions.debug || context.env.SRM_DEBUG)
   const logger = getLogger(context)
   const filename = fileURLToPath(import.meta.url)
   const dirname = path.dirname(filename)
@@ -30,7 +30,7 @@ async function release(
     logger.info(`Running srm version ${srmPkgJSON.version}`)
     logger.info(`Load packages from: ${context.cwd}`)
 
-    debug(`srm options: ${JSON.stringify(srmOptions, null, 2)}`)
+    debug(JSON.stringify(srmOptions, null, 2))
 
     const paths = getManifestPaths(context.cwd, srmOptions.ignorePackages)
     await releasePackages(paths, srOptions, srmOptions, context, logger)

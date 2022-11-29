@@ -30,7 +30,7 @@ jobs:
         run: pnpm run build
 
       - name: Release
-        run: node ./packages/cli/index.js --debug --gpr --combine-commits
+        run: node ./packages/cli/index.js --gpr --combine-commits
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -78,7 +78,7 @@ export function getInlinePluginsCreator(
         await plugins.verifyConditions(context)
       }
 
-      debug('verified conditions: %s', pkg.name)
+      // debug('verified conditions: %s', pkg.name)
     }
 
     /**
@@ -129,8 +129,9 @@ export function getInlinePluginsCreator(
       await updateNextReleaseType(pkg, packages, synchronizer, srmOptions)
 
       debug('commits analyzed: %s', pkg.name)
-      debug('next release type [deps]: %s', pkg.rawNextType || '')
-      debug('next release type  [raw]: %s', pkg.nextType || '')
+      const noRelease = 'no new version'
+      debug('next release type [deps]: %s', pkg.rawNextType || noRelease)
+      debug('next release type  [raw]: %s', pkg.nextType || noRelease)
 
       return pkg.nextType
     }
@@ -427,7 +428,7 @@ export function getInlinePluginsCreator(
       }),
     )
 
-    debug('inlinePlugin created: %s', pkg.name)
+    // debug('inlinePlugin created: %s', pkg.name)
 
     return inlinePlugin
   }
