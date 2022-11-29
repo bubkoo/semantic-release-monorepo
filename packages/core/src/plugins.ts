@@ -38,6 +38,7 @@ export function getInlinePluginsCreator(
   const { cwd } = context
   const nextReleaseMap: { [key: string]: SemanticRelease.Release[] } = {}
   const lastReleaseMap: { [key: string]: SemanticRelease.LastRelease } = {}
+  let conditionsVerified = false
 
   const createInlinePlugins = (pkg: Package) => {
     const { plugins, dir, name } = pkg
@@ -67,15 +68,17 @@ export function getInlinePluginsCreator(
         synchronizer.todo().find((pkg) => !pkg.status.ready),
       )
 
-      if (srmOptions.combineCommits) {
-        await plugins.verifyConditionsGit(context)
+      if (!conditionsVerified) {
+        conditionsVerified = true
+
+        if (srmOptions.combineCommits) {
+          await plugins.verifyConditionsGit(context)
+        }
+
+        await plugins.verifyConditions(context)
       }
 
-      const res = await plugins.verifyConditions(context)
-
       debug('verified conditions: %s', pkg.name)
-
-      return res
     }
 
     /**
