@@ -1,3 +1,10 @@
+# @semantic-release-monorepo/core [2.3.0](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@2.2.0...@semantic-release-monorepo/core@2.3.0) (2022-11-29)
+
+
+### Features
+
+* run "verifyConditions" once ([605e0d2](https://github.com/bubkoo/semantic-release-monorepo/commit/605e0d2c37b90315b0fbe613b454dc464140613b))
+
 # @semantic-release-monorepo/core [2.2.0](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@2.1.20...@semantic-release-monorepo/core@2.2.0) (2022-11-25)
 
 
