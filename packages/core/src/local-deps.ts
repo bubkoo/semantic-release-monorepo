@@ -172,10 +172,11 @@ export function updateManifestDeps(
     const release = dep.nextRelease || dep.lastRelease
 
     // Cannot establish version.
-    if (!release || !release.version)
+    if (!release || !release.version) {
       throw Error(
         `Cannot release because dependency ${dep.name} has not been released`,
       )
+    }
 
     // update changed dependencies
     const {

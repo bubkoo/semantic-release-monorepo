@@ -93,7 +93,7 @@ export function getManifestPaths(cwd: string, ignorePackages?: string[]) {
     packages.push(...ignorePackages.map((p) => `!${p}`))
   }
 
-  const workspacePackages = globbySync(
+  const workspacePackagePaths = globbySync(
     packages.map((p) => unixify(p)), // convert Windows file paths to unix paths
     {
       cwd,
@@ -104,9 +104,9 @@ export function getManifestPaths(cwd: string, ignorePackages?: string[]) {
     },
   ).filter((f) => /\/package\.json$/.test(f))
 
-  if (!workspacePackages.length) {
+  if (!workspacePackagePaths.length) {
     throw new TypeError('Project must contain one or more workspace-packages')
   }
 
-  return workspacePackages
+  return workspacePackagePaths
 }

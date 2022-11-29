@@ -75,8 +75,8 @@ export interface Context {
 }
 
 export interface SRMContext extends Context {
+  localOptions: SemanticRelease.Options
   globalOptions: SemanticRelease.Options
-  inputOptions: SemanticRelease.Options
 }
 
 /**

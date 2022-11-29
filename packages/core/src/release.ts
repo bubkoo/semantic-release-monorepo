@@ -23,7 +23,7 @@ import { getOptions, getSuccessComment, getFailComment } from './options.js'
 
 export async function releasePackages(
   paths: string[],
-  inputOptions: semanticRelease.Options,
+  localOptions: semanticRelease.Options,
   srmOptions: SRMOptions,
   { cwd, env, stdout, stderr }: Context,
   logger: Signale,
@@ -49,12 +49,12 @@ export async function releasePackages(
 
   const globalOptions = await getOptions(cwd)
   const context: SRMContext = {
-    globalOptions,
-    inputOptions,
     cwd,
     env,
     stdout,
     stderr,
+    localOptions,
+    globalOptions,
   }
 
   // Load packages from paths
@@ -144,7 +144,7 @@ async function releasePackage(
 
 async function loadPackage(
   path: string,
-  { globalOptions, inputOptions, env, cwd, stdout, stderr }: SRMContext,
+  { globalOptions, localOptions, env, cwd, stdout, stderr }: SRMContext,
   srmOptions: SRMOptions,
 ): Promise<Package> {
   // eslint-disable-next-line no-param-reassign
@@ -169,7 +169,7 @@ async function loadPackage(
   const finalOptions = {
     ...globalOptions,
     ...pkgOptions,
-    ...inputOptions,
+    ...localOptions,
   }
 
   // Make a fake logger so semantic-release's get-config doesn't fail.
@@ -234,6 +234,7 @@ function makePushToGitMethod(
 
       const bodyTemplate =
         srmOptions.combinedMessageBody ||
+        // eslint-disable-next-line no-template-curly-in-string
         '[${nextRelease.gitTag}](${nextRelease.url})'
 
       const headerTemplate =
