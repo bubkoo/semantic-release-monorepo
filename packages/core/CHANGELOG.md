@@ -1,3 +1,10 @@
+# @semantic-release-monorepo/core [2.4.0](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@2.3.0...@semantic-release-monorepo/core@2.4.0) (2022-11-29)
+
+
+### Features
+
+* add 'SRM_DEBUG' env variable for debugger ([1f96ff0](https://github.com/bubkoo/semantic-release-monorepo/commit/1f96ff0fab01fe4e4b9291c14c32860a31494422))
+
 # @semantic-release-monorepo/core [2.3.0](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/core@2.2.0...@semantic-release-monorepo/core@2.3.0) (2022-11-29)
 
 
