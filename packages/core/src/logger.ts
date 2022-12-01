@@ -1,4 +1,5 @@
 import signale from 'signale'
+import figures from 'figures'
 
 export function getLogger({
   stdout,
@@ -12,12 +13,42 @@ export function getLogger({
     scope: 'srm',
     stream: stdout,
     types: {
-      info: { color: 'magenta', label: '', badge: 'ℹ', stream: [stdout] },
-      error: { color: 'red', label: '', badge: '✖', stream: [stderr] },
-      log: { color: 'magenta', label: '', badge: '•', stream: [stdout] },
-      success: { color: 'green', label: '', badge: '✔', stream: [stdout] },
-      complete: { color: 'red', label: '', badge: '❤', stream: [stdout] },
-      start: { color: 'cyan', label: '', badge: '✈', stream: [stdout] },
+      info: {
+        color: 'magenta',
+        label: '',
+        badge: figures.info,
+        stream: [stdout],
+      },
+      error: {
+        color: 'red',
+        label: '',
+        badge: figures.cross,
+        stream: [stderr],
+      },
+      log: {
+        color: 'magenta',
+        label: '',
+        badge: figures.bullet,
+        stream: [stdout],
+      },
+      success: {
+        color: 'green',
+        label: '',
+        badge: figures.tick,
+        stream: [stdout],
+      },
+      complete: {
+        color: 'red',
+        label: '',
+        badge: figures.heart,
+        stream: [stdout],
+      },
+      start: {
+        color: 'cyan',
+        label: '',
+        badge: figures.home,
+        stream: [stdout],
+      },
     },
   })
 }
