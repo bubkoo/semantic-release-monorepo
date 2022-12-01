@@ -283,7 +283,7 @@ function makePushToGitMethod(
   return null
 }
 
-export async function getSemanticConfig(
+async function getSemanticConfig(
   {
     cwd,
     env,
