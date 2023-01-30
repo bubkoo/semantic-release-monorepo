@@ -1,6 +1,6 @@
 {
   "name": "@semantic-release-monorepo/cli",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "type": "module",
   "exports": "./index.js",
   "files": [

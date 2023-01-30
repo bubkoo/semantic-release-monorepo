@@ -1,3 +1,10 @@
+## @semantic-release-monorepo/cli [2.1.5](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/cli@2.1.4...@semantic-release-monorepo/cli@2.1.5) (2023-01-30)
+
+
+### Bug Fixes
+
+* support semantic-release 20.x ([2f30a13](https://github.com/bubkoo/semantic-release-monorepo/commit/2f30a13d44b69ad0d0d66a76c6630d8e280ba2cc))
+
 ## @semantic-release-monorepo/cli [2.1.4](https://github.com/bubkoo/semantic-release-monorepo/compare/@semantic-release-monorepo/cli@2.1.3...@semantic-release-monorepo/cli@2.1.4) (2023-01-30)
 
 
