@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import path from 'path'
+import * as SemanticRelease from 'semantic-release'
 import { fileURLToPath } from 'url'
-import SemanticRelease from 'semantic-release'
 import { getLogger } from './logger.js'
 import { releasePackages } from './release.js'
 import { Context, SRMOptions as Options } from './types.js'

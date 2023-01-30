@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import SemanticRelease from 'semantic-release'
+import * as SemanticRelease from 'semantic-release'
 import { writeFileSync } from 'fs'
 import { getManifest } from './manifest.js'
 import {

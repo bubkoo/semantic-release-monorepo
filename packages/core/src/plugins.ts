@@ -1,8 +1,9 @@
 import _ from 'lodash'
 import path from 'path'
-import fse from 'fs-extra'
+import fs from 'fs/promises'
+import fse from 'fs-extra/esm'
 import gitOwner from 'git-username'
-import SemanticRelease from 'semantic-release'
+import * as SemanticRelease from 'semantic-release'
 import { execa } from 'execa'
 import {
   Package,
@@ -278,12 +279,12 @@ export function getInlinePluginsCreator(
 
         const npmrcPath = path.join(path.dirname(pkgPath), '.npmrc')
         const hasNpmrc = await fse.pathExists(npmrcPath)
-        const oldNpmrc = hasNpmrc ? await fse.readFile(npmrcPath) : null
-        await fse.writeFile(
+        const oldNpmrc = hasNpmrc ? await fs.readFile(npmrcPath) : null
+        await fs.writeFile(
           npmrcPath,
           `@${gprScope}:registry=https://npm.pkg.github.com\n//${host}/:_authToken=${token}\nscripts-prepend-node-path=true`,
         )
-        await fse.writeFile(pkgPath, JSON.stringify(manifest, null, 2))
+        await fs.writeFile(pkgPath, JSON.stringify(manifest, null, 2))
 
         const pub = execa('npm', ['publish'], {
           cwd: pkg.dir,
@@ -295,9 +296,9 @@ export function getInlinePluginsCreator(
 
         const ret = await pub
 
-        await fse.writeFile(pkgPath, oldManifest)
+        await fs.writeFile(pkgPath, oldManifest)
         if (hasNpmrc) {
-          await fse.writeFile(npmrcPath, oldNpmrc)
+          await fs.writeFile(npmrcPath, oldNpmrc!)
         } else {
           await fse.remove(npmrcPath)
         }

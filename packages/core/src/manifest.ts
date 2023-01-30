@@ -1,18 +1,18 @@
+import fs from 'fs'
 import path from 'path'
 import unixify from 'unixify'
 import { globbySync } from 'globby'
-import { existsSync, lstatSync, readFileSync, Stats } from 'fs'
 import { getPackagesSync, Packages } from '@manypkg/get-packages'
 import { PackageJSON } from './types.js'
 
 export function readManifest(path: string) {
-  if (!existsSync(path)) {
+  if (!fs.existsSync(path)) {
     throw new ReferenceError(`package.json file not found: "${path}"`)
   }
 
-  let stat: Stats
+  let stat: fs.Stats
   try {
-    stat = lstatSync(path)
+    stat = fs.lstatSync(path)
   } catch (_) {
     throw new ReferenceError(`package.json cannot be read: "${path}"`)
   }
@@ -21,7 +21,7 @@ export function readManifest(path: string) {
     throw new ReferenceError(`package.json is not a file: "${path}"`)
 
   try {
-    return readFileSync(path, 'utf8')
+    return fs.readFileSync(path, 'utf8')
   } catch (_) {
     throw new ReferenceError(`package.json cannot be read: "${path}"`)
   }
@@ -79,13 +79,13 @@ export function getManifestPaths(cwd: string, ignorePackages?: string[]) {
   } catch (e) {
     console.warn(e)
     workspace = {
-      tool: 'root',
+      tool: { type: 'root' },
       root: {
         dir: cwd,
         packageJson: getManifest(path.join(cwd, 'package.json')),
       },
       packages: [],
-    }
+    } as any as Packages
   }
 
   const packages = workspace.packages.map((p) => path.relative(cwd, p.dir))

@@ -1,4 +1,4 @@
-import SemanticRelease from 'semantic-release'
+import * as SemanticRelease from 'semantic-release'
 import { cosmiconfig } from 'cosmiconfig'
 
 const CONFIG_NAME = 'release'

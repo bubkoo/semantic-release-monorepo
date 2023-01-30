@@ -1,5 +1,5 @@
 import semver from 'semver'
-import SemanticRelease from 'semantic-release'
+import * as SemanticRelease from 'semantic-release'
 import { getTags } from './git.js'
 import { BumpStrategy, Package, VersionPrefix } from './types.js'
 

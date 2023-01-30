@@ -1,4 +1,4 @@
-import SemanticRelease from 'semantic-release'
+import * as SemanticRelease from 'semantic-release'
 import { PackageJSON } from '@changesets/types'
 
 export type { PackageJSON }

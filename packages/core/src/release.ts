@@ -2,6 +2,7 @@ import _ from 'lodash'
 import path, { dirname } from 'path'
 import signale, { Signale } from 'signale'
 import semanticRelease from 'semantic-release'
+import * as SemanticRelease from 'semantic-release'
 import semanticGetConfig from 'semantic-release/lib/get-config.js'
 import { WritableStreamBuffer } from 'stream-buffers'
 import { check } from './blork.js'
@@ -23,7 +24,7 @@ import { getOptions, getSuccessComment, getFailComment } from './options.js'
 
 export async function releasePackages(
   paths: string[],
-  localOptions: semanticRelease.Options,
+  localOptions: SemanticRelease.Options,
   srmOptions: SRMOptions,
   { cwd, env, stdout, stderr }: Context,
   logger: Signale,
@@ -202,18 +203,18 @@ async function loadPackage(
 
 function makePushToGitMethod(
   context: any,
-  parsedOptions: semanticRelease.Options,
+  parsedOptions: SemanticRelease.Options,
   plugin: undefined | string | [string, any],
   srmOptions: SRMOptions,
 ) {
   // https://github.com/semantic-release/git
   if (plugin) {
     return async (
-      branch: semanticRelease.BranchObject,
+      branch: SemanticRelease.BranchObject,
       releases: {
         package: Package
-        lastRelease: semanticRelease.LastRelease
-        nextReleases: semanticRelease.Release[]
+        lastRelease: SemanticRelease.LastRelease
+        nextReleases: SemanticRelease.Release[]
       }[],
     ) => {
       const pluginName = Array.isArray(plugin) ? plugin[0] : plugin
@@ -297,7 +298,7 @@ async function getSemanticConfig(
     stderr: NodeJS.WriteStream
     logger: Logger
   },
-  options: semanticRelease.Options,
+  options: SemanticRelease.Options,
   srmOptions: SRMOptions,
 ) {
   try {
@@ -308,8 +309,8 @@ async function getSemanticConfig(
 
     const context = { cwd, env, stdout, stderr, logger: blackhole }
     const raw = await semanticGetConfig(context, options)
-    const parsedOptions: semanticRelease.Options = raw.options
-    const plugins: semanticRelease.PluginSpec[] = parsedOptions.plugins
+    const parsedOptions: SemanticRelease.Options = raw.options
+    const plugins: SemanticRelease.PluginSpec[] = parsedOptions.plugins
       ? parsedOptions.plugins.slice()
       : []
 
