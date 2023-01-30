@@ -22,7 +22,7 @@
   ],
   "scripts": {},
   "peerDependencies": {
-    "semantic-release": "^19.x"
+    "semantic-release": "^19.x || ^20.x"
   },
   "dependencies": {
     "@semantic-release-monorepo/core": "2.4.2",
